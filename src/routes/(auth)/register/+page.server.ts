@@ -1,55 +1,43 @@
-import { fail, redirect } from '@sveltejs/kit'
-import type { Action, Actions, PageServerLoad } from './$types'
-import bcrypt from 'bcrypt'
-
-import { db } from '$lib/prisma'
-
-// using an enum for user roles to avoid typos
-// if you're not using TypeScript use an object
-enum Roles {
-  ADMIN = 'ADMIN',
-  USER = 'USER',
-}
+import { auth } from "$lib/lucia";
+import { fail, redirect } from "@sveltejs/kit";
+import type { PageServerLoad, Actions } from "./$types";
 
 export const load: PageServerLoad = async ({ locals }) => {
-  // redirect user if logged in
-  if (locals.user) {
-    throw redirect(302, '/')
+  if (Object.keys(locals).length === 0) return {};
+  const session = await locals.auth.validate();
+  if (session) throw redirect(302, "/dash");
+  return {};
+};
+
+export const actions: Actions = {
+  default: async ({ request, locals }) => {
+    const formData = await request.formData();
+    const email = formData.get("email")! as string;
+    const password = formData.get("password")! as string;
+
+    try {
+      const user = await auth.createUser({
+        key: {
+          providerId: "email",
+          providerUserId: email,
+          password // hashed by Lucia
+        },
+        attributes: {
+          email
+        }
+      });
+      const session = await auth.createSession({
+        userId: user.userId,
+        attributes: {}
+      });
+      locals.auth.setSession(session); // set session cookie
+    } catch (e) {
+      console.log(e);
+      return fail(500, {
+        message: "An unknown error occurred"
+      });
+    }
+
+    throw redirect(302, "/dash");
   }
-}
-
-export const actions = {
-  register: async ({ request }) => {
-    const data = await request.formData()
-    const username = data.get('username')
-    const password = data.get('password')
-
-    if (
-      typeof username !== 'string' ||
-      typeof password !== 'string' ||
-      !username ||
-      !password
-    ) {
-      return fail(400, { invalid: true })
-    }
-
-    const user = await db.user.findUnique({
-      where: { username },
-    })
-
-    if (user) {
-      return fail(400, { user: true })
-    }
-
-    await db.user.create({
-      data: {
-        username,
-        passwordHash: await bcrypt.hash(password, 10),
-        userAuthToken: crypto.randomUUID(),
-        role: { connect: { name: Roles.USER } },
-      },
-    })
-
-    throw redirect(303, '/login')
-  },
-}
+};

@@ -1,25 +1,13 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-
-	export let form;
 </script>
 
 <h1>Register</h1>
-
-<form action="?/register" method="POST" use:enhance>
-	<div>
-		<label for="username">Username</label>
-		<input id="username" name="username" type="text" required />
-	</div>
-
-	<div>
-		<label for="password">Password</label>
-		<input id="password" name="password" type="password" required />
-	</div>
-
-	{#if form?.user}
-		<p class="error">Username is taken.</p>
-	{/if}
-
-	<button type="submit">Register</button>
+<form method="post" use:enhance>
+	<label for="email">Email</label>
+	<input name="email" id="email" /><br />
+	<label for="password">Password</label>
+	<input type="password" name="password" id="password" /><br />
+	<input type="submit" />
 </form>
+<a href="/login">Log in</a>

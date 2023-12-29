@@ -11,20 +11,29 @@ datasource db {
 }
 
 model User {
-  id            String @id @default(uuid())
-  username      String @unique
-  passwordHash  String
-  userAuthToken String @unique
+  id           String    @id @unique
+  auth_session Session[]
+  key          Key[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  role   Roles @relation(fields: [roleId], references: [id])
-  roleId Int
+  // Additions
+  email        String    @unique
 }
 
-model Roles {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-  User User[]
+model Session {
+  id             String @id @unique
+  user_id        String
+  active_expires BigInt
+  idle_expires   BigInt
+  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model Key {
+  id              String  @id @unique
+  hashed_password String?
+  user_id         String
+  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
 }

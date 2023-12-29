@@ -15,7 +15,6 @@
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
-		"@types/bcrypt": "^5.0.2",
 		"@types/eslint": "8.56.0",
 		"@types/node": "^20.10.5",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
@@ -36,7 +35,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@lucia-auth/adapter-prisma": "^3.0.2",
 		"@prisma/client": "5.4.1",
-		"bcrypt": "^5.1.1"
+		"lucia": "^2.7.6"
 	}
 }

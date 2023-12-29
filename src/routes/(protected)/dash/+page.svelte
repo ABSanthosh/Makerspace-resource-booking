@@ -1,15 +1,13 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { enhance } from '$app/forms';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
 </script>
 
-<h1>Dashboard</h1>
-
-{#if $page.data.user}
-	<p>Welcome {$page.data.user.name}!</p>
-{/if}
-
-{#if $page.data.user.role === 'ADMIN'}
-	<form action="/logout" method="POST">
-		<button type="submit">Log out</button>
-	</form>
-{/if}
+<h1>Profile</h1>
+<p>User id: {data.userId}</p>
+<p>Email: {data.email}</p>
+<form method="post" action="/logout" use:enhance>
+	<input type="submit" value="Sign out" />
+</form>
