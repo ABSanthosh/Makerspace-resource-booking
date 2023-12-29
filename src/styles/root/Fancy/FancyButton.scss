@@ -3,30 +3,33 @@
   outline: none;
   font-size: 15px;
   border-radius: 6px;
-  @include box(auto, 32px);
-  color: var(--foreground);
-  box-shadow: var(--buttonShadow);
-  border: 1.2px solid var(--border);
-  background-color: var(--background);
+  @include box(var(--width, auto), var(--height, 40px));
+  
+  // no data-type selector
+  &[data-type=""] {
+    color: var(--foreground);
+    border: 1.2px solid var(--border);
+    background-color: var(--background);
+    &:hover:not(:disabled) {
+      border: 1px solid var(--buttonHoverBorder);
+      background-color: var(--buttonHoverBG) !important;
+    }
+    &:disabled {
+      cursor: not-allowed;
+      color: var(--disabledLink);
+      border: 1px solid (--border);
+      background-color: var(--buttonHover);
+    }
+  }
 
   gap: 10px;
   outline: none;
   cursor: pointer;
   padding: 8px 10px;
   @include make-flex($dir: row);
-  // transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
 
-  &:hover:not(:disabled) {
-    // color: var(--subElevatedBG);
-    border: 1px solid var(--buttonHoverBorder);
-    background-color: var(--buttonHoverBG) !important;
-  }
-  &:disabled {
-    cursor: not-allowed;
-    color: var(--disabledLink);
-    border: 1px solid (--border);
-    background-color: var(--buttonHover);
-  }
+
 
   &[data-close] {
     @include box(25px, 25px);
@@ -45,5 +48,12 @@
         color: white !important;
       }
     }
+  }
+
+  // types
+  &[data-type="black-fill"]{
+    background-color: var(--foreground);
+    color: var(--background);
+    border: 1px solid transparent;
   }
 }

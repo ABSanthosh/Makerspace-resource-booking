@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
 // font-family: 'Inter', sans-serif;
@@ -12,6 +11,7 @@
 
 [data-icon],
 [data-icon-after] {
+
   &::after,
   &::before {
     line-height: 1;
