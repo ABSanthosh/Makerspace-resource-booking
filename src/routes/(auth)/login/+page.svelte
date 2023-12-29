@@ -6,7 +6,7 @@
 <main class="Login">
 	<form method="post" use:enhance>
 		<h2>Login</h2>
-		<LabelInput name="email" type="email">Organizational Email</LabelInput>
+		<LabelInput name="email" mandatory type="email">Organizational Email</LabelInput>
 		<LabelInput name="password" type="password">Password</LabelInput>
 		<button
 			class="FancyButton"
@@ -14,7 +14,10 @@
 			data-type="black-fill"
 			type="submit">Login</button
 		>
-		<a href="/register">Create an account</a>
+		<span>
+			Don't have an account?
+			<a href="/register">Create an account</a>
+		</span>
 	</form>
 </main>
 
