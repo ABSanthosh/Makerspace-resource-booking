@@ -1,13 +1,40 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import LabelInput from '$components/LabelInput.svelte';
+	import type { PageData } from './$types';
+	import { superForm } from 'sveltekit-superforms/client';
+
+	export let data: PageData;
+
+	// Client form API:
+	const { form, errors, constraints } = superForm(data.form);
 </script>
 
 <main class="Login">
 	<form method="post" use:enhance>
 		<h2>Login</h2>
-		<LabelInput name="email" mandatory type="email">Organizational Email</LabelInput>
-		<LabelInput name="password" type="password">Password</LabelInput>
+		<LabelInput
+			mandatory
+			name="email"
+			type="email"
+			{...$constraints.email}
+			bind:value={$form.email}
+			bind:error={$errors.email}
+			aria-invalid={$errors.email ? 'true' : undefined}
+		>
+			Organizational Email
+		</LabelInput>
+		<LabelInput
+			mandatory
+			name="password"
+			type="password"
+			{...$constraints.email}
+			bind:value={$form.password}
+			bind:error={$errors.password}
+			aria-invalid={$errors.password ? 'true' : undefined}
+		>
+			Password
+		</LabelInput>
 		<button
 			class="FancyButton"
 			style="--height: 42px; width: 100%"

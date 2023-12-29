@@ -1,17 +1,33 @@
 import { auth } from "$lib/lucia";
 import { LuciaError } from "lucia";
 import { fail, redirect } from "@sveltejs/kit";
+import { z } from "zod";
+import { superValidate } from "sveltekit-superforms/server"
 import type { PageServerLoad, Actions } from "./$types";
 
+const loginForm = z.object({
+  email: z.string().email(),
+  password: z.string().min(8)
+})
+
 export const load: PageServerLoad = async ({ locals }) => {
-  if (Object.keys(locals).length === 0) return {};
+  const form = await superValidate(loginForm)
+  if (Object.keys(locals).length === 0) return { form };
+
   const session = await locals.auth.validate();
   if (session) throw redirect(302, "/dash");
-  return {};
+
+  return { form };
 };
 
 export const actions: Actions = {
   default: async ({ request, locals }) => {
+    const form = await superValidate(request, loginForm);
+    console.log(form)
+    if (!form.valid) {
+      return fail(400, { form });
+    }
+
     const formData = await request.formData();
     const email = formData.get("email")! as string;
     const password = formData.get("password")! as string;
@@ -41,7 +57,8 @@ export const actions: Actions = {
       }
       console.log(e);
       return fail(500, {
-        message: "An unknown error occurred"
+        message: "An unknown error occurred",
+        form
       });
     }
 
