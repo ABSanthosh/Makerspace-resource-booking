@@ -1,7 +1,7 @@
 import { auth } from "$lib/lucia";
 import { LuciaError } from "lucia";
 import { fail, redirect } from "@sveltejs/kit";
-import { superValidate } from "sveltekit-superforms/server"
+import { setError, superValidate } from "sveltekit-superforms/server"
 import type { PageServerLoad, Actions } from "./$types";
 import { loginSchema } from "$lib/schemas";
 
@@ -23,7 +23,6 @@ export const actions: Actions = {
     }
 
     try {
-      // find user by key and validate password
       const key = await auth.useKey(
         "email",
         form.data.email,
@@ -35,17 +34,14 @@ export const actions: Actions = {
       });
       locals.auth.setSession(session); // set session cookie
     } catch (e) {
-      if (
-        e instanceof LuciaError &&
-        (e.message === "AUTH_INVALID_KEY_ID" ||
-          e.message === "AUTH_INVALID_PASSWORD")
-      ) {
-        // user does not exist or invalid password
-        return fail(400, {
-          message: "Incorrect email or password"
-        });
+      if (e instanceof LuciaError) {
+        if (e.message === "AUTH_INVALID_KEY_ID") {
+          return setError(form, "email", "Incorrect email");
+        } else if (e.message === "AUTH_INVALID_PASSWORD") {
+          return setError(form, "password", "Incorrect password");
+        }
       }
-      console.log(e);
+      
       return fail(500, {
         message: "An unknown error occurred",
         form
