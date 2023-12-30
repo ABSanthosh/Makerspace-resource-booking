@@ -14,13 +14,16 @@
 ::-webkit-scrollbar {
   background: transparent;
 }
+
 ::-webkit-scrollbar {
   @include box($scrollbarWidth, $scrollbarWidth);
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--scroll);
   border-radius: 10px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
@@ -70,15 +73,19 @@ body,
   &--center {
     @include make-flex($dir: row, $just: center);
   }
+
   &--start {
     @include make-flex($dir: row, $just: flex-start);
   }
+
   &--end {
     @include make-flex($dir: row, $just: flex-end);
   }
+
   &--between {
     @include make-flex($dir: row, $just: space-between);
   }
+
   &--around {
     @include make-flex($dir: row, $just: space-around);
   }
@@ -90,9 +97,11 @@ body,
   &--a-end {
     @include make-flex($dir: row, $align: flex-end);
   }
+
   &--j-start {
     @include make-flex($dir: row, $just: flex-start);
   }
+
   &--j-end {
     @include make-flex($dir: row, $just: flex-end);
   }
@@ -102,9 +111,11 @@ body,
   &--center {
     @include make-flex($dir: column, $just: center);
   }
+
   &--j-start {
     @include make-flex($dir: column, $just: flex-start);
   }
+
   &--j-end {
     @include make-flex($dir: column, $just: flex-end);
   }
@@ -120,30 +131,53 @@ body,
   &--between {
     @include make-flex($dir: column, $just: space-between);
   }
+
   &--around {
     @include make-flex($dir: column, $just: space-around);
   }
 }
 
 // Padding Classes
-$paddingSizes: (5, 10, 15, 20);
-$paddingDirections: (l, r, t, b, x, y);
+$paddingSizes: (
+  5,
+  10,
+  15,
+  20
+);
+$paddingDirections: (
+  l,
+  r,
+  t,
+  b,
+  x,
+  y
+);
 
 @each $size in $paddingSizes {
   @each $dir in $paddingDirections {
     .pad-#{$size}#{$dir} {
-      @if $dir == l {
+      @if $dir ==l {
         padding-left: #{$size}px;
-      } @else if $dir == r {
+      }
+
+      @else if $dir ==r {
         padding-right: #{$size}px;
-      } @else if $dir == t {
+      }
+
+      @else if $dir ==t {
         padding-top: #{$size}px;
-      } @else if $dir == b {
+      }
+
+      @else if $dir ==b {
         padding-bottom: #{$size}px;
-      } @else if $dir == x {
+      }
+
+      @else if $dir ==x {
         padding-left: #{$size}px;
         padding-right: #{$size}px;
-      } @else if $dir == y {
+      }
+
+      @else if $dir ==y {
         padding-top: #{$size}px;
         padding-bottom: #{$size}px;
       }
@@ -155,14 +189,21 @@ $paddingDirections: (l, r, t, b, x, y);
   &-auto {
     width: auto;
   }
+
   &-100 {
     width: 100%;
   }
+
   &-90 {
     width: 90%;
   }
+
   &-80 {
     width: 80%;
+  }
+
+  &-50 {
+    width: 50%;
   }
 }
 
@@ -170,15 +211,23 @@ $paddingDirections: (l, r, t, b, x, y);
   &-100 {
     height: 100%;
   }
+
   &-90 {
     height: 90%;
   }
+
   &-80 {
     height: 80%;
   }
 }
+
 // Gap Classes
-$gapSizes: (5, 10, 15, 20);
+$gapSizes: (
+  5,
+  10,
+  15,
+  20
+);
 
 @each $gap in $gapSizes {
   .gap-#{$gap} {

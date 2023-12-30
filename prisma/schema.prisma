@@ -17,6 +17,21 @@ model User {
 
   // Additions
   email        String    @unique
+  userCategory UserCategory
+  firstName    String
+  lastName     String
+  orgName      String
+  department   String
+  userId       String
+  mobile       String
+  school       String
+}
+
+enum UserCategory {
+  student
+  professor
+  staff
+  other
 }
 
 model Session {

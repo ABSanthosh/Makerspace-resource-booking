@@ -1,17 +1,12 @@
 import { auth } from "$lib/lucia";
 import { LuciaError } from "lucia";
 import { fail, redirect } from "@sveltejs/kit";
-import { z } from "zod";
 import { superValidate } from "sveltekit-superforms/server"
 import type { PageServerLoad, Actions } from "./$types";
-
-const loginForm = z.object({
-  email: z.string().email(),
-  password: z.string().min(8)
-})
+import { loginSchema } from "$lib/schemas";
 
 export const load: PageServerLoad = async ({ locals }) => {
-  const form = await superValidate(loginForm)
+  const form = await superValidate(loginSchema)
   if (Object.keys(locals).length === 0) return { form };
 
   const session = await locals.auth.validate();
@@ -22,22 +17,17 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
   default: async ({ request, locals }) => {
-    const form = await superValidate(request, loginForm);
-    console.log(form)
+    const form = await superValidate(request, loginSchema);
     if (!form.valid) {
       return fail(400, { form });
     }
-
-    const formData = await request.formData();
-    const email = formData.get("email")! as string;
-    const password = formData.get("password")! as string;
 
     try {
       // find user by key and validate password
       const key = await auth.useKey(
         "email",
-        email,
-        password
+        form.data.email,
+        form.data.password
       );
       const session = await auth.createSession({
         userId: key.userId,

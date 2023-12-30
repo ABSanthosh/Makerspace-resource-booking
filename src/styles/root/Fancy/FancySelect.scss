@@ -6,11 +6,17 @@
   border-radius: 5px;
   padding: 0 35px 0 10px;
   color: var(--foreground);
-  @include box(auto, 35px);
   background-repeat: no-repeat;
   border: 1px solid var(--border);
   box-shadow: var(--buttonShadow);
   background-image: var(--downArrow);
   background-color: var(--background);
   background-position: right 5px top 50%;
+  @include box(var(--width, auto), var(--height, 35px));
+
+  &:focus {
+    outline-offset: 2px;
+    outline: 0.125rem solid #0054f0;
+    transition: outline-offset 0.15s linear;
+  }
 }
