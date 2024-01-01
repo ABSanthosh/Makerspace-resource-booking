@@ -68,7 +68,8 @@ model Item {
   id          String    @id @unique @default(nanoid(7))
   name        String
   description String?   @default("")
-  equipment   Equipment @relation(fields: [id], references: [id])
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+  equipmentId String
 }
 
 model Manual {

@@ -47,7 +47,7 @@ export type RegisterSchema = typeof registerSchema;
 
 export const equipmentItemSchema = z.object({
   name: z.string().min(2),
-  description: z.string().min(2),
+  description: z.string().optional().or(z.literal('')),
 })
 
 export type EquipmentItemSchema = z.infer<typeof equipmentItemSchema>;
@@ -60,4 +60,4 @@ export const newEquipmentSchema = z.object({
   equipment: z.array(equipmentItemSchema)
 })
 
-export type NewEquipmentSchema = typeof newEquipmentSchema;
+export type NewEquipmentSchema = z.infer<typeof newEquipmentSchema>;

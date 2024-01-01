@@ -28,6 +28,7 @@ const config = {
 			"$components/*": "src/components/*",
 			"$lib/*": "src/lib/*",
 			"$directive/*": "src/directive/*",
+			"$db/*": "src/db/*",
 		},
 	}
 };

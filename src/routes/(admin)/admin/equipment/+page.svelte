@@ -27,22 +27,28 @@
 				},
 				{ taint: false }
 			);
+		},
+		onResult(event) {
+			if (event.result.status === 200) {
+				instances = [];
+				addEquipmentModal = false;
+				resetForm();
+			}
 		}
 	});
-</script>
 
-<button on:click={() => (addEquipmentModal = !addEquipmentModal)}>Open</button>
-<Pane
-	bind:open={addEquipmentModal}
-	style="--paneWidth: 450px;"
-	on:close={() => {
+	const resetForm = () => {
 		$newForm.name = '';
 		$newForm.model = '';
 		$newForm.image = '';
 		$newForm.description = '';
 		$newForm.equipment = [];
-	}}
->
+		instances = [];
+	};
+</script>
+
+<button on:click={() => (addEquipmentModal = !addEquipmentModal)}>Open</button>
+<Pane bind:open={addEquipmentModal} style="--paneWidth: 450px;" on:close={() => resetForm()}>
 	<div class="AddEModal">
 		<h2>Add Equipment</h2>
 		<form class="Col--center gap-10 w-100" action="?/add" method="POST" use:enhance>
@@ -106,7 +112,7 @@
 						instances = [
 							...instances,
 							{
-								name: `${$newForm.name} ${instances.length + 1}`,
+								name: `${$newForm.model} - ${instances.length + 1}`,
 								description: ''
 							}
 						];
