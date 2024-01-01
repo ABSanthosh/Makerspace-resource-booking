@@ -3,6 +3,7 @@ import { fail, redirect } from "@sveltejs/kit";
 import type { PageServerLoad, Actions } from "./$types";
 import { registerSchema } from "$lib/schemas";
 import { superValidate } from "sveltekit-superforms/server";
+import { UserCategory } from "@prisma/client";
 
 export const load: PageServerLoad = async ({ locals }) => {
   const form = await superValidate(registerSchema)
@@ -21,8 +22,6 @@ export const actions: Actions = {
     if (!form.valid) {
       return fail(400, { form });
     }
-    console.log(form);
-
     try {
       const user = await auth.createUser({
         key: {
@@ -47,12 +46,14 @@ export const actions: Actions = {
         attributes: {}
       });
       locals.auth.setSession(session); // set session cookie
+      if(session.user.userCategory === UserCategory.admin) throw redirect(302, "/admin");
     } catch (e) {
       console.log(e);
       return fail(500, {
         message: "An unknown error occurred"
       });
     }
+
 
     throw redirect(302, "/dash");
   }

@@ -33,22 +33,18 @@ html {
   overflow-x: hidden;
   font-family: 'Inter', Arial, sans-serif;
   @include make-flex($just: flex-start);
-  @include box(100vw, auto);
-  min-height: 100vh;
+  @include box(100vw, 100vh);
+  // min-height: 100vh;
   scrollbar-gutter: stable;
   scroll-behavior: smooth;
 }
 
 body,
 #app {
-  @include box(100vw, auto);
+  @include box();
   background-color: var(--body);
-  min-height: 100vh;
+  // min-height: 100vh;
   @include make-flex($just: flex-start);
-}
-
-#app {
-  min-height: 100vh;
 }
 
 .Content {
