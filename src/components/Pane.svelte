@@ -49,6 +49,7 @@
 		margin-bottom: 0;
 		max-height: none;
 		background-color: white;
+		border-left: 3px solid #006db4;
 		@include box(var(--paneWidth, 600px));
 
 		&::backdrop {

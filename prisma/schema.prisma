@@ -59,7 +59,7 @@ model Equipment {
   name        String
   model       String
   image       String?  @default("")
-  description String?  @default("")
+  description String?  @default("") @db.LongText
   manuals     Manual[]
   items       Item[]
 }
@@ -67,7 +67,7 @@ model Equipment {
 model Item {
   id          String    @id @unique @default(nanoid(7))
   name        String
-  description String?   @default("")
+  description String?   @default("") @db.LongText
   equipment   Equipment @relation(fields: [equipmentId], references: [id])
   equipmentId String
 }

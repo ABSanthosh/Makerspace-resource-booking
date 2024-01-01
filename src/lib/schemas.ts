@@ -46,6 +46,7 @@ export const registerSchema = z.object({
 export type RegisterSchema = typeof registerSchema;
 
 export const equipmentItemSchema = z.object({
+  id: z.string().optional().or(z.literal('')),
   name: z.string().min(2),
   description: z.string().optional().or(z.literal('')),
 })
@@ -53,6 +54,7 @@ export const equipmentItemSchema = z.object({
 export type EquipmentItemSchema = z.infer<typeof equipmentItemSchema>;
 
 export const newEquipmentSchema = z.object({
+  id: z.string().optional().or(z.literal('')),
   name: z.string().min(2),
   model: z.string().min(2),
   image: z.string().url().optional().or(z.literal('')),
