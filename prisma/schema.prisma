@@ -16,7 +16,7 @@ model User {
   key          Key[]
 
   // Additions
-  email        String    @unique
+  email        String       @unique
   userCategory UserCategory
   firstName    String
   lastName     String
@@ -31,6 +31,7 @@ enum UserCategory {
   student
   professor
   staff
+  admin
   other
 }
 
@@ -51,4 +52,35 @@ model Key {
   user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id])
+}
+
+model Equipment {
+  id          String   @id @unique @default(nanoid(7))
+  name        String
+  model       String
+  description String?
+  manualsId   Int?
+  manuals     Manual[]
+  items       Item[]
+}
+
+model Item {
+  id          String   @id @unique @default(nanoid(7))
+  name        String
+  description String?
+  equipment   Equipment @relation(fields: [id], references: [id])
+}
+
+model Manual {
+  id   String     @id @unique @default(nanoid(7))
+  name String
+  type ManualType
+  url  String?
+
+  equipment Equipment @relation(fields: [id], references: [id])
+}
+
+enum ManualType {
+  website
+  file
 }
