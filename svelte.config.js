@@ -27,6 +27,7 @@ const config = {
 		alias: {
 			"$components/*": "src/components/*",
 			"$lib/*": "src/lib/*",
+			"$directive/*": "src/directive/*",
 		},
 	}
 };
