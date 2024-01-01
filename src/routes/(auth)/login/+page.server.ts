@@ -4,6 +4,7 @@ import { fail, redirect } from "@sveltejs/kit";
 import { setError, superValidate } from "sveltekit-superforms/server"
 import type { PageServerLoad, Actions } from "./$types";
 import { loginSchema } from "$lib/schemas";
+import { UserCategory } from "@prisma/client";
 
 export const load: PageServerLoad = async ({ locals }) => {
   const form = await superValidate(loginSchema)
@@ -18,6 +19,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions: Actions = {
   default: async ({ request, locals }) => {
     const form = await superValidate(request, loginSchema);
+    let userCategory = UserCategory.student;
     if (!form.valid) {
       return fail(400, { form });
     }
@@ -32,6 +34,7 @@ export const actions: Actions = {
         userId: key.userId,
         attributes: {}
       });
+      userCategory = session.user.userCategory
       locals.auth.setSession(session); // set session cookie
     } catch (e) {
       if (e instanceof LuciaError) {
@@ -41,13 +44,16 @@ export const actions: Actions = {
           return setError(form, "password", "Incorrect password");
         }
       }
-      
+      console.log(e);
+
       return fail(500, {
         message: "An unknown error occurred",
         form
       });
     }
 
+    // @ts-ignore
+    if(userCategory === UserCategory.admin) return redirect(302, "/admin");
     throw redirect(302, "/dash");
   }
 };
