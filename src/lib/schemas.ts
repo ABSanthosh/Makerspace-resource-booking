@@ -43,4 +43,21 @@ export const registerSchema = z.object({
   path: ['confirm']
 })
 
-export type RegisterSchema = typeof registerSchema; 
+export type RegisterSchema = typeof registerSchema;
+
+export const equipmentItemSchema = z.object({
+  name: z.string().min(2),
+  description: z.string().min(2),
+})
+
+export type EquipmentItemSchema = z.infer<typeof equipmentItemSchema>;
+
+export const newEquipmentSchema = z.object({
+  name: z.string().min(2),
+  model: z.string().min(2),
+  image: z.string().url().optional().or(z.literal('')),
+  description: z.string().optional(),
+  equipment: z.array(equipmentItemSchema)
+})
+
+export type NewEquipmentSchema = typeof newEquipmentSchema;

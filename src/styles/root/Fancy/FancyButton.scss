@@ -32,9 +32,9 @@
 
 
   &[data-close] {
-    @include box(25px, 25px);
+    // @include box(25px, 25px);
     color: var(--foreground);
-    border-radius: 50%;
+    // border-radius: 50%;
     background-color: var(--background);
     border: 1px solid var(--border);
     transition: all 0.1s ease-in-out;
@@ -43,6 +43,7 @@
     }
     &:hover {
       background-color: var(--lightRed) !important;
+      color: white !important;
 
       &::before {
         color: white !important;

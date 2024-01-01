@@ -58,16 +58,16 @@ model Equipment {
   id          String   @id @unique @default(nanoid(7))
   name        String
   model       String
-  description String?
-  manualsId   Int?
+  image       String?  @default("")
+  description String?  @default("")
   manuals     Manual[]
   items       Item[]
 }
 
 model Item {
-  id          String   @id @unique @default(nanoid(7))
+  id          String    @id @unique @default(nanoid(7))
   name        String
-  description String?
+  description String?   @default("")
   equipment   Equipment @relation(fields: [id], references: [id])
 }
 
@@ -75,7 +75,7 @@ model Manual {
   id   String     @id @unique @default(nanoid(7))
   name String
   type ManualType
-  url  String?
+  url  String?    @default("")
 
   equipment Equipment @relation(fields: [id], references: [id])
 }

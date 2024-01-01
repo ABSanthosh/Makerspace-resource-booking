@@ -1,4 +1,7 @@
 <script lang="ts">
+	import type { HTMLDialogAttributes } from 'svelte/elements';
+	interface $$restProps extends HTMLDialogAttributes {}
+
 	export let open = false;
 
 	let pane: HTMLDialogElement;
@@ -12,7 +15,9 @@
 	}
 </script>
 
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <dialog
+	on:close
 	class="Pane"
 	{...$$restProps}
 	bind:this={pane}
@@ -44,7 +49,7 @@
 		margin-bottom: 0;
 		max-height: none;
 		background-color: white;
-		@include box(var(--width, 600px));
+		@include box(var(--paneWidth, 600px));
 
 		&::backdrop {
 			@include box(100vw, 100vh);
