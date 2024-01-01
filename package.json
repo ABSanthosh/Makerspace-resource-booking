@@ -3,13 +3,14 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev": "vite dev --host",
+		"dev": "nix-shell --run 'vite dev --host'",
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"prisma": "nix-shell --run 'prisma db push && prisma generate'"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.0.0",
