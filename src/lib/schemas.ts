@@ -1,3 +1,4 @@
+import { UserCategory } from '@prisma/client';
 import { z } from 'zod';
 
 const phoneRegex = new RegExp(/(\+91\s)?\d{10}/);
@@ -26,7 +27,7 @@ export const loginSchema = z.object({
 export type LoginSchema = typeof loginSchema;
 
 export const registerSchema = z.object({
-  userCategory: z.enum(['student', 'professor', 'staff', 'other']),
+  userCategory: z.enum(Object.keys(UserCategory) as [string]),
   firstName: z.string().min(2),
   lastName: z.string().min(2),
   orgName: z.string().min(2),

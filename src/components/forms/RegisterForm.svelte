@@ -9,6 +9,7 @@
 	import { cubicIn, cubicOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+	import { UserCategory } from '@prisma/client';
 
 	export let data: SuperValidated<RegisterSchema>;
 
@@ -43,7 +44,7 @@
 					<LabelSelect
 						mandatory
 						name="userCategory"
-						options={['student', 'professor', 'staff', 'other']}
+						options={Object.keys(UserCategory)}
 						{...$constraints.userCategory}
 						bind:value={$form.userCategory}
 						bind:error={$errors.userCategory}
