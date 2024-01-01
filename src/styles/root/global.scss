@@ -4,11 +4,15 @@
 @import "../root/Fancy/FancyInput.scss";
 @import "../root/fonts.scss";
 
+
 * {
-  margin: 0;
   padding: 0;
   box-sizing: border-box;
   color: var(--foreground);
+
+  &:not(dialog) {
+    margin: 0;
+  }
 }
 
 ::-webkit-scrollbar {

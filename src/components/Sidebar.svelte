@@ -4,7 +4,6 @@
 	import type { Route } from '$lib/routes';
 	import { getInitials, getUsernameColor } from '../utils/profilePicture';
 
-	// actual
 	export let user: { email: any; userId: any };
 	export let routes: Route[];
 
@@ -25,7 +24,6 @@
 
 <div class="Sidebar" class:open={navState}>
 	<div class="Sidebar__logo Row--between gap-15">
-		<!-- <img src="/assets/images/snu_logo.svg" alt="snu logo" /> -->
 		<img src="/assets/images/logo.svg" alt="logo" />
 	</div>
 	<ul class="Sidebar__menuList">
@@ -163,29 +161,31 @@
 
 			&--item,
 			summary {
-				color: #344054;
-				@include box(100%, 35px);
-				border-radius: 7px;
-				background-color: #fafbfb;
-				text-decoration: none;
-				border: 1px solid transparent;
-				cursor: pointer;
-				position: relative;
-				padding: 0px 8px;
 				gap: 8px;
-				@include make-flex($dir: row, $just: flex-start);
+				flex-shrink: 0;
+				color: #344054;
+				cursor: pointer;
+				padding: 0px 8px;
+				border-radius: 7px;
+				position: relative;
 				line-height: normal;
 				white-space: nowrap;
-				flex-shrink: 0;
+				text-decoration: none;
+				@include box(100%, 35px);
+				background-color: #fafbfb;
+				border: 1px solid transparent;
+				@include make-flex($dir: row, $just: flex-start);
 
 				&[data-active='true'] {
-					background-color: #f9fafb;
-					border: 1px solid #d2d4d9;
+					background-color: #ebedf0;
 				}
-				&:hover,
-				&:focus {
-					outline: none;
-					background-color: #f4f5f6;
+
+				&:not(&[data-active='true']) {
+					&:hover,
+					&:focus {
+						outline: none;
+						background-color: #f4f5f6;
+					}
 				}
 			}
 		}
