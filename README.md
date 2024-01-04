@@ -59,3 +59,8 @@ Supabase dashboard: http://localhost:54323/
 
 1) Add `http://127.0.0.1:54321/auth/v1/callback` to google console to Authorised redirect URIs
 2) Add `http://localhost:5173/` in `site_url` to `config.toml`
+
+## [To see errors in supabase db](https://github.com/supabase/cli/issues/271#issuecomment-1661981609)
+```
+docker logs -f supabase_db_makerspace
+```
