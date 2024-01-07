@@ -2,18 +2,26 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["multiSchema"]
+  provider = "prisma-client-js"
+  // previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider = "postgresql"
-  schemas  = ["public", "auth"]
   url      = env("DATABASE_URL_POSTGRES")
 }
 
-model User {
-  id Int @id
+enum Role {
+  admin
+  user
+}
 
-  @@schema("auth") // or @@schema("public")
+model Profile {
+  id    String  @id @db.Uuid
+  role  Role    @default(user)
+  isNew Boolean @default(true) @map("isnew")
+
+  // More fields...
+
+  @@map("profile")
 }
