@@ -1,38 +1,49 @@
-# create-svelte
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
 
-## Creating a project
+## ToDo
+- [ ] Change equipment schema
+- [ ] Add equipment category
+- [ ] Add multiple types 
 
-If you're seeing this, you've probably already done this step. Congrats!
+For each equipment
+- *Generic Name eg: 3d printer
+- *make and model
+- *description
+- *image
+- videos
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+For each item
+- *name
+- *description
+- *cost
+- manuals
+- status: operational, down-for-maintenance, out-of-service
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+Equipment categories (as editable)
+- 3d printer
+- CNC (laser cutter)
+- welding
+- Hand power tools
+- hand tools
+- Design station
+- testing eqquipment
+- PCB design 
+- standalone Power tools
 
-## Developing
+Electronic repository (loanables)
+- *quantity
+- *make and model
+- *loaned quantity
+- *image
+- description
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Material repository (consumables)
+- *name
+- *quantity
+- *dimensions
+  - *type: length, area, volume, breadths
+  - *value
+  - *unit: need the list of possible units 
+- description
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+Supabase dashboard: http://localhost:54323/

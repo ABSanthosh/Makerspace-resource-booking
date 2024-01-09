@@ -25,7 +25,7 @@
 	const transitionOut = { easing: cubicIn, x: -x, duration, delay: -delay };
 </script>
 
-<SuperDebug data={$form} />
+<!-- <SuperDebug data={$form} /> -->
 
 <form class="RegisterForm" method="post" use:enhance>
 	<h2>Register</h2>

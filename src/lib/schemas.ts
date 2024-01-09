@@ -43,6 +43,18 @@ export const registerSchema = z.object({
   path: ['confirm']
 })
 
+// userId
+// string of numbers for emp id
+// OTP for mail
+// For students just netid and roll number
+// For faculty just netid and emp id
+
+// Need in register page
+// User category
+// first name, last name
+
+// https://lucia-auth.com/oauth/providers/google/
+
 export type RegisterSchema = typeof registerSchema;
 
 export const equipmentItemSchema = z.object({
