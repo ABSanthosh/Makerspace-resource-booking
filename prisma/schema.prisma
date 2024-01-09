@@ -2,86 +2,18 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
+  schemas  = ["public", "auth"]
+  url      = env("DATABASE_URL_POSTGRES")
 }
 
 model User {
-  id           String    @id @unique
-  auth_session Session[]
-  key          Key[]
+  id Int @id
 
-  // Additions
-  email        String       @unique
-  userCategory UserCategory
-  firstName    String
-  lastName     String
-  orgName      String
-  department   String
-  userId       String
-  mobile       String
-  school       String
-}
-
-enum UserCategory {
-  student
-  professor
-  staff
-  admin
-  other
-}
-
-model Session {
-  id             String @id @unique
-  user_id        String
-  active_expires BigInt
-  idle_expires   BigInt
-  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
-
-  @@index([user_id])
-}
-
-model Key {
-  id              String  @id @unique
-  hashed_password String?
-  user_id         String
-  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
-
-  @@index([user_id])
-}
-
-model Equipment {
-  id          String   @id @unique @default(nanoid(7))
-  name        String
-  model       String
-  image       String?  @default("")
-  description String?  @default("") @db.LongText
-  manuals     Manual[]
-  items       Item[]
-}
-
-model Item {
-  id          String    @id @unique @default(nanoid(7))
-  name        String
-  description String?   @default("") @db.LongText
-  equipment   Equipment @relation(fields: [equipmentId], references: [id])
-  equipmentId String
-}
-
-model Manual {
-  id   String     @id @unique @default(nanoid(7))
-  name String
-  type ManualType
-  url  String?    @default("")
-
-  equipment Equipment @relation(fields: [id], references: [id])
-}
-
-enum ManualType {
-  website
-  file
+  @@schema("auth") // or @@schema("public")
 }

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 </script>
 
 <div class="Admin__content">

@@ -1,15 +1,15 @@
 <script lang="ts">
 	import Sidebar from '$components/Sidebar.svelte';
-	import type { PageData } from './$types';
 	import { ADMIN_ROUTES } from '$lib/routes';
-	export let data: PageData;
+	// import type { PageData } from './$types';
+	// export let data: PageData;
 </script>
 
 <main class="AdminLayout">
 	<Sidebar
 		user={{
-			email: data.email,
-			userId: data.userId
+			email: 'data.email',
+			userId: 'data.userId'
 		}}
 		routes={ADMIN_ROUTES}
 	/>
