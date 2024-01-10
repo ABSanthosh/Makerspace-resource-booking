@@ -1,17 +1,33 @@
 <script lang="ts">
+	import { invalidate } from '$app/navigation';
+	import { onMount } from 'svelte';
+	import { derived, writable } from 'svelte/store';
+
+	export let data;
+
+	$: ({ supabase, session } = data);
+
+	let supabaseStore = writable<typeof supabase>();
+	$: supabaseStore.set(supabase);
+
+	// this is necessary to ensure that subscriptions to old supabase clients are cleaned up properly
+	// when a new client is retrieved from the loader.
+	let supabaseAuthStateChangeSubscriptionStore = derived(supabaseStore, ($supabaseStore, set) => {
+		const {
+			data: { subscription }
+		} = $supabaseStore.auth.onAuthStateChange((_, _session) => {
+			if (_session?.expires_at !== session?.expires_at) {
+				invalidate('supabase:auth');
+			}
+		});
+		set(subscription);
+		return subscription.unsubscribe;
+	});
+
+	onMount(() => {
+		/* eslint-disable-next-line @typescript-eslint/no-empty-function */
+		return supabaseAuthStateChangeSubscriptionStore.subscribe(() => {});
+	});
 </script>
 
-<svelte:head>
-	<title>SNU Makerspace</title>
-	<meta charset="utf-8" />
-	<meta
-		content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
-		name="viewport"
-	/>
-</svelte:head>
-
 <slot />
-
-<style lang="scss" global>
-	@import '../styles/root/global.scss';
-</style>

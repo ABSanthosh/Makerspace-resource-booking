@@ -1,10 +1,3 @@
-<script lang="ts">
-	import { enhance } from '$app/forms';
-</script>
+<h1>This is a protected page.</h1>
 
-<h1>Profile</h1>
-<p>User id: {'data.userId'}</p>
-<p>Email: {'data.email'}</p>
-<form method="post" action="/logout" use:enhance>
-	<input type="submit" value="Sign out" />
-</form>
+<a href="../">Go back</a>
