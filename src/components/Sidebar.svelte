@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import type { Route } from '$lib/routes';
 	import type { SupabaseClient, User } from '@supabase/supabase-js';
@@ -79,8 +78,8 @@
 				style="background-image: url('{userPicture}'); background-size: cover; background-position: center;"
 			/>
 			<div class="Sidebar__bottom--col">
-				<p>{userName || 'Loading...'}</p>
-				<p title={userEmail || 'Loading...'}>{user.email || 'Loading...'}</p>
+				<p title={userName}>{userName}</p>
+				<p title={userEmail}>{userEmail}</p>
 			</div>
 			<button
 				class="FancyButton"
