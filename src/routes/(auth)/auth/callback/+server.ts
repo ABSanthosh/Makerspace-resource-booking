@@ -6,7 +6,12 @@ export async function GET(event) {
   } = event;
   const code = url.searchParams.get('code') as string;
   const next = url.searchParams.get('next') ?? '/';
-  
+  const error = url.searchParams.get('error') as string;
+
+  if (error) {
+    throw redirect(303, '/');
+  }
+
   if (code) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
