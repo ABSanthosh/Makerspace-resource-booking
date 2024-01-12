@@ -2,10 +2,15 @@
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import type { Route } from '$lib/routes';
-	import { getInitials, getUsernameColor } from '../utils/profilePicture';
+	import type { SupabaseClient, User } from '@supabase/supabase-js';
 
-	export let user: { email: any; userId: any };
+	export let user: User;
+	export let supabase: SupabaseClient;
 	export let routes: Route[];
+
+	$: userName = user.user_metadata.name;
+	$: userEmail = user.user_metadata.email;
+	$: userPicture = user.user_metadata.picture;
 
 	$: navState = false;
 	$: collapsibleState = {
@@ -13,13 +18,6 @@
 			routes.filter((item) => item.children.length > 0).map((item) => [item.route, false])
 		)
 	} as Record<string, boolean>;
-
-	const profileColor = getUsernameColor(user.userId || 'Loading...');
-	const ProfilePicture = {
-		backgroundColor: profileColor.backgroundColor,
-		textColor: profileColor.textColor
-	};
-	const initials = getInitials(user.email || 'Loading...');
 </script>
 
 <div class="Sidebar" class:open={navState}>
@@ -78,23 +76,19 @@
 	<div class="Sidebar__bottom">
 		<div class="Sidebar__user">
 			<span
-				style="background-color: {ProfilePicture.backgroundColor}; color: {ProfilePicture.textColor};"
-			>
-				{initials}
-			</span>
+				style="background-image: url('{userPicture}'); background-size: cover; background-position: center;"
+			/>
 			<div class="Sidebar__bottom--col">
-				<p>{user.userId || 'Loading...'}</p>
-				<p title={user.email || 'Loading...'}>{user.email || 'Loading...'}</p>
+				<p>{userName || 'Loading...'}</p>
+				<p title={userEmail || 'Loading...'}>{user.email || 'Loading...'}</p>
 			</div>
-			<form method="post" action="/logout" use:enhance>
-				<button
-					class="FancyButton"
-					data-icon={String.fromCharCode(59834)}
-					on:click={async () => {}}
-					title="Logout"
-					type="submit"
-				/>
-			</form>
+			<button
+				class="FancyButton"
+				data-icon={String.fromCharCode(59834)}
+				on:click={() => supabase.auth.signOut()}
+				title="Logout"
+				type="submit"
+			/>
 		</div>
 		<button
 			class={`dark  Sidebar__toggle${navState ? '--active' : '--item'}`}
@@ -267,31 +261,31 @@
 			align-items: end;
 			padding: 10px 0 10px 0;
 
-			img {
-				border-radius: 50%;
-				border: 1px solid black;
-				@include box(38px, 38px);
-			}
+			// img {
+			// 	border-radius: 50%;
+			// 	border: 1px solid black;
+			// 	@include box(38px, 38px);
+			// }
 
-			&--col {
-				overflow: hidden;
+			// &--col {
+			// 	overflow: hidden;
 
-				p {
-					text-overflow: ellipsis;
-					overflow: hidden;
+			// 	p {
+			// 		text-overflow: ellipsis;
+			// 		overflow: hidden;
 
-					&:first-child {
-						font-size: 16px;
-						font-weight: 600;
-					}
+			// 		&:first-child {
+			// 			font-size: 16px;
+			// 			font-weight: 600;
+			// 		}
 
-					&:last-child {
-						font-size: 14px;
-						font-weight: 500;
-						color: #84878d;
-					}
-				}
-			}
+			// 		&:last-child {
+			// 			font-size: 14px;
+			// 			font-weight: 500;
+			// 			color: #84878d;
+			// 		}
+			// 	}
+			// }
 
 			& > span {
 				border-radius: 50%;

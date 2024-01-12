@@ -1,18 +1,19 @@
 <script lang="ts">
 	import Sidebar from '$components/Sidebar.svelte';
 	import { ADMIN_ROUTES } from '$lib/routes';
-	// import type { PageData } from './$types';
-	// export let data: PageData;
+	import type { User } from '@supabase/supabase-js';
+	import type { PageData } from './$types';
+
+	export let data;
+
+	$: ({ user } = data!.session!);
+	$: ({ supabase } = data);
+
+	$: console.log(supabase)
 </script>
 
 <main class="AdminLayout">
-	<Sidebar
-		user={{
-			email: 'data.email',
-			userId: 'data.userId'
-		}}
-		routes={ADMIN_ROUTES}
-	/>
+	<Sidebar {supabase} {user} routes={ADMIN_ROUTES} />
 
 	<div class="AdminLayout__content">
 		<slot />

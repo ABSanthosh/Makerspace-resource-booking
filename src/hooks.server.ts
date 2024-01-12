@@ -1,6 +1,6 @@
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 import { createServerClient } from '@supabase/ssr';
-import { redirect, type Handle, error, type LoadEvent, type ServerLoadEvent } from '@sveltejs/kit';
+import { redirect, type Handle, error } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
 const createSupabaseClient: Handle = async ({ event, resolve }) => {
@@ -43,6 +43,12 @@ const authorization: Handle = async ({ event, resolve }) => {
 
 	// GET requests
 	if (event.url.pathname.startsWith('/dash') && event.request.method === 'GET') {
+		if (!session) {
+			throw redirect(303, '/');
+		}
+	}
+
+	if (event.url.pathname.startsWith('/admin') && event.request.method === 'GET') {
 		if (!session) {
 			throw redirect(303, '/');
 		}
