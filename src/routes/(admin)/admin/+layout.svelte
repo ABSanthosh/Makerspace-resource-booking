@@ -1,15 +1,13 @@
 <script lang="ts">
 	import Sidebar from '$components/Sidebar.svelte';
 	import { ADMIN_ROUTES } from '$lib/routes';
-	import type { User } from '@supabase/supabase-js';
+	import type { User, Session } from '@supabase/supabase-js';
 	import type { PageData } from './$types';
 
 	export let data;
 
-	$: ({ user } = data!.session!);
+	$: ({ user } = data!.session || ({} as Session));
 	$: ({ supabase } = data);
-
-	$: console.log(supabase)
 </script>
 
 <main class="AdminLayout">

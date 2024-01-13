@@ -2,6 +2,7 @@
 	export let data;
 
 	$: ({ supabase, session } = data);
+	// console.log(data)
 </script>
 
 <div>
