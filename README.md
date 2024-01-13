@@ -1,9 +1,11 @@
 
 
 ## ToDo
-- [ ] Change equipment schema
-- [ ] Add equipment category
-- [ ] Add multiple types 
+- [x] Change equipment schema
+- [x] Add equipment category
+- [x] Add multiple types 
+- [ ] [User dashboard with editing](https://supabase.com/docs/guides/getting-started/tutorials/with-sveltekit?language=ts)
+- [ ] Hook up new equipment schema to frontend
 
 For each equipment
 - *Generic Name eg: 3d printer
@@ -64,3 +66,4 @@ Supabase dashboard: http://localhost:54323/
 ```
 docker logs -f supabase_db_makerspace
 ```
+

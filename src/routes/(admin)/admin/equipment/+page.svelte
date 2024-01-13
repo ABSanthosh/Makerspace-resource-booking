@@ -1,4 +1,4 @@
-<!-- <script lang="ts">
+<script lang="ts">
 	import LabelInput from '$components/LabelInput.svelte';
 	import Pane from '$components/Pane.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
@@ -416,4 +416,4 @@
 			}
 		}
 	}
-</style> -->
+</style>

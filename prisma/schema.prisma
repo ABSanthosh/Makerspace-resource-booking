@@ -3,7 +3,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  // previewFeatures = ["multiSchema"]
 }
 
 datasource db {
@@ -24,4 +23,56 @@ model Profile {
   // More fields...
 
   @@map("profile")
+}
+
+model Equipment {
+  id          String   @id @unique @default(nanoid(7))
+  name        String
+  model       String
+  description String   @db.VarChar(255)
+  image       String
+  items       EItems[]
+  // videos
+}
+
+enum EStatus {
+  available
+  inUse       @map("in_use")
+  maintenance
+  broken
+}
+
+model EItems {
+  id          String   @id @unique @default(nanoid(7))
+  name        String
+  description String   @db.VarChar(255)
+  status      EStatus? @default(available)
+  cost        Float
+  // manuals
+
+  equipment Equipment @relation(fields: [id], references: [id])
+}
+
+model ECategories {
+  id   String @id @unique @default(nanoid(7))
+  name String
+}
+
+model RepoElectronics {
+  id          String  @id @unique @default(nanoid(7))
+  name        String
+  model       String
+  loanedQty   Int
+  image       String
+  description String? @db.VarChar(255)
+}
+
+model RepoMaterials {
+  id         String @id @unique @default(nanoid(7))
+  name       String
+  quantity   Int
+  dimensions Json   @db.Json
+  // { type: DType, value: number, unit: DUnit }[]
+
+  description String? @db.VarChar(255)
 }
