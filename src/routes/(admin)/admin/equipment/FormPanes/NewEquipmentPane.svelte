@@ -7,6 +7,7 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { ECategories } from '@prisma/client';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+	import UploadImage from '$components/UploadImage.svelte';
 
 	export let { modal, formStore, instances, resetForm, eCategories } = $$props as {
 		modal: boolean;
@@ -36,6 +37,8 @@
 			}
 		}
 	});
+
+	$: imageSrc = '';
 </script>
 
 <Pane bind:open={modal} style="--paneWidth: 450px;" on:close={() => resetForm(form)}>
@@ -73,7 +76,7 @@
 			>
 				Model
 			</LabelInput>
-			<LabelInput
+			<!-- <LabelInput
 				noFocus
 				style="--padxy: 10px; --font: 15px; --height: 34px;"
 				name="image"
@@ -83,7 +86,8 @@
 				aria-invalid={$form.image ? 'true' : undefined}
 			>
 				Image URL
-			</LabelInput>
+			</LabelInput> -->
+			<UploadImage {imageSrc} />
 
 			<LabelInput
 				noFocus
