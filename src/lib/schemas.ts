@@ -1,3 +1,4 @@
+import { EStatus } from '@prisma/client';
 import { z } from 'zod';
 
 const phoneRegex = new RegExp(/(\+91\s)?\d{10}/);
@@ -13,23 +14,23 @@ const phoneRegex = new RegExp(/(\+91\s)?\d{10}/);
 // first name, last name
 
 export const EItemZodSchema = z.object({
-  id: z.string().optional().or(z.literal('')),
-  name: z.string().min(2),
-  description: z.string().optional().or(z.literal('')),
-  status: z.enum(['available', 'inUse', 'maintenance', 'broken']),
-  cost: z.number().min(0),
+	id: z.string().optional().or(z.literal('')),
+	name: z.string().min(2),
+	description: z.string().optional().or(z.literal('')),
+	status: z.nativeEnum(EStatus),
+	cost: z.string().min(1).default('0')
 });
 
 export type EItemSchema = z.infer<typeof EItemZodSchema>;
 
 export const EZodSchema = z.object({
-  id: z.string().optional().or(z.literal('')),
-  name: z.string().min(2),
-  model: z.string().min(2),
-  image: z.string().url().optional().or(z.literal('')),
-  description: z.string().optional(),
-  instances: z.array(EItemZodSchema),
-  eCategoriesId: z.string().min(7)
+	id: z.string().optional().or(z.literal('')),
+	name: z.string().min(2),
+	model: z.string().min(2),
+	image: z.string().url().or(z.literal('')),
+	description: z.string().optional().default(''),
+	instances: z.array(EItemZodSchema),
+	eCategoriesId: z.string().min(7)
 });
 
 export type ESchema = z.infer<typeof EZodSchema>;

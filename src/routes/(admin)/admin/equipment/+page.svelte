@@ -59,9 +59,9 @@
 						on:click={() => {
 							editItem = {
 								...item,
-								instances: []
+								// instances: []
 							};
-							instances = item.instances ?? [];
+							// instances = item.instances ?? [];
 							editEquipmentModal = true;
 						}}
 					>

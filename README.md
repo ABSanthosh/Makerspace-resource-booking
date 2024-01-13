@@ -6,6 +6,8 @@
 - [x] Add multiple types 
 - [ ] [User dashboard with editing](https://supabase.com/docs/guides/getting-started/tutorials/with-sveltekit?language=ts)
 - [ ] Hook up new equipment schema to frontend
+- [ ] Error in nested instances loop not binding
+- [ ] try to refactor new and edit equipment pane into one
 - [ ] make time sheet
 
 For each equipment
