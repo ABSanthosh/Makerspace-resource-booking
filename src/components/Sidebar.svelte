@@ -109,12 +109,13 @@
 	.Sidebar {
 		gap: 15px;
 		max-height: 100vh;
-		@include box(58px);
+		@include box(56px);
 		overflow-x: hidden;
 		@include make-flex();
-		background-color: #fafbfb;
-		border-right: 3px solid #e5e7eb;
-		padding: 20px 8px 10px 10px;
+		background-color: #f8f9fa;
+		border-right: 1px solid var(--border);
+		// padding: 20px 8px 10px 10px;
+		padding: 8px;
 		transition: all 0.3s ease-in-out;
 
 		&.open {
@@ -132,9 +133,9 @@
 		}
 
 		&__logo {
+			@include box(100%, 40px);
 			img {
-				width: 100%;
-				height: 80%;
+				@include box(100%, 80%);
 				object-fit: contain;
 			}
 		}
@@ -156,7 +157,7 @@
 			summary {
 				gap: 8px;
 				flex-shrink: 0;
-				color: #344054;
+				color: #7e868c;
 				cursor: pointer;
 				padding: 0px 8px;
 				border-radius: 7px;
@@ -164,20 +165,26 @@
 				line-height: normal;
 				white-space: nowrap;
 				text-decoration: none;
-				@include box(100%, 35px);
-				background-color: #fafbfb;
+				@include box(calc(100% - 2px), 35px);
+				background-color: transparent;
 				border: 1px solid transparent;
 				@include make-flex($dir: row, $just: flex-start);
+				overflow: hidden;
+				border: 1px solid transparent;
 
 				&[data-active='true'] {
-					background-color: #ebedf0;
+					background-color: #e6e8eb;
+					color: #11181c;
+					&::before {
+						color: #11181c;
+					}
 				}
 
 				&:not(&[data-active='true']) {
 					&:hover,
 					&:focus {
 						outline: none;
-						background-color: #f4f5f6;
+						background-color: #ebedf1;
 					}
 				}
 			}
@@ -301,6 +308,12 @@
 				border: none;
 				background-color: transparent;
 				cursor: pointer;
+
+				&:hover,
+				&:focus {
+					outline: none;
+					background-color: #ebedf1;
+				}
 			}
 		}
 
