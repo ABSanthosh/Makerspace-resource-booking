@@ -1,7 +1,14 @@
 <script lang="ts">
+	import HomeNavigation from '$components/HomeNavigation.svelte';
+
+	export let { pathname } = $$props as {
+		pathname: string;
+	};
 </script>
 
-<header class="Header"></header>
+<header class="Header">
+	<HomeNavigation {pathname} isHeader={true} />
+</header>
 
 <style lang="scss">
 	.Header {

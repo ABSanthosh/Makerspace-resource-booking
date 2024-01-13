@@ -1,42 +1,49 @@
 <script lang="ts">
 	import clickOutside from '$directive/clickOutside';
 	import { HOME_ROUTES } from '$lib/routes';
-	export let pathname: string;
+	export let { pathname, isHeader } = $$props as {
+		pathname: string;
+		isHeader: boolean;
+	};
 
 	$: isNavOpen = false;
 </script>
 
-<aside class="HomeNav--desktop">
-	<ul class="HomeNav__box HomeNav--content" data-align="left">
-		{#each HOME_ROUTES as path}
-			<a href={path.route} class="HomeNav--item" class:active={path.route === `/${pathname}`}>
-				{path.name}
-			</a>
-		{/each}
-	</ul>
-</aside>
-
-<details
-	use:clickOutside
-	bind:open={isNavOpen}
-	class="FancyMenu HomeNav HomeNav--mobile"
-	on:outclick={() => (isNavOpen = false)}
->
-	<summary data-no-marker data-icon={String.fromCharCode(57682)}> Navigation </summary>
-	<ul class="HomeNav__box FancyMenu__content HomeNav--content" data-align="left">
-		{#each HOME_ROUTES as path}
-			<a href={path.route} class="HomeNav--item">
-				<!-- class:active={path.checked} -->
-				{path.name}
-			</a>
-		{/each}
-	</ul>
-</details>
+{#if !isHeader}
+	<aside class="HomeNav--desktop">
+		<ul class="HomeNav__box HomeNav--content" data-align="left">
+			{#each HOME_ROUTES as path}
+				<a href={path.route} class="HomeNav--item" class:active={path.route === `/${pathname}`}>
+					{path.name}
+				</a>
+			{/each}
+		</ul>
+	</aside>
+{:else}
+	<details
+		use:clickOutside
+		bind:open={isNavOpen}
+		class="FancyMenu HomeNav--mobile"
+		on:outclick={() => (isNavOpen = false)}
+	>
+		<summary data-no-marker data-icon={String.fromCharCode(58839)}>
+			<!-- get current route name -->
+			{HOME_ROUTES.filter((path) => path.route === `/${pathname}`)[0].name}
+		</summary>
+		<ul class="HomeNav__box FancyMenu__content HomeNav--content" data-align="left">
+			{#each HOME_ROUTES as path}
+				<a href={path.route} class="HomeNav--item" class:active={path.route === `/${pathname}`}>
+					{path.name}
+				</a>
+			{/each}
+		</ul>
+	</details>
+{/if}
 
 <style lang="scss">
 	.HomeNav {
 		&__box {
-			@include box();
+			width: 100%;
 			padding: 13px;
 			@include make-flex($dir: column, $align: flex-start);
 		}
@@ -74,14 +81,22 @@
 			background: #fff;
 			box-shadow: 0px 0px 21.6px 1px rgba(0, 0, 0, 0.04);
 
-			@include respondAt(630px) {
+			@include respondAt(780px) {
 				display: none;
 			}
 		}
 
 		&--mobile {
 			display: none;
-			@include respondAt(630px) {
+			@include box(220px, 36px);
+
+			& > summary {
+				&::before {
+					right: 8px;
+				}
+			}
+
+			@include respondAt(780px) {
 				display: block;
 			}
 		}

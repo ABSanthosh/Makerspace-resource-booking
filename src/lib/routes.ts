@@ -28,12 +28,6 @@ export const HOME_ROUTES: Route[] = [
 		children: []
 	},
 	{
-		name: 'Equipments',
-		route: '/equipment',
-		icon: 0,
-		children: []
-	},
-	{
 		name: 'Guides',
 		route: '/guides',
 		icon: 0,
@@ -60,6 +54,12 @@ export const HOME_ROUTES: Route[] = [
 	{
 		name: 'Archive',
 		route: '/archive',
+		icon: 0,
+		children: []
+	},
+	{
+		name: 'Equipments',
+		route: '/equipment',
 		icon: 0,
 		children: []
 	}

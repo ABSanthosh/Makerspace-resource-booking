@@ -1,5 +1,4 @@
 <script lang="ts">
-	// import type { EZodSchema } from '$lib/schemas';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -33,7 +32,6 @@
 
 		&__card {
 			@include make-flex();
-			// @include box(150px, 300px);
 			@include box();
 			gap: 10px;
 
