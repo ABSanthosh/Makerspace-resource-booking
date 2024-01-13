@@ -12,12 +12,13 @@ const phoneRegex = new RegExp(/(\+91\s)?\d{10}/);
 // User category
 // first name, last name
 
-
 export const EItemZodSchema = z.object({
   id: z.string().optional().or(z.literal('')),
   name: z.string().min(2),
   description: z.string().optional().or(z.literal('')),
-})
+  status: z.enum(['available', 'inUse', 'maintenance', 'broken']),
+  cost: z.number().min(0),
+});
 
 export type EItemSchema = z.infer<typeof EItemZodSchema>;
 
@@ -29,6 +30,6 @@ export const EZodSchema = z.object({
   description: z.string().optional(),
   instances: z.array(EItemZodSchema),
   eCategoriesId: z.string().min(7)
-})
+});
 
 export type ESchema = z.infer<typeof EZodSchema>;
