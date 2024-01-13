@@ -1,20 +1,11 @@
 <script lang="ts">
 	// import type { EZodSchema } from '$lib/schemas';
-  import type { PageData } from './$types';
-  
-	export let data: PageData;
+	import type { PageData } from './$types';
 
-	console.log(data);
+	export let data: PageData;
 </script>
 
 <main class="Equipment">
-	<ul>
-		<li><a href="/">Home</a></li>
-		<li><a href="/login">Login</a></li>
-		<li><a href="/admin">Admin</a></li>
-		<li><a href="/dash">Dashboard</a></li>
-		<li><a href="/equipment">Equipment</a></li>
-	</ul>
 	<div class="Equipment__content">
 		{#each data.allEquipment as item}
 			<div class="Equipment__card">

@@ -6,7 +6,10 @@
 </script>
 
 <div>
-	{#if session != null}
+	{#each [...Array(100).keys()] as i}
+		<p>{i}</p>
+	{/each}
+	<!-- {#if session != null}
 		<p>You are logged in as {session.user.email}</p>
 		<ul>
 			<li><a href="/admin">Admin</a></li>
@@ -32,5 +35,5 @@
 		>
 			Continue with Google
 		</button>
-	{/if}
+	{/if} -->
 </div>

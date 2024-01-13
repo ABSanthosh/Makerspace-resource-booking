@@ -26,12 +26,11 @@ export const actions: Actions = {
 		if (!newEquipmentForm.valid) {
 			return fail(400, { newEquipmentForm });
 		}
-		const temp = await addEquipment(newEquipmentForm.data);
-    console.log(temp);
+		
 		return {
 			form: {
 				...newEquipmentForm,
-				response: temp,
+				response: await addEquipment(newEquipmentForm.data),
 				allEquipment: await getAllEquipment()
 			}
 		};

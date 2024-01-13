@@ -1,6 +1,5 @@
 export default function clickOutside(node: HTMLElement) {
 	const handleClick = (event: MouseEvent) => {
-		console.log(node);
 		if (!node.contains(event.target as Node)) {
 			node.dispatchEvent(new CustomEvent('outclick'));
 		}
