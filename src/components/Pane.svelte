@@ -9,37 +9,47 @@
 	$: if (pane) {
 		if (open) {
 			pane.showModal();
+			document.documentElement.style.scrollbarGutter = 'unset';
 		} else {
 			pane.close();
+			document.documentElement.style.scrollbarGutter = '';
 		}
 	}
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<dialog
-	on:close
-	class="Pane"
-	{...$$restProps}
-	bind:this={pane}
-	on:keydown={(e) => {
-		if (e.key === 'Escape') {
-			pane.close();
-			open = false;
-		}
-	}}
->
-	<button
-		class="Pane--close"
-		on:click={() => {
-			pane.close();
-			open = false;
+{#if open}
+	<dialog
+		on:close
+		class="Pane"
+		{...$$restProps}
+		bind:this={pane}
+		on:keydown={(e) => {
+			if (e.key === 'Escape') {
+				pane.close();
+				open = false;
+			}
 		}}
-		data-icon={String.fromCharCode(58829)}
-	/>
-	{#if open}
-		<slot />
-	{/if}
-</dialog>
+	>
+		<header>
+			<slot name="header" />
+			<button
+				class="Pane--close"
+				on:click={() => {
+					pane.close();
+					open = false;
+				}}
+				data-icon={String.fromCharCode(58829)}
+			/>
+		</header>
+		<main>
+			<slot />
+		</main>
+		<footer>
+			<slot name="footer" />
+		</footer>
+	</dialog>
+{/if}
 
 <style lang="scss">
 	.Pane {
@@ -48,14 +58,44 @@
 		margin-right: 0;
 		margin-bottom: 0;
 		max-height: none;
-		background-color: white;
-		border-left: 3px solid #006db4;
+		overflow: hidden;
+		background-color: #fbfcfd;
+		border-left: 1px solid var(--border);
+		box-shadow:
+			rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+			rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+			rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
+			rgba(0, 0, 0, 0.1) 0px 8px 10px -6px;
 		@include box(var(--paneWidth, 600px));
+		@include make-flex();
+		outline: none;
+
+		& > header {
+			@include box(100%, auto);
+			padding: 16px 24px;
+			@include make-flex($align: flex-start);
+			border-bottom: 1px solid var(--border);
+			position: relative;
+		}
+
+		& > main {
+			@include box(100%, auto);
+			padding: 24px;
+			flex: 1 1 0%;
+			overflow-y: auto;
+		}
+
+		& > footer {
+			@include box(100%, auto);
+			padding: 12px 16px;
+			@include make-flex($align: flex-end);
+			border-top: 1px solid var(--border);
+		}
 
 		&::backdrop {
 			@include box(100vw, 100vh);
-			backdrop-filter: blur(2px);
-			background: rgba(0, 0, 0, 0.22);
+			backdrop-filter: blur(1px);
+			background: rgba(240, 242, 244, 75%);
 		}
 
 		&[open] {
@@ -67,7 +107,8 @@
 		}
 
 		&--close {
-			top: 10px;
+			top: 50%;
+			transform: translateY(-50%);
 			right: 10px;
 			padding: 6px;
 			outline: none;

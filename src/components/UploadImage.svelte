@@ -15,9 +15,13 @@
 	};
 </script>
 
-<label class="UploadImage" for="image-upload">
+<div class="UploadImage">
 	<span>Image</span>
-	<div class="UploadImage__dnd" data-image={imageSrc === '' ? undefined : true}>
+	<label
+		for="image-upload"
+		class="UploadImage__dnd"
+		data-image={imageSrc === '' ? undefined : true}
+	>
 		<input
 			type="file"
 			id="image-upload"
@@ -30,9 +34,9 @@
 		{:else}
 			Upload image
 		{/if}
-	</div>
+	</label>
 	<!-- style="display:none" -->
-</label>
+</div>
 
 <style lang="scss">
 	.UploadImage {
