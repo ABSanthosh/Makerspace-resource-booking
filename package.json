@@ -11,6 +11,7 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"db": "prisma db push && prisma db seed && npx tsx ./src/lib/seedTrigger.ts",
+		"sb-stop": "supabase stop --backup",
 		"sb-restart": "supabase stop --backup && supabase start",
 		"sb-reset": "supabase db reset && yarn sb-restart && prisma db push"
 	},

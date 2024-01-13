@@ -1,29 +1,29 @@
 import { db } from "$lib/prisma";
-import type { NewEquipmentSchema } from "$lib/schemas";
+import type { ESchema } from "$lib/schemas";
 
-export async function addEquipment(equipment: NewEquipmentSchema) {
-  return await db.equipment.create({
-    data: {
-      name: equipment.name,
-      model: equipment.model,
-      image: equipment.image,
-      description: equipment.description,
-      items: {
-        create: equipment.equipment
-      }
-    }
-  });
+export async function addEquipment(equipment: ESchema) {
+  // return await db.equipment.create({
+  //   data: {
+  //     name: equipment.name,
+  //     model: equipment.model,
+  //     image: equipment.image,
+  //     description: equipment.description,
+  //     items: {
+  //       create: equipment.equipment
+  //     }
+  //   }
+  // });
 }
 
-export async function getAllEquipment() {
+export async function getAllEquipment(): Promise<ESchema[]> {
   return await db.equipment.findMany({
     include: {
-      items: true
+      instances: true,
     }
   });
 }
 
-export async function editEquipment(equipment: NewEquipmentSchema) {
+export async function editEquipment(equipment: ESchema) {
   return await db.equipment.update({
     where: {
       id: equipment.id
@@ -33,8 +33,8 @@ export async function editEquipment(equipment: NewEquipmentSchema) {
       model: equipment.model,
       image: equipment.image,
       description: equipment.description,
-      items: {
-        updateMany: equipment.equipment.map((item) => ({
+      instances: {
+        updateMany: equipment.instances.map((item) => ({
           where: {
             id: item.id
           },
@@ -46,4 +46,8 @@ export async function editEquipment(equipment: NewEquipmentSchema) {
       }
     }
   });
+}
+
+export async function getECategories() {
+  return await db.eCategories.findMany();
 }

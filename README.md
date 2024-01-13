@@ -6,6 +6,7 @@
 - [x] Add multiple types 
 - [ ] [User dashboard with editing](https://supabase.com/docs/guides/getting-started/tutorials/with-sveltekit?language=ts)
 - [ ] Hook up new equipment schema to frontend
+- [ ] make time sheet
 
 For each equipment
 - *Generic Name eg: 3d printer

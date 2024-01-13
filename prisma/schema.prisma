@@ -26,12 +26,14 @@ model Profile {
 }
 
 model Equipment {
-  id          String   @id @unique @default(nanoid(7))
-  name        String
-  model       String
-  description String   @db.VarChar(255)
-  image       String
-  items       EItems[]
+  id            String      @id @unique @default(nanoid(7))
+  name          String
+  model         String
+  description   String      @db.VarChar(255)
+  image         String
+  instances     EInstances[]
+  eCategoriesId String
+  category      ECategories @relation(fields: [eCategoriesId], references: [id])
   // videos
 }
 
@@ -42,7 +44,7 @@ enum EStatus {
   broken
 }
 
-model EItems {
+model EInstances {
   id          String   @id @unique @default(nanoid(7))
   name        String
   description String   @db.VarChar(255)
@@ -56,6 +58,8 @@ model EItems {
 model ECategories {
   id   String @id @unique @default(nanoid(7))
   name String
+
+  equipment Equipment[]
 }
 
 model RepoElectronics {
