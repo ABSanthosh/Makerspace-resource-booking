@@ -42,7 +42,7 @@
 
 <Pane bind:open={modal} style="--paneWidth: 450px;" on:close={() => resetForm(form)}>
 	<p slot="header">Add Equipment</p>
-	<SuperDebug data={$form} />
+	<!-- <SuperDebug data={$form} /> -->
 	<form
 		use:enhance
 		method="POST"
