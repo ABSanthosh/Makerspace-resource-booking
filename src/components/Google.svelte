@@ -7,7 +7,7 @@
 
 {#if $SessionStore === null}
 	<button
-		class="Google FancyButton"
+		class="Google--button FancyButton"
 		on:click={async () => {
 			await $SupaStore.auth.signInWithOAuth({
 				provider: 'google',
@@ -85,29 +85,29 @@
 
 <style lang="scss">
 	.Google {
-		@include box(auto, 36px);
-		gap: 10px;
-		border: 1px solid transparent;
-		cursor: pointer;
+		&--button {
+			@include box(auto, 36px);
+			gap: 10px;
+			border: 1px solid transparent;
+			cursor: pointer;
 
-		& > span {
-			font-size: 15px;
-			white-space: nowrap;
+			& > span {
+				font-size: 15px;
+				white-space: nowrap;
+			}
+
+			&:hover {
+				border: 1px solid var(--buttonHoverBorder);
+				background-color: var(--buttonHoverBG) !important;
+			}
+
+			& > svg {
+				@include box(20px, 20px);
+			}
 		}
-
-		&:hover {
-			border: 1px solid var(--buttonHoverBorder);
-			background-color: var(--buttonHoverBG) !important;
-		}
-
-		& > svg {
-			@include box(20px, 20px);
-		}
-
 		&__profile {
 			@include box(36px, 36px);
 			min-width: unset;
-
 			& > summary {
 				@include box();
 				padding: 0;
@@ -125,6 +125,17 @@
 
 			&--box {
 				@include box(200px, auto);
+
+				&[data-align='right'] {
+					right: 0;
+					&::after {
+						right: 11px;
+					}
+
+					&::before {
+						right: calc(11px + 0.5px);
+					}
+				}
 			}
 
 			&--item {
