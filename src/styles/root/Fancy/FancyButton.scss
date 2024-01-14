@@ -1,66 +1,63 @@
 .FancyButton {
-  border: none;
-  outline: none;
-  font-size: 15px;
-  border-radius: 6px;
-  @include box(var(--width, auto), var(--height, 40px));
-  
-  // no data-type selector
-  &[data-type=""] {
-    color: var(--foreground);
-    border: 1.2px solid var(--border);
-    background-color: var(--background);
-    &:hover:not(:disabled) {
-      border: 1px solid var(--buttonHoverBorder);
-      background-color: var(--buttonHoverBG) !important;
-    }
-    &:disabled {
-      cursor: not-allowed;
-      color: var(--disabledLink);
-      border: 1px solid (--border);
-      background-color: var(--buttonHover);
-    }
-  }
+	border: none;
+	outline: none;
+	font-size: 15px;
+	border-radius: 6px;
+	@include box(var(--width, auto), var(--height, 40px));
 
-  gap: 10px;
-  outline: none;
-  cursor: pointer;
-  padding: 8px 10px;
-  @include make-flex($dir: row);
-  transition: all 0.1s ease-in-out;
+	// no data-type selector
+	&[data-type=''] {
+		color: var(--foreground);
+		border: 1.2px solid var(--border);
+		background-color: var(--background);
+		&:hover:not(:disabled) {
+			border: 1px solid var(--buttonHoverBorder);
+			background-color: var(--buttonHoverBG) !important;
+		}
+		&:disabled {
+			cursor: not-allowed;
+			color: var(--disabledLink);
+			border: 1px solid (--border);
+			background-color: var(--buttonHover);
+		}
+	}
 
+	gap: 10px;
+	outline: none;
+	cursor: pointer;
+	padding: 8px 10px;
+	@include make-flex($dir: row);
+	transition: all 0.1s ease-in-out;
 
+	&[data-type='close'] {
+		// @include box(25px, 25px);
+		color: var(--foreground);
+		// border-radius: 50%;
+		border: 1px solid var(--border);
+		transition: all 0.1s ease-in-out;
+		background-color: var(--lightRed);
+		color: white !important;
+		&::before {
+			color: white !important;
+		}
+		&::before {
+			font-size: 15px;
+		}
+		&:hover {
+			background-color: var(--darkRed) !important;
+		}
+	}
 
-  &[data-close] {
-    // @include box(25px, 25px);
-    color: var(--foreground);
-    // border-radius: 50%;
-    background-color: var(--background);
-    border: 1px solid var(--border);
-    transition: all 0.1s ease-in-out;
-    &::before {
-      font-size: 15px;
-    }
-    &:hover {
-      background-color: var(--lightRed) !important;
-      color: white !important;
+	// types
+	&[data-type='black-fill'] {
+		background-color: var(--foreground);
+		color: var(--background);
+		border: 1px solid transparent;
+	}
 
-      &::before {
-        color: white !important;
-      }
-    }
-  }
-
-  // types
-  &[data-type="black-fill"]{
-    background-color: var(--foreground);
-    color: var(--background);
-    border: 1px solid transparent;
-  }
-
-  &[data-type="black-outline"]{
-    background-color: var(--background);
-    color: var(--foreground);
-    border: 1px solid var(--foreground);
-  }
+	&[data-type='black-outline'] {
+		background-color: var(--background);
+		color: var(--foreground);
+		border: 1px solid var(--foreground);
+	}
 }

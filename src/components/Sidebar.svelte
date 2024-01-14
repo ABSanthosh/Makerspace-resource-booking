@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import type { Route } from '$lib/routes';
-	import type { SupabaseClient, User } from '@supabase/supabase-js';
+	import { SupaStore, SessionStore } from '$store/SupaStore';
 
-	export let user: User;
-	export let supabase: SupabaseClient;
+	$: supabase = $SupaStore;
+	$: user = $SessionStore!.user;
 	export let routes: Route[];
 
 	$: userName = user.user_metadata.name;

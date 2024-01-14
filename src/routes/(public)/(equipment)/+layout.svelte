@@ -14,7 +14,7 @@
 		@include box($height: auto);
 		@include make-flex($just: flex-start);
 		padding: 30px 20px 20px 20px;
-		margin-top: 84px;
+		margin-top: 64px;
 		max-width: $maxWidth;
 		gap: 15px;
 	}

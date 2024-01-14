@@ -27,7 +27,6 @@
 		on:outclick={() => (isNavOpen = false)}
 	>
 		<summary data-no-marker data-icon={String.fromCharCode(58839)}>
-			<!-- get current route name -->
 			{HOME_ROUTES.filter((path) => path.route === `/${pathname}`)[0].name}
 		</summary>
 		<ul class="HomeNav__box FancyMenu__content HomeNav--content" data-align="left">
@@ -68,7 +67,7 @@
 		}
 
 		&--desktop {
-			top: 108px;
+			top: 84px;
 			width: auto;
 			height: unset;
 			width: 220px;
@@ -88,7 +87,8 @@
 
 		&--mobile {
 			display: none;
-			@include box(220px, 36px);
+			@include box(100%, 36px);
+			max-width: 220px;
 
 			& > summary {
 				&::before {
