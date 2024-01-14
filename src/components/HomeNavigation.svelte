@@ -29,7 +29,7 @@
 		<summary data-no-marker data-icon={String.fromCharCode(58839)}>
 			{HOME_ROUTES.filter((path) => path.route === `/${pathname}`)[0].name}
 		</summary>
-		<ul class="HomeNav__box FancyMenu__content HomeNav--content" data-align="left">
+		<ul class="HomeNav__box FancyMenu__content HomeNav--content" data-align="right">
 			{#each HOME_ROUTES as path}
 				<a href={path.route} class="HomeNav--item" class:active={path.route === `/${pathname}`}>
 					{path.name}
@@ -83,6 +83,10 @@
 			@include respondAt(780px) {
 				display: none;
 			}
+		}
+
+		&--content {
+			width: 220px;
 		}
 
 		&--mobile {

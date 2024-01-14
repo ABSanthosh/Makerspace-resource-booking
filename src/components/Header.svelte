@@ -9,7 +9,13 @@
 
 <header class="HeaderWrapper">
 	<div class="Header">
-		<div class="Header__left">LOGO</div>
+		<div class="Header__left">
+			<a href="/" class="Header__logo">
+				<img src="/assets/images/snu_logo.svg" alt="snu Logo" />
+				<hr />
+				<img src="/assets/images/logo.svg" alt="Logo" />
+			</a>
+		</div>
 		<div class="Header__right">
 			<HomeNavigation {pathname} isHeader={true} />
 			<Google />
@@ -36,13 +42,45 @@
 		@include box();
 		max-width: $maxWidth;
 		@include make-flex($dir: row, $just: space-between);
-
+		gap: 15px;
 		padding: 16px 20px;
+
+		&__logo {
+			@include make-flex($dir: row, $just: flex-start, $align: center);
+			gap: 10px;
+			@include box(auto);
+			& > img {
+				@include box(auto, 35px);
+
+				&:first-child {
+					@include respondAt(500px) {
+						display: none;
+					}
+				}
+			}
+			& > hr {
+				@include box(1px, 40px);
+				background: var(--border);
+				border: none;
+				@include respondAt(500px) {
+					display: none;
+				}
+			}
+		}
+
+		&__left {
+			@include make-flex($dir: row, $just: flex-start);
+			@include box(auto, auto);
+		}
 
 		&__right {
 			@include make-flex($dir: row, $just: flex-end);
-			gap: 15px;
 			@include box(100%, auto);
+		}
+
+		&__right,
+		&__left {
+			gap: 15px;
 		}
 	}
 </style>
