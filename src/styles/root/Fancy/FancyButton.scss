@@ -3,17 +3,19 @@
 	outline: none;
 	font-size: 15px;
 	border-radius: 6px;
-	@include box(var(--width, auto), var(--height, 40px));
+	@include box(var(--width, auto), var(--height, 36px));
 
 	// no data-type selector
 	&[data-type=''] {
 		color: var(--foreground);
 		border: 1.2px solid var(--border);
 		background-color: var(--background);
+
 		&:hover:not(:disabled) {
 			border: 1px solid var(--buttonHoverBorder);
 			background-color: var(--buttonHoverBG) !important;
 		}
+
 		&:disabled {
 			cursor: not-allowed;
 			color: var(--disabledLink);
@@ -29,6 +31,11 @@
 	@include make-flex($dir: row);
 	transition: all 0.1s ease-in-out;
 
+	&[data-type='dark-blue'] {
+		background-color: var(--darkBlue) !important;
+		color: white !important;
+	}
+
 	&[data-type='close'] {
 		// @include box(25px, 25px);
 		color: var(--foreground);
@@ -37,12 +44,15 @@
 		transition: all 0.1s ease-in-out;
 		background-color: var(--lightRed);
 		color: white !important;
+
 		&::before {
 			color: white !important;
 		}
+
 		&::before {
 			font-size: 15px;
 		}
+
 		&:hover {
 			background-color: var(--darkRed) !important;
 		}

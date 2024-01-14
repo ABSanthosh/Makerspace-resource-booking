@@ -1,39 +1,154 @@
 <script lang="ts">
-	export let data;
+	// export let data;
+	// $: ({ supabase, session } = data);
 
-	$: ({ supabase, session } = data);
-	// console.log(data)
+	const hours = [
+		{
+			day: 'Monday',
+			from: '8:00 AM',
+			to: '5:00 PM'
+		},
+		{
+			day: 'Tuesday',
+			from: '8:00 AM',
+			to: '5:00 PM'
+		},
+		{
+			day: 'Wednesday',
+			from: '8:00 AM',
+			to: '5:00 PM'
+		},
+		{
+			day: 'Thursday',
+			from: '8:00 AM',
+			to: '5:00 PM'
+		}
+	];
 </script>
 
-<div>
-	{#each [...Array(100).keys()] as i}
-		<p>{i}</p>
-	{/each}
-	<!-- {#if session != null}
-		<p>You are logged in as {session.user.email}</p>
-		<ul>
-			<li><a href="/admin">Admin</a></li>
-			<li><a href="/dash">Dashboard</a></li>
-			<li><a href="/equipment">Equipment</a></li>
-		</ul>
-		<br />
-		<button on:click={() => supabase.auth.signOut()}>Sign out</button>
-	{:else}
-		<button
-			on:click={async () => {
-				await supabase.auth.signInWithOAuth({
-					provider: 'google',
-					options: {
-						redirectTo: `${location.origin}/auth/callback`,
-						queryParams: {
-							access_type: 'offline',
-							prompt: 'consent'
-						}
-					}
-				});
-			}}
-		>
-			Continue with Google
-		</button>
-	{/if} -->
+<div class="LandingPage">
+	<section class="LandingPage__hero">
+		<div class="LandingPage__hero--intro Col--a-start gap-15">
+			<h1>Welcome to SNIoE Makerspace!</h1>
+			<p>
+				Welcome to SNIoE's Makerspace, an embodiment of our commitment to STEAM education and
+				innovation. Here, we offer a dynamic collaborative environment fostering interdisciplinary
+				research and project creation.
+				<br />
+				<br />
+				Our Makerspace is equipped with cutting-edge, user-friendly tools and state-of-the-art technologies,
+				ensuring accessibility and affordability. It serves as a hub for world-class research test-beds,
+				facilitating the creation of quality publications.
+				<br />
+				<br />
+				As a one-stop destination, our space fuels solutions in sustainability, green energy, intelligent
+				building, robotics, networks, and AI. Additionally, we provide comprehensive training and workshops,
+				ensuring efficient and safe utilization of tools and machines.
+			</p>
+		</div>
+		<div class="LandingPage__slot">
+			<h3>Makerspace Hours</h3>
+			<ul>
+				{#each hours as hour}
+					<li>
+						{hour.day}
+						<hr />
+						{hour.from} - {hour.to}
+					</li>
+				{/each}
+			</ul>
+			<button class="FancyButton" data-type="dark-blue" style="--width: 100%">Book a slot</button>
+		</div>
+	</section>
 </div>
+
+<style lang="scss">
+	.LandingPage {
+		gap: 150px;
+		@include box(100%, auto);
+		@include make-flex($just: flex-start);
+
+		&__hero {
+			gap: 24px;
+			display: grid;
+			grid-template-columns: 1fr 300px;
+
+			@include respondAt(1060px) {
+				@include make-flex();
+			}
+
+			&--intro {
+				& > h1 {
+					font-size: 36px;
+					font-weight: 700;
+					line-height: 1.5;
+
+					@include respondAt(500px) {
+						font-size: 32px;
+					}
+
+					@include respondAt(400px) {
+						font-size: 28px;
+					}
+				}
+				& > p {
+					font-size: 17px;
+					line-height: 1.5;
+					text-align: justify;
+
+					@include respondAt(500px) {
+						font-size: 16px;
+					}
+
+					@include respondAt(400px) {
+						font-size: 15px;
+					}
+				}
+			}
+		}
+
+		&__slot {
+			border-radius: 8px;
+			background: #e3f0ff;
+			box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.07);
+			padding: 15px;
+			height: fit-content;
+			@include make-flex();
+			gap: 20px;
+
+			@include respondAt(1060px) {
+				@include box(100%, auto);
+			}
+
+			& > h3 {
+				font-size: 18px;
+				@include box(100%, auto);
+				font-weight: 600;
+				// margin-bottom: 10px;
+			}
+
+			& > ul {
+				list-style: none;
+				gap: 10px;
+				@include make-flex();
+				@include box(100%, auto);
+
+				& > li {
+					font-size: 16px;
+					@include box(100%, auto);
+
+					@include make-flex($dir: row, $just: space-between);
+					line-height: 1.5;
+					gap: 10px;
+					& > hr {
+						margin: 0;
+						border: 0;
+						flex: 1;
+						border-top: 1px solid #ccc;
+						text-align: center;
+					}
+				}
+			}
+		}
+	}
+</style>
