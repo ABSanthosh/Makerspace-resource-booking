@@ -1,4 +1,5 @@
 <script lang="ts">
+	import LocationCard from '$components/LocationCard.svelte';
 	// export let data;
 	// $: ({ supabase, session } = data);
 
@@ -60,11 +61,12 @@
 			<button class="FancyButton" data-type="dark-blue" style="--width: 100%">Book a slot</button>
 		</div>
 	</section>
+	<LocationCard />
 </div>
 
 <style lang="scss">
 	.LandingPage {
-		gap: 150px;
+		gap: 80px;
 		@include box(100%, auto);
 		@include make-flex($just: flex-start);
 
