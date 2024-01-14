@@ -1,15 +1,14 @@
 <script lang="ts">
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { writable } from 'svelte/store';
-
+	import { SupaStore, SessionStore, ProfileStore } from '$store/SupaStore';
 	export let data;
 
 	// Supabase
-	$: ({ supabase, session } = data);
-
-	let supabaseStore = writable<typeof supabase>();
-	$: supabaseStore.set(supabase);
+	$: ({ supabase, session, profile } = data);
+	$: SupaStore.set(supabase);
+	$: SessionStore.set(session);
+	$: ProfileStore.set(profile);
 
 	onMount(() => {
 		const {

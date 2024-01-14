@@ -29,6 +29,7 @@ const config = {
 			"$lib/*": "src/lib/*",
 			"$directive/*": "src/directive/*",
 			"$db/*": "src/db/*",
+			"$store/*": "src/store/*",
 		},
 	}
 };
