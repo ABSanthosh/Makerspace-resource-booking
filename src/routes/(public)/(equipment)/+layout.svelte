@@ -1,11 +1,12 @@
 <script lang="ts">
+	import BreadCrumb from '$components/BreadCrumb.svelte';
+	import { BreadCrumbStore } from '$store/BreadCrumbStore';
+
 	// This is the layout for all the routes inside (equipment) group.
 </script>
 
 <div class="EquipmentLayout">
-	<a href="/"> Home </a>
-	<h1>Equipment Layout</h1>
-
+	<BreadCrumb crumbs={$BreadCrumbStore} />
 	<slot />
 </div>
 
