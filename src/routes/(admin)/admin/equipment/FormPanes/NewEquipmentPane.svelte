@@ -49,6 +49,7 @@
 		<LabelInput
 			mandatory
 			style="--padxy: 10px;"
+			labelStyle="--width: 100%;"
 			name="name"
 			type="text"
 			bind:value={$form.name}
@@ -60,6 +61,7 @@
 		<LabelInput
 			mandatory
 			style="--padxy: 10px;"
+			labelStyle="--width: 100%;"
 			name="model"
 			type="text"
 			bind:value={$form.model}
@@ -74,6 +76,7 @@
 		<LabelInput
 			style="--padxy: 10px; --height: 120px;"
 			name="description"
+			labelStyle="--width: 100%;"
 			type="textarea"
 			bind:value={$form.description}
 			bind:error={$errors.description}
@@ -113,6 +116,7 @@
 						mandatory
 						orient="row"
 						style="--padxy: 10px; --width: 70%;"
+						labelStyle="--width: 100%;"
 						name={`instances[${i}].name`}
 						type="text"
 						bind:value={item.name}
@@ -124,6 +128,7 @@
 						mandatory
 						orient="row"
 						style="--padxy: 10px; --width: 70%;"
+						labelStyle="--width: 100%;"
 						name={`instances[${i}].cost`}
 						type="number"
 						bind:value={item.cost}
@@ -149,6 +154,7 @@
 						orient="row"
 						style="--padxy: 10px; --height: 80px; --width: 70%;"
 						name={`instances[${i}].description`}
+						labelStyle="--width: 100%;"
 						type="textarea"
 						bind:value={item.description}
 						aria-invalid={item.description ? 'true' : undefined}

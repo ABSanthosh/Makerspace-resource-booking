@@ -5,16 +5,17 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import type { ESchema, EItemSchema, EZodSchema } from '$lib/schemas';
-	import { EStatus } from '@prisma/client';
+	import { EStatus, type ECategories } from '@prisma/client';
 	import UploadImage from '$components/UploadImage.svelte';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
-	export let { modal, formStore, resetForm, editItem, allEquipments } = $$props as {
+	export let { modal, formStore, resetForm, editItem, allEquipments, eCategories } = $$props as {
 		modal: boolean;
 		editItem: ESchema;
 		allEquipments: EItemSchema[];
 		formStore: SuperValidated<typeof EZodSchema>;
 		resetForm: (form: Writable<ESchema>) => void;
+		eCategories: ECategories[];
 	};
 
 	const { form, errors, enhance } = superForm(formStore, {
@@ -37,7 +38,7 @@
 
 <Pane bind:open={modal} style="--paneWidth: 450px;" on:close={() => resetForm(form)}>
 	<p slot="header">Edit Equipment</p>
-	<!-- <SuperDebug data={$form} /> -->
+	<SuperDebug data={$form} />
 
 	<form
 		use:enhance
@@ -46,9 +47,16 @@
 		id="editEquipmentForm"
 		class="Col--center gap-10 w-100"
 	>
+		<select class="FancySelect" style="--width: 100%;" bind:value={$form.eCategoriesId}>
+			<option value="" disabled selected>Select a Category</option>
+			{#each eCategories as item}
+				<option value={item.id}>{item.name}</option>
+			{/each}
+		</select>
 		<LabelInput
 			mandatory
 			style="--padxy: 10px; --font: 15px;"
+			labelStyle="--width: 100%;"
 			name="name"
 			type="text"
 			bind:value={$form.name}
@@ -60,6 +68,7 @@
 		<LabelInput
 			mandatory
 			style="--padxy: 10px; --font: 15px;"
+			labelStyle="--width: 100%;"
 			name="model"
 			type="text"
 			bind:value={$form.model}
@@ -72,6 +81,7 @@
 		<LabelInput
 			style="--padxy: 10px; --font: 15px; --height: 120px;"
 			name="description"
+			labelStyle="--width: 100%;"
 			type="textarea"
 			bind:value={$form.description}
 			bind:error={$errors.description}
@@ -111,7 +121,8 @@
 					<LabelInput
 						mandatory
 						orient="row"
-						style="--padxy: 10px; --font: 15px; --width: 70%;"
+						style="--padxy: 10px; --width: 70%;"
+						labelStyle="--width: 100%;"
 						name={`instances[${i}].name`}
 						type="text"
 						bind:value={item.name}
@@ -123,6 +134,7 @@
 						mandatory
 						orient="row"
 						style="--padxy: 10px; --width: 70%;"
+						labelStyle="--width: 100%;"
 						name={`instances[${i}].cost`}
 						type="number"
 						bind:value={item.cost}
@@ -149,6 +161,7 @@
 						style="--padxy: 10px; --font: 15px; --height: 80px; --width: 70%;"
 						name={`instances[${i}].description`}
 						type="textarea"
+						labelStyle="--width: 100%;"
 						bind:value={item.description}
 						aria-invalid={item.description ? 'true' : undefined}
 					>
@@ -161,7 +174,6 @@
 						data-icon={String.fromCharCode(59506)}
 						style="--height: 34px; --width: auto --font: 15px;"
 						on:click={() => {
-							// instances = instances.filter((_, index) => index !== i);
 							form.update(($form) => {
 								let { instances } = $form;
 								instances = instances.filter((_, index) => index !== i);
