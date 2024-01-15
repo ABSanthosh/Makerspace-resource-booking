@@ -1524,11 +1524,6 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
-lucia@^2.7.6:
-  version "2.7.6"
-  resolved "https://registry.yarnpkg.com/lucia/-/lucia-2.7.6.tgz#7407b7b3d44021a0f5630df1322c833be90ae1b2"
-  integrity sha512-xyRkNtevf0DUM4nGC6F2nCFFNphZ1qqBrfWwAgPa9zkpQsVJ/hN32I8zAY+pm+ZKWPPS/C/Sqqmo2LreSCzg7w==
-
 magic-string@^0.30.4, magic-string@^0.30.5:
   version "0.30.5"
   resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.30.5.tgz#1994d980bd1c8835dc6e78db7cbd4ae4f24746f9"
