@@ -60,7 +60,7 @@
 			}
 			& > hr {
 				@include box(1px, 40px);
-				background: var(--border);
+				background: var(--iconColor);
 				border: none;
 				@include respondAt(500px) {
 					display: none;

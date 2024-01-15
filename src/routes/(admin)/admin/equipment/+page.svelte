@@ -45,6 +45,7 @@
 	{resetForm}
 	bind:editItem
 	bind:instances
+	bind:eCategories
 	bind:modal={editEquipmentModal}
 	bind:formStore={editEquipmentForm}
 />
@@ -52,6 +53,7 @@
 <main class="AdminEquipment">
 	<header>
 		<LabelInput
+			noLabel
 			label="Search"
 			type="search"
 			style="--width: 270px;"
@@ -67,7 +69,7 @@
 		</button>
 	</header>
 	<div class="AdminEquipment__content">
-		<table>
+		<table class="FancyTable">
 			<thead>
 				<tr>
 					<th> Equipment Name </th>
@@ -141,111 +143,6 @@
 			&::-webkit-scrollbar {
 				width: 6px;
 			}
-			& > table {
-				width: 100%;
-				border-collapse: separate;
-				border-spacing: 0;
-
-				thead tr th {
-					position: sticky;
-					top: 0;
-				}
-				tr {
-					background-color: #fbfcfd;
-
-					&.empty {
-						& > td {
-							text-align: center;
-							padding: 24px;
-							color: #687076;
-						}
-					}
-
-					& > th,
-					& > td {
-						padding: 12px 24px;
-						text-align: left;
-						font-size: 15px;
-
-						&:first-child {
-							border-left: 1px solid var(--border);
-							padding: 12px 16px 12px 24px;
-						}
-
-						&:last-child {
-							border-right: 1px solid var(--border);
-							padding: 12px 24px 12px 16px;
-						}
-					}
-
-					& > td {
-						border-bottom: 1px solid var(--border);
-					}
-
-					& > th {
-						border-top: 1px solid var(--border);
-						border-bottom: 1px solid var(--border);
-						background-color: var(--body);
-						color: #687076;
-						font-weight: 500;
-
-						&:first-child {
-							border-top-left-radius: 6px;
-						}
-
-						&:last-child {
-							border-top-right-radius: 6px;
-						}
-					}
-
-					&:last-child > td {
-						border-bottom: 0;
-					}
-				}
-				& > tfoot {
-					& > tr > td {
-						border-radius: 0 0 6px 6px;
-						font-size: 12px;
-						color: #7e868c;
-						position: sticky;
-						bottom: 0;
-						background-color: #fbfcfd;
-						border-top: 1px solid var(--border);
-						border-bottom: 1px solid var(--border) !important;
-					}
-				}
-			}
 		}
-
-		// &__content {
-		// 	@include box();
-		// 	display: grid;
-		// 	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-		// 	grid-template-rows: repeat(auto-fill, minmax(180px, 1fr));
-		// 	gap: 10px;
-		// 	padding: 20px;
-		// }
-
-		// &__card {
-		// 	@include make-flex($align: unset);
-		// 	// @include box(150px, 300px);
-		// 	@include box();
-		// 	gap: 15px;
-
-		// 	border-radius: 10px;
-		// 	padding: 20px;
-		// 	background: #fff;
-		// 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-
-		// 	& > h2 {
-		// 		white-space: nowrap;
-		// 		overflow: hidden;
-		// 		text-overflow: ellipsis;
-		// 	}
-		// 	& > img {
-		// 		@include box(100%, 100px);
-		// 		object-fit: contain;
-		// 	}
-		// }
 	}
 </style>
