@@ -34,6 +34,21 @@ export async function getAllEquipment(): Promise<
 	});
 }
 
+export async function getEquipmentById(
+	id: string
+): Promise<Equipment & { category: ECategories; instances: EItemSchema[] }> {
+	// @ts-ignore
+	return await db.equipment.findUnique({
+		where: {
+			id
+		},
+		include: {
+			instances: true,
+			category: true
+		}
+	});
+}
+
 export async function editEquipment(equipment: ESchema) {
 	return await db.equipment.update({
 		where: {
@@ -44,6 +59,7 @@ export async function editEquipment(equipment: ESchema) {
 			model: equipment.model,
 			image: equipment.image,
 			description: equipment.description,
+			eCategoriesId: equipment.eCategoriesId,
 			instances: {
 				updateMany: equipment.instances.map((item) => ({
 					where: {
