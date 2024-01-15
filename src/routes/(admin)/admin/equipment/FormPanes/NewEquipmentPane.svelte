@@ -2,7 +2,7 @@
 	import LabelInput from '$components/LabelInput.svelte';
 	import Pane from '$components/Pane.svelte';
 	import type { Writable } from 'svelte/store';
-	import type { ESchema, EItemSchema, EZodSchema } from '$lib/schemas';
+	import type { ESchema, EZodSchema } from '$lib/schemas';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { ECategories } from '@prisma/client';
@@ -12,7 +12,6 @@
 
 	export let { modal, formStore, resetForm, eCategories } = $$props as {
 		modal: boolean;
-		// instances: EItemSchema[];
 		formStore: SuperValidated<typeof EZodSchema>;
 		resetForm: (form: Writable<ESchema>) => void;
 		eCategories: ECategories[];
@@ -21,22 +20,13 @@
 	const { form, errors, enhance } = superForm(formStore, {
 		id: 'newEquipmentForm',
 		dataType: 'json',
-		// onSubmit: () => {
-		// 	form.update(
-		// 		($form) => {
-		// 			$form.instances = instances;
-		// 			return $form;
-		// 		},
-		// 		{ taint: false }
-		// 	);
-		// },
 		onResult(event) {
 			if (event.result.status === 200) {
-				// instances = [];
 				modal = false;
 				resetForm(form);
 			}
-		}
+		},
+		taintedMessage: null
 	});
 </script>
 
@@ -58,8 +48,7 @@
 		</select>
 		<LabelInput
 			mandatory
-			noFocus
-			style="--padxy: 10px; --height: 34px;"
+			style="--padxy: 10px;"
 			name="name"
 			type="text"
 			bind:value={$form.name}
@@ -70,8 +59,7 @@
 		</LabelInput>
 		<LabelInput
 			mandatory
-			noFocus
-			style="--padxy: 10px; --height: 34px;"
+			style="--padxy: 10px;"
 			name="model"
 			type="text"
 			bind:value={$form.model}
@@ -84,7 +72,6 @@
 		<UploadImage bind:imageSrc={$form.image} />
 
 		<LabelInput
-			noFocus
 			style="--padxy: 10px; --height: 120px;"
 			name="description"
 			type="textarea"
@@ -124,9 +111,8 @@
 				<li class="Col--a-end gap-10 w-100">
 					<LabelInput
 						mandatory
-						noFocus
 						orient="row"
-						style="--padxy: 10px; --height: 34px; --width: 70%;"
+						style="--padxy: 10px; --width: 70%;"
 						name={`instances[${i}].name`}
 						type="text"
 						bind:value={item.name}
@@ -136,9 +122,8 @@
 					</LabelInput>
 					<LabelInput
 						mandatory
-						noFocus
 						orient="row"
-						style="--padxy: 10px; --height: 34px; --width: 70%;"
+						style="--padxy: 10px; --width: 70%;"
 						name={`instances[${i}].cost`}
 						type="number"
 						bind:value={item.cost}
@@ -161,7 +146,6 @@
 						</select>
 					</div>
 					<LabelInput
-						noFocus
 						orient="row"
 						style="--padxy: 10px; --height: 80px; --width: 70%;"
 						name={`instances[${i}].description`}

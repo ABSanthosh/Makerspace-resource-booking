@@ -1,5 +1,6 @@
 import { db } from '$lib/prisma';
-import type { ESchema } from '$lib/schemas';
+import type { EItemSchema, ESchema } from '$lib/schemas';
+import type { ECategories, Equipment } from '@prisma/client';
 
 export async function addEquipment(equipment: ESchema) {
 	return await db.equipment.create({
@@ -21,11 +22,14 @@ export async function addEquipment(equipment: ESchema) {
 	});
 }
 
-export async function getAllEquipment(): Promise<ESchema[]> {
+export async function getAllEquipment(): Promise<
+	(Equipment & { category: ECategories; instances: EItemSchema[] })[]
+> {
 	// @ts-ignore
 	return await db.equipment.findMany({
 		include: {
-			instances: true
+			instances: true,
+			category: true
 		}
 	});
 }

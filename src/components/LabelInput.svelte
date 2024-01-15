@@ -26,7 +26,7 @@
 			id={name}
 			bind:value
 			{...$$restProps}
-			data-no-focus={noFocus ? 'true' : undefined}
+			data-no-focus={noFocus ? undefined: 'true'}
 		/>
 	{:else}
 		<input
@@ -34,7 +34,7 @@
 			id={name}
 			bind:value
 			{...$$restProps}
-			data-no-focus={noFocus ? 'true' : undefined}
+			data-no-focus={noFocus ? undefined: 'true'}
 		/>
 	{/if}
 	{#if error && error.length > 0}
@@ -76,7 +76,7 @@
 
 		& > input,
 		& > textarea {
-			@include box(var(--width, 100%), var(--height, 45px));
+			@include box(var(--width, 100%), var(--height, 34px));
 			padding: 1px var(--padxy, 14px);
 			font-size: var(--font, 14px);
 			border-radius: 7px;

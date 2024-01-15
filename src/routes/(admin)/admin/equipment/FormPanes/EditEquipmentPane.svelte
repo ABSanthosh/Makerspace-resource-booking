@@ -12,7 +12,6 @@
 	export let { modal, formStore, resetForm, editItem, allEquipments } = $$props as {
 		modal: boolean;
 		editItem: ESchema;
-		// instances: EItemSchema[];
 		allEquipments: EItemSchema[];
 		formStore: SuperValidated<typeof EZodSchema>;
 		resetForm: (form: Writable<ESchema>) => void;
@@ -21,21 +20,12 @@
 	const { form, errors, enhance } = superForm(formStore, {
 		id: 'editEquipmentForm',
 		dataType: 'json',
-		// onSubmit: () => {
-		// 	form.update(
-		// 		($form) => {
-		// 			$form.instances = instances;
-		// 			return $form;
-		// 		},
-		// 		{ taint: false }
-		// 	);
-		// },
 		onResult(event) {
 			if (event.result.status === 200) {
-				// instances = [];
 				modal = false;
 			}
-		}
+		},
+		taintedMessage: null
 	});
 
 	$: editItem,
@@ -43,8 +33,6 @@
 			$form = editItem;
 			return $form;
 		});
-
-	$: console.log($errors);
 </script>
 
 <Pane bind:open={modal} style="--paneWidth: 450px;" on:close={() => resetForm(form)}>
@@ -60,8 +48,7 @@
 	>
 		<LabelInput
 			mandatory
-			noFocus
-			style="--padxy: 10px; --font: 15px; --height: 34px;"
+			style="--padxy: 10px; --font: 15px;"
 			name="name"
 			type="text"
 			bind:value={$form.name}
@@ -72,8 +59,7 @@
 		</LabelInput>
 		<LabelInput
 			mandatory
-			noFocus
-			style="--padxy: 10px; --font: 15px; --height: 34px;"
+			style="--padxy: 10px; --font: 15px;"
 			name="model"
 			type="text"
 			bind:value={$form.model}
@@ -84,7 +70,6 @@
 		</LabelInput>
 		<UploadImage bind:imageSrc={$form.image} />
 		<LabelInput
-			noFocus
 			style="--padxy: 10px; --font: 15px; --height: 120px;"
 			name="description"
 			type="textarea"
@@ -125,9 +110,8 @@
 				<li class="Col--a-end gap-10 w-100">
 					<LabelInput
 						mandatory
-						noFocus
 						orient="row"
-						style="--padxy: 10px; --font: 15px; --height: 34px; --width: 70%;"
+						style="--padxy: 10px; --font: 15px; --width: 70%;"
 						name={`instances[${i}].name`}
 						type="text"
 						bind:value={item.name}
@@ -137,9 +121,8 @@
 					</LabelInput>
 					<LabelInput
 						mandatory
-						noFocus
 						orient="row"
-						style="--padxy: 10px; --height: 34px; --width: 70%;"
+						style="--padxy: 10px; --width: 70%;"
 						name={`instances[${i}].cost`}
 						type="number"
 						bind:value={item.cost}
@@ -162,7 +145,6 @@
 						</select>
 					</div>
 					<LabelInput
-						noFocus
 						orient="row"
 						style="--padxy: 10px; --font: 15px; --height: 80px; --width: 70%;"
 						name={`instances[${i}].description`}
