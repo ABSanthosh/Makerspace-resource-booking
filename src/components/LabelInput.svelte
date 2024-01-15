@@ -5,28 +5,38 @@
 		error,
 		mandatory,
 		noFocus,
-		orient = 'col'
+		noLabel,
+		orient = 'col',
+		labelStyle
 	} = $$props as {
 		value: string;
 		name: string;
 		mandatory?: boolean;
 		error: string[] | undefined;
 		noFocus?: boolean;
+		noLabel?: boolean;
 		orient?: 'col' | 'row';
+		labelStyle?: string;
 	};
 </script>
 
-<label class="LabelInput {orient === 'col' ? 'Col--center' : 'Row--center'}" for={name}>
-	<span class="LabelInput__text" data-mandatory={mandatory ? 'true' : undefined}>
-		<slot />
-	</span>
+<label
+	for={name}
+	style={labelStyle}
+	class="LabelInput {orient === 'col' ? 'Col--center' : 'Row--center'}"
+>
+	{#if !noLabel}
+		<span class="LabelInput__text" data-mandatory={mandatory ? 'true' : undefined}>
+			<slot />
+		</span>
+	{/if}
 	{#if $$restProps.type === 'textarea'}
 		<textarea
 			{name}
 			id={name}
 			bind:value
 			{...$$restProps}
-			data-no-focus={noFocus ? undefined: 'true'}
+			data-no-focus={noFocus ? undefined : 'true'}
 		/>
 	{:else}
 		<input
@@ -34,7 +44,7 @@
 			id={name}
 			bind:value
 			{...$$restProps}
-			data-no-focus={noFocus ? undefined: 'true'}
+			data-no-focus={noFocus ? undefined : 'true'}
 		/>
 	{/if}
 	{#if error && error.length > 0}
@@ -49,10 +59,9 @@
 <style lang="scss">
 	.LabelInput {
 		gap: 5px;
-		@include box(100%, auto);
+		@include box(var(--width, auto), auto);
 		align-items: flex-start;
 		justify-content: space-between;
-		// @include make-flex($align: flex-start);
 
 		&__text {
 			@include box(auto, auto);
@@ -63,7 +72,6 @@
 			color: rgb(104, 112, 118);
 			@include make-flex($dir: row, $align: flex-start);
 		}
-		// line-height: 24px;
 
 		&__error {
 			list-style-position: inside;

@@ -111,7 +111,7 @@
 
 		&__slot {
 			border-radius: 8px;
-			background: #e3f0ff;
+			background: var(--lightBlue);
 			box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.07);
 			padding: 15px;
 			height: fit-content;
