@@ -2,9 +2,10 @@
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import { BreadCrumbStore } from '$store/BreadCrumbStore';
+	import Pane from '$components/Pane.svelte';
 
 	export let data: PageData;
-
+	$: ({ equipment } = data);
 	onMount(() => {
 		BreadCrumbStore.update(() => {
 			return [
@@ -24,8 +25,22 @@
 		});
 	});
 
-	console.log(data.equipment);
+	$: availabilityPane = false;
 </script>
+
+<Pane bind:open={availabilityPane} style="--paneWidth: 450px;">
+	<p slot="header">Availability</p>
+
+	<div slot="footer">
+		<button
+			class="FancyButton"
+			data-type="black-outline"
+			on:click={() => (availabilityPane = false)}
+		>
+			Close
+		</button>
+	</div>
+</Pane>
 
 <main class="Equipment">
 	<header class="Equipment__header w-100 gap-10">
@@ -51,6 +66,51 @@
 				<a href={'#'} target="_blank" class="FancyButton" data-type="black-outline">Videos</a>
 				<a href={'#'} target="_blank" class="FancyButton" data-type="black-outline">Manual</a>
 			</div>
+		</div>
+	</section>
+	<section class="Equipment__instance Col--j-start">
+		<h3 class="w-100">
+			Instances
+			<hr />
+		</h3>
+		<div class="Equipment__tableContainer">
+			<table class="FancyTable">
+				<thead>
+					<tr>
+						<th> Instance Name </th>
+						<th> Model </th>
+						<th> Category </th>
+						<th> Cost </th>
+						<th> View Availability</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each equipment.instances as item}
+						<tr>
+							<td>{item.name}</td>
+							<td>{equipment.model}</td>
+							<td>{equipment.category.name}</td>
+							<td>{item.cost}</td>
+							<td>
+								<button
+									class="FancyButton"
+									data-type="black-outline"
+									on:click={() => (availabilityPane = true)}
+								>
+									View
+								</button>
+							</td>
+						</tr>
+					{/each}
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="5">
+							Showing {equipment?.instances.length ?? 0} result(s)
+						</td>
+					</tr>
+				</tfoot>
+			</table>
 		</div>
 	</section>
 </main>
@@ -92,9 +152,25 @@
 			}
 		}
 
-		&__hero {
+		&__hero,
+		&__instance {
 			gap: 15px;
 			@include box();
+			h3 {
+				gap: 15px;
+				font-size: 25px;
+				font-weight: 500;
+				@include make-flex($dir: row, $just: flex-start);
+
+				hr {
+					margin: 10px 0;
+					width: 100%;
+					border: 1px solid var(--border);
+				}
+			}
+		}
+
+		&__hero {
 			@include make-flex($dir: row, $align: flex-start);
 
 			@include respondAt(730px) {
@@ -110,18 +186,14 @@
 				font-size: 18px;
 				font-weight: 400;
 			}
+		}
 
-			h3 {
-				gap: 15px;
-				font-size: 25px;
-				font-weight: 500;
-				@include make-flex($dir: row, $just: flex-start);
-
-				hr {
-					margin: 10px 0;
-					width: 100%;
-					border: 1px solid var(--border);
-				}
+		&__tableContainer {
+			@include box();
+			@include make-flex($align: flex-start);
+			overflow: auto;
+			& > table {
+				padding-bottom: 7px;
 			}
 		}
 	}

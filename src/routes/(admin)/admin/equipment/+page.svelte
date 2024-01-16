@@ -112,7 +112,7 @@
 			<tfoot>
 				<tr>
 					<td colspan="5">
-						Showing {allEquipment?.length ?? 0} results
+						Showing {allEquipment?.length ?? 0} result(s)
 					</td>
 				</tr>
 			</tfoot>

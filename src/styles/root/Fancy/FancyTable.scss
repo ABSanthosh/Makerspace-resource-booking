@@ -23,6 +23,7 @@
 			padding: 12px 24px;
 			text-align: left;
 			font-size: 15px;
+			white-space: nowrap;
 
 			&:first-child {
 				border-left: 1px solid var(--border);
