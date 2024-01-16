@@ -29,7 +29,7 @@ model Equipment {
   id            String      @id @unique @default(nanoid(7))
   name          String
   model         String
-  description   String      @db.VarChar(255)
+  description   String      @db.VarChar(2500)
   image         String
   instances     EInstances[]
   eCategoriesId String
@@ -47,7 +47,7 @@ enum EStatus {
 model EInstances {
   id          String   @id @unique @default(nanoid(7))
   name        String
-  description String   @db.VarChar(255)
+  description String   @db.VarChar(2500)
   status      EStatus? @default(available)
   cost        String
   // manuals

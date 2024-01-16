@@ -10,6 +10,8 @@
 - [ ] try to refactor new and edit equipment pane into one
 - [x] make time sheet
 - [ ] Refactor input to FancyInput css
+- [ ] return to equipment page if manually opened a wrong equipment id
+- [ ] image upload in equipment
 
 For each equipment
 - *Generic Name eg: 3d printer
