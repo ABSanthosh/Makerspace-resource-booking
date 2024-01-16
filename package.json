@@ -17,7 +17,7 @@
 		"sb-reset": "supabase db reset && yarn sb-restart && prisma db push"
 	},
 	"prisma": {
-		"seed": "tsx ts-node --esm prisma/seed.ts"
+		"seed": "npx tsx ts-node --esm prisma/seed.ts"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.0.0",
