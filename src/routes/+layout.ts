@@ -25,9 +25,9 @@ export const load: LayoutLoad = async ({ fetch, data, depends, url }) => {
 	// If there is no session, redirect to the index page.
 	// This works because in the client, on sign out, we remove the session cookie and
 	// invalidate is called. This will make the layout.ts load function run again.
-	if (session === null && url.pathname !== '/') {
-		throw redirect(303, '/');
-	}
+	// if (session === null && url.pathname !== '/') {
+	// 	throw redirect(303, '/');
+	// }
 
 	const profile = session ? await getUserProfile(supabase, session?.user?.id!) : null;
 

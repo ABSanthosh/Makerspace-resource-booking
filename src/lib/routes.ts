@@ -27,12 +27,12 @@ export const HOME_ROUTES: Route[] = [
 		icon: 0,
 		children: []
 	},
-	{
-		name: 'Guides',
-		route: '/guides',
-		icon: 0,
-		children: []
-	},
+	// {
+	// 	name: 'Guides',
+	// 	route: '/guides',
+	// 	icon: 0,
+	// 	children: []
+	// },
 	{
 		name: 'Learning Modules',
 		route: '/learning-modules',

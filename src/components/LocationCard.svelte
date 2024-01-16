@@ -1,7 +1,7 @@
 <section class="LocationCard">
 	<div class="LocationCard__content">
 		<h2>Location and Contact</h2>
-		<p>D-block, third floor, D303 Shiv Nadar University, Greater Noida, Uttar Pradesh 203207</p>
+		<p>A004, A-block, Ground floor, Shiv Nadar University, Greater Noida, Uttar Pradesh 203207</p>
 
 		<h2>General Queries?</h2>
 		<ul>
