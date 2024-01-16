@@ -9,9 +9,7 @@ if (!dbUrl) {
 
 const sql = postgres(dbUrl);
 
-async function onNewUser(columns: {
-	[name: string]: string;
-}) {
+async function onNewUser(columns: { [name: string]: string }) {
 	// Remove the function if it already exists
 	await sql`
 		DROP FUNCTION IF EXISTS public.onNewUser() CASCADE;
@@ -30,8 +28,8 @@ async function onNewUser(columns: {
 		return new;
 	end;
 	$$;
-	`
-	await sql.unsafe(query)
+	`;
+	await sql.unsafe(query);
 
 	// Remove the trigger if it already exists
 	await sql`
@@ -44,7 +42,6 @@ async function onNewUser(columns: {
 			after insert on auth.users
 			for each row execute procedure public.onNewUser();
 		`;
-
 }
 
 async function onDeleteUser() {
@@ -85,12 +82,12 @@ async function onDeleteUser() {
 		id: 'new.id',
 		role: "'user'",
 		isnew: 'true'
-	})
+	});
 
 	await onDeleteUser();
 	sql.end();
 	console.log('Triggers created');
-})()
+})();
 
 // Ref:
 // https://dev.to/mihaiandrei97/implementing-supabase-auth-in-next13-with-prisma-172i
