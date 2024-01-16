@@ -18,7 +18,7 @@ export const EItemZodSchema = z.object({
 	name: z.string().min(2),
 	description: z.string().optional().or(z.literal('')),
 	status: z.nativeEnum(EStatus),
-	cost: z.string().min(1).default('0')
+	cost: z.string().min(1).default('0'),
 });
 
 export type EItemSchema = z.infer<typeof EItemZodSchema>;

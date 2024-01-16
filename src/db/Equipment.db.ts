@@ -50,6 +50,33 @@ export async function getEquipmentById(
 }
 
 export async function editEquipment(equipment: ESchema) {
+	// await db.$transaction(
+	// 	equipment.instances.map((item) =>
+	// 		db.eInstances.upsert({
+	// 			where: {
+	// 				id: item.id!,
+	// 				AND: {
+	// 					equipmentId: equipment.id!
+	// 				}
+	// 			},
+	// 			update: {
+	// 				id: item.id,
+	// 				name: item.name,
+	// 				description: item.description!,
+	// 				status: item.status,
+	// 				cost: item.cost
+	// 			},
+	// 			create: {
+	// 				equipmentId: equipment.id!,
+	// 				name: item.name,
+	// 				description: item.description!,
+	// 				status: item.status,
+	// 				cost: item.cost
+	// 			}
+	// 		})
+	// 	)
+	// );
+
 	return await db.equipment.update({
 		where: {
 			id: equipment.id
@@ -59,20 +86,7 @@ export async function editEquipment(equipment: ESchema) {
 			model: equipment.model,
 			image: equipment.image,
 			description: equipment.description,
-			eCategoriesId: equipment.eCategoriesId,
-			instances: {
-				updateMany: equipment.instances.map((item) => ({
-					where: {
-						id: item.id
-					},
-					data: {
-						name: item.name,
-						description: item.description,
-						cost: item.cost,
-						status: item.status
-					}
-				}))
-			}
+			eCategoriesId: equipment.eCategoriesId
 		}
 	});
 }

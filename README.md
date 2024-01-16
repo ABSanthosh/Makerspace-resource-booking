@@ -12,6 +12,7 @@
 - [ ] Refactor input to FancyInput css
 - [ ] return to equipment page if manually opened a wrong equipment id
 - [ ] image upload in equipment
+- [ ] Adding and deleting equipment is not working. Need to do it individually. Eg. If new instances are added, need to create it instead of upserting it and if deleted, need to delete. If it is edited, need to update it instead of upserting it.
 
 For each equipment
 - *Generic Name eg: 3d printer

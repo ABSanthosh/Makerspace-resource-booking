@@ -103,7 +103,7 @@
 							name: `${$form.model} - ${instances.length + 1}`,
 							description: '',
 							status: EStatus.available,
-							cost: '0'
+							cost: '0',
 						});
 
 						$form.instances = instances;
