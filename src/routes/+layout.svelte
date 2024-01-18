@@ -2,6 +2,8 @@
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { SupaStore, SessionStore, ProfileStore } from '$store/SupaStore';
+	import { navigating } from '$app/stores';
+	import BlurredSpinner from '$components/BlurredSpinner.svelte';
 	export let data;
 
 	// Supabase
@@ -26,6 +28,9 @@
 	// All folders are named according to: https://kit.svelte.dev/docs/advanced-routing#advanced-layouts
 </script>
 
+{#if $navigating}
+	<BlurredSpinner />
+{/if}
 <slot />
 
 <style lang="scss" global>
