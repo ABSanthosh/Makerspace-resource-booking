@@ -22,6 +22,12 @@
 	const { form, errors, enhance } = superForm(formStore, {
 		id: 'editEquipmentForm',
 		dataType: 'json',
+		onSubmit() {
+			form.set({
+				...$form,
+				image: editItem.image
+			});
+		},
 		onResult(event) {
 			if (event.result.status === 200) {
 				modal = false;
@@ -31,7 +37,7 @@
 	});
 
 	// Update the form with the editItem when either of them changes
-	$: editItem, $form, form.set(editItem);
+	$: editItem, form.set(editItem);
 </script>
 
 <Pane bind:open={modal} style="--paneWidth: 450px;" on:close={() => resetForm(form)}>
@@ -43,6 +49,7 @@
 		method="POST"
 		action="?/edit"
 		id="editEquipmentForm"
+		enctype="multipart/form-data"
 		class="Col--center gap-10 w-100"
 	>
 		<select class="FancySelect" style="--width: 100%;" bind:value={$form.eCategoriesId}>
@@ -75,7 +82,11 @@
 		>
 			Model
 		</LabelInput>
-		<UploadImage bind:img={$form.image} defaultVal={getStorageUrl(`${$form.image}`)} />
+		<UploadImage
+			name="eImage"
+			bind:img={$form.image}
+			defaultVal={getStorageUrl(`${$form.image}`)}
+		/>
 		<LabelInput
 			style="--padxy: 10px; --font: 15px; --height: 120px;"
 			name="description"

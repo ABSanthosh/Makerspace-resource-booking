@@ -22,7 +22,7 @@
 			type="file"
 			id={name}
 			{name}
-			accept=".jpg, .jpeg, .png"
+			accept=".jpg, .jpeg, .png, .webp"
 			on:change={(e) => onImageUpload(e)}
 			bind:this={file}
 		/>
