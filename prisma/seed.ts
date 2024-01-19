@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import { SupabaseEnum } from '../src/lib/Enums';
+
 const prisma = new PrismaClient();
 
 async function onNewUser(columns: { [name: string]: string }) {
@@ -69,6 +71,30 @@ async function onDeleteUser() {
 		`);
 }
 
+async function makeNewBucket(name: string) {
+	// We don't want to delete the bucket if it already exists
+	try {
+		// Create a new bucket
+		await prisma.$executeRawUnsafe(`
+		insert into storage.buckets
+		(id, name, public)
+		values
+		('${name}', '${name}', true);
+	`);
+
+		// Create a new policy
+		// https://supabase.com/docs/guides/storage/security/access-control
+		await prisma.$executeRawUnsafe(`
+		create policy "upload_equipment_image"
+		on storage.objects for insert to authenticated with check (
+				bucket_id = '${name}'
+		);
+		`);
+	} catch (e) {
+		console.log(e);
+	}
+}
+
 async function main() {
 	await prisma.eCategories.deleteMany({});
 	const eCategoriesSeed = await prisma.eCategories.createMany({
@@ -92,6 +118,8 @@ async function main() {
 	});
 
 	await onDeleteUser();
+
+	await makeNewBucket(SupabaseEnum.BUCKET);
 
 	console.log({ eCategoriesSeed });
 }

@@ -1,5 +1,5 @@
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
-import { isAdmin } from '$lib/userUtils';
+import { isAdmin } from '$lib/SupabaseUtils';
 import { createServerClient } from '@supabase/ssr';
 import { redirect, type Handle, error } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
