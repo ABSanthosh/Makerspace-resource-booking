@@ -7,7 +7,7 @@ export async function addEquipment(equipment: ESchema) {
 		data: {
 			name: equipment.name,
 			model: equipment.model,
-			image: equipment.image,
+			image: equipment.image as string,
 			description: equipment.description,
 			eCategoriesId: equipment.eCategoriesId,
 			instances: {
@@ -18,6 +18,23 @@ export async function addEquipment(equipment: ESchema) {
 					cost: item.cost
 				}))
 			}
+		}
+	});
+}
+
+export async function getAllEquipmentPreview(): Promise<
+	{ id: string; name: string; model: string; category: ECategories; instances: EItemSchema[] }[]
+> {
+	// @ts-ignore
+	return await db.equipment.findMany({
+		select: {
+			id: true,
+			name: true,
+			model: true,
+			image: true,
+			category: true,
+			eCategoriesId: true,
+			instances: true
 		}
 	});
 }
@@ -84,7 +101,7 @@ export async function editEquipment(equipment: ESchema) {
 		data: {
 			name: equipment.name,
 			model: equipment.model,
-			image: equipment.image,
+			image: equipment.image as string,
 			description: equipment.description,
 			eCategoriesId: equipment.eCategoriesId
 		}

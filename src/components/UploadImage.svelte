@@ -1,85 +1,79 @@
 <script lang="ts">
 	let file: HTMLInputElement;
 
-	export let imageSrc: string;
+	export let { name, defaultVal } = $$props as {
+		name: string;
+		defaultVal?: string;
+	};
 
 	const onImageUpload = (e: Event) => {
 		const target = e.target as HTMLInputElement;
-		const file = target.files![0];
-
-		const reader = new FileReader();
-		reader.onload = (e) => {
-			imageSrc = e.target!.result as string;
-		};
-		reader.readAsDataURL(file);
+		preview = URL.createObjectURL(target.files![0]);
 	};
+
+	let preview: string | undefined;
+	$: preview = preview || defaultVal;
 </script>
 
 <div class="UploadImage">
 	<span>Image</span>
-	<label
-		for="image-upload"
-		class="UploadImage__dnd"
-		data-image={imageSrc === '' ? undefined : true}
-	>
+	<label for={name} class="UploadImage__dnd" data-image={preview === '' ? undefined : true}>
 		<input
 			type="file"
-			id="image-upload"
+			id={name}
+			{name}
 			accept=".jpg, .jpeg, .png"
 			on:change={(e) => onImageUpload(e)}
 			bind:this={file}
 		/>
-		{#if imageSrc}
-			<img src={imageSrc} alt="Uploaded" />
+		{#if preview}
+			<img src={preview} alt="Uploaded" />
 		{:else}
 			Upload image
 		{/if}
 	</label>
-	<!-- style="display:none" -->
 </div>
 
 <style lang="scss">
 	.UploadImage {
-		@include box($height: auto);
 		gap: 11px;
+		@include box($height: auto);
 		@include make-flex($align: flex-start);
 
 		&__dnd {
-			@include box($height: 100px);
+			padding: 5px;
 			@include make-flex();
 			color: var(--subText);
-			padding: 5px;
+			@include box($height: 100px);
 
-			border: 2px dashed var(--border);
-			border-radius: 7px;
 			cursor: pointer;
+			border-radius: 7px;
 			position: relative;
+			border: 2px dashed var(--border);
 			& > input {
 				display: none;
 			}
 
 			& > img {
-				max-height: 100%;
 				max-width: 100%;
-				object-fit: contain;
+				max-height: 100%;
 				border-radius: 3px;
+				object-fit: contain;
 			}
 			&::before {
-				content: 'Change image';
-				@include make-flex();
+				inset: 0;
+				opacity: 0;
+				color: #fff;
 				@include box();
 				position: absolute;
-				inset: 0;
-				background: rgba(0, 0, 0, 0.5);
 				border-radius: 7px;
+				@include make-flex();
+				content: 'Change image';
 				backdrop-filter: blur(0.5px);
-				// display: none;
-				opacity: 0;
+				background: rgba(0, 0, 0, 0.5);
 				transition: opacity 0.1s ease-in-out;
-				color: #fff;
 			}
 			&[data-image]:hover::before {
-				// display: flex;
 				opacity: 1;
 			}
 		}

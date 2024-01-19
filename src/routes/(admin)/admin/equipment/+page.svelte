@@ -1,28 +1,31 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import type { EItemSchema, ESchema } from '$lib/schemas';
+	import type { ECategoriesSchema, EItemSchema, ESchema } from '$lib/schemas';
 	import { type Writable } from 'svelte/store';
 	import NewEquipmentPane from './FormPanes/NewEquipmentPane.svelte';
 	import EditEquipmentPane from './FormPanes/EditEquipmentPane.svelte';
 	import LabelInput from '$components/LabelInput.svelte';
+	import Pane from '$components/Pane.svelte';
 	export let data: PageData;
 
 	$: ({ newEquipmentForm, editEquipmentForm, allEquipment, eCategories } = data);
 	$: addEquipmentModal = false;
 	$: editEquipmentModal = false;
-	$: instances = [] as EItemSchema[];
 	$: editItem = {} as ESchema;
+
+	$: addCategoryModal = false;
+	$: eCategoriesModal = false;
+	$: categoryItem = {} as ECategoriesSchema;
 
 	const resetForm = (form: Writable<ESchema>) => {
 		form.set({
 			name: '',
 			model: '',
-			image: '',
+			image: new File([''], ''),
 			description: '',
 			eCategoriesId: '',
 			instances: []
 		});
-		instances = [];
 	};
 
 	$: equipmentSearch = '';
@@ -31,11 +34,22 @@
 	);
 
 	// $: temp = Array.from({ length: 100 }, () => allEquipment?.[0]!);
+
+	// $: if (editEquipmentForm && editEquipmentForm.data.image === undefined) {
+	// 	editEquipmentForm = {
+	// 		...editEquipmentForm,
+	// 		data: {
+	// 			...editEquipmentForm.data,
+	// 			image: editItem.image
+	// 		}
+	// 	};
+	// }
+
+	console.log(editEquipmentForm!);
 </script>
 
 <NewEquipmentPane
 	{resetForm}
-	bind:instances
 	bind:eCategories
 	bind:modal={addEquipmentModal}
 	bind:formStore={newEquipmentForm}
@@ -44,11 +58,52 @@
 <EditEquipmentPane
 	{resetForm}
 	bind:editItem
-	bind:instances
 	bind:eCategories
 	bind:modal={editEquipmentModal}
 	bind:formStore={editEquipmentForm}
 />
+
+<!-- <Pane
+	bind:open={eCategoriesModal}
+	style="--paneWidth: 450px;"
+	on:close={() => (eCategoriesModal = false)}
+>
+	<p slot="header">Categories</p>
+	{#if eCategories}
+		<form style="overflow:hidden" method="POST" action="">
+			<table class="FancyTable">
+				<thead>
+					<tr>
+						<th> Name </th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each [...eCategories, ...eCategories, ...eCategories, ...eCategories] as item}
+						<tr>
+							<td>
+								<LabelInput bind:value={item.name} name={item.id} />
+
+								{item.name}
+							</td>
+						</tr>
+					{/each}
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="2">
+							Showing {eCategories?.length ?? 0} result(s)
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+		</form>
+	{/if}
+	<svelte:fragment slot="footer">
+		<button class="FancyButton" style="--height: 30px" data-type="black-outline">
+			Add category
+		</button>
+	</svelte:fragment>
+</Pane> -->
 
 <main class="AdminEquipment">
 	<header>
@@ -60,13 +115,23 @@
 			bind:value={equipmentSearch}
 			placeholder="Search equipment"
 		/>
-		<button
-			class="FancyButton"
-			data-type="dark-blue"
-			on:click={() => (addEquipmentModal = !addEquipmentModal)}
-		>
-			Add equipment
-		</button>
+		<span class="Row--center gap-15">
+			<button
+				class="FancyButton"
+				data-type="dark-outline"
+				on:click={() => (eCategoriesModal = !eCategoriesModal)}
+			>
+				Add category
+			</button>
+
+			<button
+				class="FancyButton"
+				data-type="dark-blue"
+				on:click={() => (addEquipmentModal = !addEquipmentModal)}
+			>
+				Add equipment
+			</button>
+		</span>
 	</header>
 	<div class="AdminEquipment__content">
 		<table class="FancyTable">
@@ -94,9 +159,7 @@
 									style="--height: 24px; --width: auto --font: 15px;"
 									data-type="empty"
 									on:click={() => {
-										editItem = {
-											...item
-										};
+										editItem = { ...item };
 										editEquipmentModal = true;
 									}}
 								/>
@@ -122,10 +185,10 @@
 
 <style lang="scss">
 	.AdminEquipment {
-		padding: 24px;
-		@include make-flex($just: flex-start);
-		@include box();
 		gap: 24px;
+		padding: 24px;
+		@include box();
+		@include make-flex($just: flex-start);
 
 		& > header {
 			@include box($height: auto);
@@ -134,11 +197,10 @@
 
 		&__content {
 			@include box();
-			max-height: calc(100vh - 112px);
 			overflow: auto;
-			scrollbar-gutter: stable;
 			padding-right: 5px;
-			// margin-right: -10px;
+			scrollbar-gutter: stable;
+			max-height: calc(100vh - 112px);
 
 			&::-webkit-scrollbar {
 				width: 6px;
