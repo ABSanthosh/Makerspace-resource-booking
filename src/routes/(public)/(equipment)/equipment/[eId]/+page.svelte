@@ -177,9 +177,9 @@
 				flex-direction: column;
 			}
 			img {
-				width: 100%;
 				max-width: 500px;
-				height: auto;
+				border-radius: 7px;
+				@include box(100%, auto);
 			}
 
 			p {

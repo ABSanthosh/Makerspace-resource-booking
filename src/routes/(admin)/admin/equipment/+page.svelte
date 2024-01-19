@@ -21,10 +21,11 @@
 		form.set({
 			name: '',
 			model: '',
-			image: new File([''], ''),
+			image: '',
+			instances: [],
 			description: '',
 			eCategoriesId: '',
-			instances: []
+			imageFile: undefined
 		});
 	};
 
@@ -32,20 +33,6 @@
 	$: searchEquipment = allEquipment?.filter((item) =>
 		item.name.toLowerCase().includes(equipmentSearch.toLowerCase())
 	);
-
-	// $: temp = Array.from({ length: 100 }, () => allEquipment?.[0]!);
-
-	// $: if (editEquipmentForm && editEquipmentForm.data.image === undefined) {
-	// 	editEquipmentForm = {
-	// 		...editEquipmentForm,
-	// 		data: {
-	// 			...editEquipmentForm.data,
-	// 			image: editItem.image
-	// 		}
-	// 	};
-	// }
-
-	console.log(editEquipmentForm!);
 </script>
 
 <NewEquipmentPane

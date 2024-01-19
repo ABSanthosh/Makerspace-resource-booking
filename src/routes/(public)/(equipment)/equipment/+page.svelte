@@ -23,8 +23,6 @@
 
 	$: equipmentSearch = '';
 	$: categoryFilter = '';
-
-	$: console.log(categoryFilter);
 </script>
 
 <main class="Equipment">
