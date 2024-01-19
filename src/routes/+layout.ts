@@ -2,8 +2,7 @@ import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/publi
 import type { LayoutLoad } from './$types';
 import { createBrowserClient, parse } from '@supabase/ssr';
 import { browser } from '$app/environment';
-import { getUserProfile } from '$lib/userUtils';
-import { redirect } from '@sveltejs/kit';
+import { getUserProfile } from '$lib/SupabaseUtils';
 
 export const load: LayoutLoad = async ({ fetch, data, depends, url }) => {
 	depends('supabase:auth');
@@ -30,6 +29,8 @@ export const load: LayoutLoad = async ({ fetch, data, depends, url }) => {
 	// }
 
 	const profile = session ? await getUserProfile(supabase, session?.user?.id!) : null;
+	// console.log(profile)
+	// TODO: custom claim
 
 	return {
 		supabase,

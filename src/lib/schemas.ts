@@ -18,7 +18,7 @@ export const EItemZodSchema = z.object({
 	name: z.string().min(2),
 	description: z.string().optional().or(z.literal('')),
 	status: z.nativeEnum(EStatus),
-	cost: z.string().min(1).default('0'),
+	cost: z.string().min(1).default('0')
 });
 
 export type EItemSchema = z.infer<typeof EItemZodSchema>;
@@ -27,10 +27,18 @@ export const EZodSchema = z.object({
 	id: z.string().optional().or(z.literal('')),
 	name: z.string().min(2),
 	model: z.string().min(2),
-	image: z.string().url().or(z.literal('')),
+	// string needed for addEquipment function parameter image type
+	image: z.instanceof(File).or(z.string().min(2)),
 	description: z.string().optional().default(''),
 	instances: z.array(EItemZodSchema),
 	eCategoriesId: z.string().min(7)
 });
 
 export type ESchema = z.infer<typeof EZodSchema>;
+
+export const ECategoriesZSchema = z.object({
+	id: z.string(),
+	name: z.string().min(2)
+});
+
+export type ECategoriesSchema = z.infer<typeof ECategoriesZSchema>;

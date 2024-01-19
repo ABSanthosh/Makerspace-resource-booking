@@ -8,6 +8,7 @@
 	import { EStatus, type ECategories } from '@prisma/client';
 	import UploadImage from '$components/UploadImage.svelte';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+	import { getStorageUrl } from '$lib/SupabaseUtils';
 
 	export let { modal, formStore, resetForm, editItem, allEquipments, eCategories } = $$props as {
 		modal: boolean;
@@ -29,11 +30,8 @@
 		taintedMessage: null
 	});
 
-	$: editItem,
-		form.update(($form) => {
-			$form = editItem;
-			return $form;
-		});
+	// Update the form with the editItem when either of them changes
+	$: editItem, $form, form.set(editItem);
 </script>
 
 <Pane bind:open={modal} style="--paneWidth: 450px;" on:close={() => resetForm(form)}>
@@ -77,7 +75,7 @@
 		>
 			Model
 		</LabelInput>
-		<UploadImage bind:imageSrc={$form.image} />
+		<UploadImage bind:img={$form.image} defaultVal={getStorageUrl(`${$form.image}`)} />
 		<LabelInput
 			style="--padxy: 10px; --font: 15px; --height: 120px;"
 			name="description"
@@ -103,7 +101,7 @@
 							name: `${$form.model} - ${instances.length + 1}`,
 							description: '',
 							status: EStatus.available,
-							cost: '0',
+							cost: '0'
 						});
 
 						$form.instances = instances;

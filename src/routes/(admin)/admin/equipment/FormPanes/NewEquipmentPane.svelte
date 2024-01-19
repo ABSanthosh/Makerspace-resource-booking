@@ -32,12 +32,13 @@
 
 <Pane bind:open={modal} style="--paneWidth: 450px;" on:close={() => resetForm(form)}>
 	<p slot="header">Add Equipment</p>
-	<!-- <SuperDebug data={$form} /> -->
+	<SuperDebug data={$form} />
 	<form
 		use:enhance
 		method="POST"
 		action="?/add"
 		id="newEquipmentForm"
+		enctype="multipart/form-data"
 		class="Col--center gap-10 w-100"
 	>
 		<select class="FancySelect" style="--width: 100%;" bind:value={$form.eCategoriesId}>
@@ -71,7 +72,7 @@
 			Model
 		</LabelInput>
 
-		<UploadImage bind:imageSrc={$form.image} />
+		<UploadImage name="eImage" />
 
 		<LabelInput
 			style="--padxy: 10px; --height: 120px;"
