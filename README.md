@@ -15,6 +15,7 @@
 - [ ] Adding and deleting equipment is not working. Need to do it individually. Eg. If new instances are added, need to create it instead of upserting it and if deleted, need to delete. If it is edited, need to update it instead of upserting it.
 - [ ] add error handling for equipment image upload
 - [ ] clear form on closing pane(new and edit equipment)
+- [ ] seed data for inserting equipment data
 - [ ] (urgent) replace admin type from profile to custom claim
 
 For each equipment

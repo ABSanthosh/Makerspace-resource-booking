@@ -72,6 +72,31 @@ async function onDeleteUser() {
 }
 
 async function makeNewBucket(name: string) {
+	// https://supabase.com/docs/guides/storage/security/access-control
+	// https://github.com/orgs/supabase/discussions/5786#discussioncomment-2291214
+const policies = {
+select: `
+	create policy "select_equipment_image"
+	on storage.objects for select
+	to authenticated
+	using (bucket_id = '${name}');`,
+insert: `
+	create policy "insert_equipment_image"
+	on storage.objects for insert
+	to authenticated
+	with check (bucket_id = '${name}');`,
+update: `
+	create policy "update_equipment_image"
+	on storage.objects for update
+	to authenticated
+	using (bucket_id = '${name}');`,
+delete: `
+	create policy "delete_equipment_image"
+	on storage.objects for delete
+	to authenticated
+	using (bucket_id = '${name}');`
+};
+
 	// We don't want to delete the bucket if it already exists
 	try {
 		// Create a new bucket
@@ -82,14 +107,9 @@ async function makeNewBucket(name: string) {
 		('${name}', '${name}', true);
 	`);
 
-		// Create a new policy
-		// https://supabase.com/docs/guides/storage/security/access-control
-		await prisma.$executeRawUnsafe(`
-		create policy "upload_equipment_image"
-		on storage.objects for insert to authenticated with check (
-				bucket_id = '${name}'
+		await prisma.$transaction(
+			Object.values(policies).map((policy) => prisma.$executeRawUnsafe(policy))
 		);
-		`);
 	} catch (e) {
 		console.log(e);
 	}
@@ -97,31 +117,38 @@ async function makeNewBucket(name: string) {
 
 async function main() {
 	await prisma.eCategories.deleteMany({});
-	const eCategoriesSeed = await prisma.eCategories.createMany({
-		data: [
-			{ id: 'pw2mtah', name: '3D Printer' },
-			{ id: '384ieci', name: 'CNC (Laser cutter)' },
-			{ id: 'bgwbjwd', name: 'Welding' },
-			{ id: 'wec92q8', name: 'Hand power tools' },
-			{ id: 'cpwp422', name: 'Hand tools' },
-			{ id: '233g4pc', name: 'Design station' },
-			{ id: 'zyyymkp', name: 'Testing equipment' },
-			{ id: 'ex7r4z9', name: 'PCB design' },
-			{ id: 'htbyq6g', name: 'Standalone power tools' }
-		]
-	});
+	await prisma.eCategories
+		.createMany({
+			data: [
+				{ id: 'pw2mtah', name: '3D Printer' },
+				{ id: '384ieci', name: 'CNC (Laser cutter)' },
+				{ id: 'bgwbjwd', name: 'Welding' },
+				{ id: 'wec92q8', name: 'Hand power tools' },
+				{ id: 'cpwp422', name: 'Hand tools' },
+				{ id: '233g4pc', name: 'Design station' },
+				{ id: 'zyyymkp', name: 'Testing equipment' },
+				{ id: 'ex7r4z9', name: 'PCB design' },
+				{ id: 'htbyq6g', name: 'Standalone power tools' }
+			]
+		})
+		.then(() => console.log('✅ eCategories seeded'))
+		.catch((e) => console.error(`🚨 ${e}`));
 
 	await onNewUser({
 		id: 'new.id',
-		role: "'user'",
+		role: 'user',
 		isnew: 'true'
-	});
+	})
+		.then(() => console.log('✅ onNewUser trigger created'))
+		.catch((e) => console.error(`🚨 ${e}`));
 
-	await onDeleteUser();
+	await onDeleteUser()
+		.then(() => console.log('✅ onDeleteUser trigger created'))
+		.catch((e) => console.error(`🚨 ${e}`));
 
-	await makeNewBucket(SupabaseEnum.BUCKET);
-
-	console.log({ eCategoriesSeed });
+	await makeNewBucket(SupabaseEnum.BUCKET)
+		.then(() => console.log('✅ Bucket created'))
+		.catch((e) => console.error(`🚨 ${e}`));
 }
 
 main()

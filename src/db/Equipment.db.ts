@@ -1,3 +1,4 @@
+import { getStorageUrl } from '$lib/SupabaseUtils';
 import { db } from '$lib/prisma';
 import type { EItemSchema, ESchema } from '$lib/schemas';
 import type { ECategories, Equipment } from '@prisma/client';
@@ -23,20 +24,25 @@ export async function addEquipment(equipment: ESchema) {
 }
 
 export async function getAllEquipmentPreview(): Promise<
-	{ id: string; name: string; model: string; category: ECategories; instances: EItemSchema[] }[]
+	{ id: string; name: string; model: string; eCategoriesId: string; image: string }[]
 > {
 	// @ts-ignore
-	return await db.equipment.findMany({
-		select: {
-			id: true,
-			name: true,
-			model: true,
-			image: true,
-			category: true,
-			eCategoriesId: true,
-			instances: true
-		}
-	});
+	return await db.equipment
+		.findMany({
+			select: {
+				id: true,
+				name: true,
+				model: true,
+				image: true,
+				eCategoriesId: true
+			}
+		})
+		.then((res) => {
+			return res.map((item) => ({
+				...item,
+				image: getStorageUrl(item.image)
+			}));
+		});
 }
 
 export async function getAllEquipment(): Promise<
@@ -55,15 +61,22 @@ export async function getEquipmentById(
 	id: string
 ): Promise<Equipment & { category: ECategories; instances: EItemSchema[] }> {
 	// @ts-ignore
-	return await db.equipment.findUnique({
-		where: {
-			id
-		},
-		include: {
-			instances: true,
-			category: true
-		}
-	});
+	return await db.equipment
+		.findUnique({
+			where: {
+				id
+			},
+			include: {
+				instances: true,
+				category: true
+			}
+		})
+		.then((res) => {
+			return {
+				...res,
+				image: getStorageUrl(res!.image)
+			};
+		});
 }
 
 export async function editEquipment(equipment: ESchema) {
@@ -101,7 +114,7 @@ export async function editEquipment(equipment: ESchema) {
 		data: {
 			name: equipment.name,
 			model: equipment.model,
-			image: equipment.image as string,
+			image: equipment.image,
 			description: equipment.description,
 			eCategoriesId: equipment.eCategoriesId
 		}

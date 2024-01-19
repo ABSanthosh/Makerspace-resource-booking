@@ -28,7 +28,8 @@ export const EZodSchema = z.object({
 	name: z.string().min(2),
 	model: z.string().min(2),
 	// string needed for addEquipment function parameter image type
-	image: z.instanceof(File).or(z.string().min(2)),
+	image: z.string(),
+	imageFile: z.instanceof(File).optional(),
 	description: z.string().optional().default(''),
 	instances: z.array(EItemZodSchema),
 	eCategoriesId: z.string().min(7)
