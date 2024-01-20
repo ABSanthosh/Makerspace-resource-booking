@@ -7,7 +7,7 @@
 	@include box(var(--width, auto), var(--height, 34px));
 
 	// no data-type selector
-	&[data-type=''] {
+	&:not([data-type]) {
 		color: var(--foreground);
 		border: 1.2px solid var(--border);
 		background-color: var(--background);

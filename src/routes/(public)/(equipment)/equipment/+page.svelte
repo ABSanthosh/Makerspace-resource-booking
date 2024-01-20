@@ -47,12 +47,12 @@
 		{#each data.allEquipment.filter((item) => {
 			if (categoryFilter === '') return item;
 			return item.eCategoriesId === categoryFilter;
-		}) as item}
+		}) as item (item.id)}
 			<div class="Equipment__card">
 				<img src={item.image} alt={item.name} />
 				<h2 class="w-100">{item.name}</h2>
 				<p class="w-100">{item.model}</p>
-				<a href="/equipment/{item.id}" class="w-100">View</a>
+				<a href="/equipment/{item.id}" class="FancyButton w-100">Learn</a>
 			</div>
 		{/each}
 	</div>
@@ -77,24 +77,33 @@
 		&__content {
 			@include box();
 			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-			grid-template-rows: repeat(auto-fill, minmax(180px, 1fr));
-			gap: 10px;
+			grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+			// grid-template-rows: repeat(auto-fill, minmax(430px, 1fr));
+			gap: 15px;
 		}
 
 		&__card {
-			@include make-flex();
-			@include box();
 			gap: 10px;
-
-			border-radius: 10px;
 			padding: 20px;
+			@include box();
 			background: #fff;
-			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			border-radius: 10px;
+			@include make-flex($just: flex-start);
+			box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 
 			& > img {
-				@include box(100px, 100px);
+				border-radius: 7px;
 				object-fit: contain;
+				@include box(100%, auto);
+			}
+
+			& > h2 {
+				font-size: 23px;
+				font-weight: 600;
+			}
+
+			& > a {
+				margin-top: auto;
 			}
 		}
 	}
