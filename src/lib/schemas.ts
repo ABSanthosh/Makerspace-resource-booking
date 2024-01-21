@@ -1,4 +1,4 @@
-import { EStatus } from '@prisma/client';
+import { BookingStatus, EStatus } from '@prisma/client';
 import { z } from 'zod';
 
 const phoneRegex = new RegExp(/(\+91\s)?\d{10}/);
@@ -43,3 +43,23 @@ export const ECategoriesZSchema = z.object({
 });
 
 export type ECategoriesSchema = z.infer<typeof ECategoriesZSchema>;
+
+export const CartItemZSchema = z.object({
+	end: z.date(),
+	start: z.date(),
+	instanceId: z.string(),
+	equipmentId: z.string(),
+	id: z.string().optional().or(z.literal('')),
+	userId: z.string().optional().or(z.literal(''))
+});
+
+export type CartItemSchema = z.infer<typeof CartItemZSchema>;
+
+export const CartZSchema = z.object({
+	userId: z.string(),
+	items: z.array(CartItemZSchema),
+	status: z.nativeEnum(BookingStatus),
+	id: z.string().optional().or(z.literal(''))
+});
+
+export type CartSchema = z.infer<typeof CartZSchema>;
