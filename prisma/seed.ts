@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { EStatus, PrismaClient } from '@prisma/client';
 import { SupabaseEnum } from '../src/lib/Enums';
 
 const prisma = new PrismaClient();
@@ -74,28 +74,28 @@ async function onDeleteUser() {
 async function makeNewBucket(name: string) {
 	// https://supabase.com/docs/guides/storage/security/access-control
 	// https://github.com/orgs/supabase/discussions/5786#discussioncomment-2291214
-const policies = {
-select: `
-	create policy "select_equipment_image"
-	on storage.objects for select
-	to authenticated
-	using (bucket_id = '${name}');`,
-insert: `
-	create policy "insert_equipment_image"
-	on storage.objects for insert
-	to authenticated
-	with check (bucket_id = '${name}');`,
-update: `
-	create policy "update_equipment_image"
-	on storage.objects for update
-	to authenticated
-	using (bucket_id = '${name}');`,
-delete: `
-	create policy "delete_equipment_image"
-	on storage.objects for delete
-	to authenticated
-	using (bucket_id = '${name}');`
-};
+	const policies = {
+		select: `
+			create policy "select_equipment_image"
+			on storage.objects for select
+			to authenticated
+			using (bucket_id = '${name}');`,
+		insert: `
+			create policy "insert_equipment_image"
+			on storage.objects for insert
+			to authenticated
+			with check (bucket_id = '${name}');`,
+		update: `
+			create policy "update_equipment_image"
+			on storage.objects for update
+			to authenticated
+			using (bucket_id = '${name}');`,
+		delete: `
+			create policy "delete_equipment_image"
+			on storage.objects for delete
+			to authenticated
+			using (bucket_id = '${name}');`
+	};
 
 	// We don't want to delete the bucket if it already exists
 	try {
@@ -111,8 +111,75 @@ delete: `
 			Object.values(policies).map((policy) => prisma.$executeRawUnsafe(policy))
 		);
 	} catch (e) {
-		console.log(e);
+		// console.log(e);
 	}
+}
+
+async function seedEquipments() {
+	const equipments = [
+		{
+			id: '_iPoLfl',
+			name: 'Creality 3D Printer',
+			model: 'CR-10 SE',
+			image: 'e6G_5Bt.png',
+			description:
+				'The CR-10 from Creality is a workhorse of a printer. Able to work for long periods non-stop, it is more than capable of handling large prints requiring many hours of print time. Likewise, parts, upgrades, and materials for this printer are very cost-effective and readily available.',
+			eCategoriesId: 'pw2mtah',
+			imageFile: undefined
+		},
+		{
+			id: 'cAZ0IdL',
+			name: 'ENON',
+			model: 'Inverter ARC Welding Machine',
+			image: 'lYXj4np.jpg',
+			description: `SMOOTH ARC: The core of any welding machine's performance is the quality of the welding arc it produces. With this welding machine, you can expect a remarkably smooth and stable arc. This is crucial for achieving clean, precise, and aesthetically pleasing welds.
+			ADVANCED IGBT TECHNOLOGY: The welding industry has seen a significant shift towards IGBT (Insulated Gate Bipolar Transistor) technology due to its numerous advantages. This machine harnesses the power of advanced IGBT technology, ensuring stable and efficient welding performance.
+			IMPRESSIVE POWER: With 8200W of power and a 220V input, this welding machine packs a punch. It provides the energy required for various welding tasks, whether you're working on thin materials or thicker pieces.
+			WHAT'S IN THE BOX: Along with the welding machine, your purchase includes essential accessories to enhance your welding experience, including a brush for cleaning, a belt for easy transport, a protective welding mask, an electrode holder, and ground clamps.
+			HOT START: Igniting the welding arc can sometimes be a challenge, especially in less than ideal conditions. The Hot Start function addresses this issue by providing a quick and easy ignition of the welding arc. This feature significantly reduces the risk of electrode sticking, ensuring a smooth start to your welding projects.`,
+			eCategoriesId: 'bgwbjwd',
+			imageFile: undefined
+		}
+	];
+
+	const instances = [
+		{
+			name: 'CR-10 SE - 1',
+			status: EStatus.available	,
+			cost: '0',
+			description: '',
+			equipmentId: '_iPoLfl'
+		},
+		{
+			name: 'CR-10 SE - 2',
+			status: EStatus.inUse,
+			cost: '0',
+			description: '',
+			equipmentId: '_iPoLfl'
+		},
+		{
+			name: 'CR-10 SE - 3',
+			status: EStatus.broken,
+			cost: '0',
+			description: '',
+			equipmentId: '_iPoLfl'
+		},
+		{
+			name: 'ENON - 1',
+			status: EStatus.available,
+			cost: '0',
+			description: '',
+			equipmentId: 'cAZ0IdL'
+		}
+	];
+
+	await prisma.equipment.createMany({
+		data: equipments
+	});
+
+	await prisma.eInstance.createMany({
+		data: instances
+	});
 }
 
 async function main() {
@@ -148,6 +215,10 @@ async function main() {
 
 	await makeNewBucket(SupabaseEnum.BUCKET)
 		.then(() => console.log('✅ Bucket created'))
+		.catch((e) => console.error(`🚨 ${e}`));
+
+	await seedEquipments()
+		.then(() => console.log('✅ Equipments seeded'))
 		.catch((e) => console.error(`🚨 ${e}`));
 }
 
