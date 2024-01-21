@@ -21,40 +21,56 @@ model Profile {
   role  Role    @default(user)
   isNew Boolean @default(true) @map("isnew")
 
+  cart   Cart?
   // More fields...
+  cartId String?
 
   @@map("profile")
 }
 
 model Equipment {
-  id            String       @id @unique @default(nanoid(7))
+  id            String      @id @unique @default(nanoid(7))
   name          String
   model         String
-  description   String       @db.VarChar(2500)
+  description   String      @db.VarChar(2500)
   image         String
-  instances     EInstances[]
+  instances     EInstance[]
   eCategoriesId String
-  category      ECategories  @relation(fields: [eCategoriesId], references: [id], onDelete: Cascade)
+  category      ECategories @relation(fields: [eCategoriesId], references: [id], onDelete: Cascade)
   // videos
 }
 
-enum EStatus {
-  available
-  inUse       @map("in_use")
-  maintenance
-  broken
-}
-
-model EInstances {
-  id          String   @id @unique @default(nanoid(7))
+model EInstance {
+  id          String    @id @unique @default(nanoid(7))
   name        String
-  description String   @db.VarChar(2500)
-  status      EStatus? @default(available)
+  description String    @db.VarChar(2500)
+  status      EStatus?  @default(available)
   cost        String
   equipmentId String
   // manuals
+  // TODO: new model to hold availability of each instance
+  equipment   Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
 
-  equipment Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+model Cart {
+  id        String        @id @unique @default(nanoid(7))
+  userId    String        @unique @db.Uuid
+  items     CartItem[]
+  status    BookingStatus @default(pending)
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @default(now()) @map("updated_at")
+
+  user Profile @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model CartItem {
+  id          String   @id @unique @default(nanoid(12))
+  equipmentId String
+  instanceId  String
+  start       DateTime
+  end         DateTime
+  cartId      String
+  cart        Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model ECategories {
@@ -81,4 +97,18 @@ model RepoMaterials {
   // { type: DType, value: number, unit: DUnit }[]
 
   description String? @db.VarChar(255)
+}
+
+// Enums
+enum EStatus {
+  available
+  inUse       @map("in_use")
+  maintenance
+  broken
+}
+
+enum BookingStatus {
+  pending
+  approved
+  rejected
 }
