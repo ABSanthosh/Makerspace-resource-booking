@@ -2,7 +2,10 @@
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import { BreadCrumbStore } from '$store/BreadCrumbStore';
-	import Pane from '$components/Pane.svelte';
+	import AvailabilityPane from './CartItemPane.svelte';
+	import type { EItemSchema } from '$lib/schemas';
+	import { EStatus } from '@prisma/client';
+	import { SessionStore } from '$store/SupaStore';
 
 	export let data: PageData;
 	$: ({ equipment } = data);
@@ -25,22 +28,18 @@
 		});
 	});
 
+	$: user = $SessionStore!.user;
 	$: availabilityPane = false;
+	$: selectedInstance = null as EItemSchema | null;
 </script>
 
-<Pane bind:open={availabilityPane} style="--paneWidth: 450px;">
-	<p slot="header">Availability</p>
-
-	<div slot="footer">
-		<button
-			class="FancyButton"
-			data-type="black-outline"
-			on:click={() => (availabilityPane = false)}
-		>
-			Close
-		</button>
-	</div>
-</Pane>
+<AvailabilityPane
+	userId={user.id}
+	modal={availabilityPane}
+	equipmentId={data.equipment.id}
+	formStore={data.cartItemForm}
+	instanceId={selectedInstance?.id}
+/>
 
 <main class="Equipment">
 	<header class="Equipment__header w-100 gap-10">
@@ -81,6 +80,7 @@
 						<th> Model </th>
 						<th> Category </th>
 						<th> Cost </th>
+						<th> Status </th>
 						<th> View Availability</th>
 					</tr>
 				</thead>
@@ -91,11 +91,16 @@
 							<td>{equipment.model}</td>
 							<td>{equipment.category.name}</td>
 							<td>{item.cost}</td>
+							<td>{item.status}</td>
 							<td>
 								<button
 									class="FancyButton"
+									disabled={item.status !== EStatus.available}
 									data-type="black-outline"
-									on:click={() => (availabilityPane = true)}
+									on:click={() => {
+										selectedInstance = item;
+										availabilityPane = true;
+									}}
 								>
 									View
 								</button>
@@ -105,7 +110,7 @@
 				</tbody>
 				<tfoot>
 					<tr>
-						<td colspan="5">
+						<td colspan="6">
 							Showing {equipment?.instances.length ?? 0} result(s)
 						</td>
 					</tr>
