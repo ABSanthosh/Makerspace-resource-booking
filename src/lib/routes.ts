@@ -20,6 +20,21 @@ export const ADMIN_ROUTES: Route[] = [
 	}
 ];
 
+export const USER_ROUTES: Route[] = [
+	{
+		name: 'Dashboard',
+		route: '/dash',
+		icon: 59530,
+		children: [] as Route[]
+	},
+	{
+		name: 'Cart',
+		route: '/dash/cart',
+		icon: 59596,
+		children: [] as Route[]
+	}
+]
+
 export const HOME_ROUTES: Route[] = [
 	{
 		name: 'Home',
