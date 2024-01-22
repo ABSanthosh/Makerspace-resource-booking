@@ -114,6 +114,15 @@
 					transition: outline-offset 0.15s linear;
 				}
 			}
+
+			&:disabled {
+				color: #7e868c;
+				box-shadow: none;
+				user-select: none;
+				cursor: not-allowed;
+				background-color: #ebedf1;
+				border: 1px solid #d4d8dc;
+			}
 		}
 
 		& > textarea {

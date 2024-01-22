@@ -18,7 +18,7 @@
 		bind:value
 		{...$$restProps}
 		class="FancySelect"
-		style="--height: 45px; width: 100%;"
+		style="width: 100%;"
 	>
 		{#each options as option}
 			<option value={option}>{option}</option>
