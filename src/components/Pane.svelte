@@ -2,7 +2,10 @@
 	import type { HTMLDialogAttributes } from 'svelte/elements';
 	interface $$restProps extends HTMLDialogAttributes {}
 
-	export let open = false;
+	export let { open = false, className } = $$props as {
+		open: boolean;
+		className?: string;
+	};
 
 	let pane: HTMLDialogElement;
 
@@ -10,9 +13,11 @@
 		if (open) {
 			pane.showModal();
 			document.documentElement.style.scrollbarGutter = 'unset';
+			document.documentElement.style.overflow = 'hidden';
 		} else {
 			pane.close();
 			document.documentElement.style.scrollbarGutter = '';
+			document.documentElement.style.overflow = '';
 		}
 	}
 </script>
@@ -42,9 +47,13 @@
 				data-icon={String.fromCharCode(58829)}
 			/>
 		</header>
-		<main>
-			<slot />
-		</main>
+		{#if $$slots.main}
+			<main>
+				<slot name="main" />
+			</main>
+		{:else}
+			<slot name="free" />
+		{/if}
 		<footer>
 			<slot name="footer" />
 		</footer>
@@ -58,6 +67,7 @@
 		margin-right: 0;
 		margin-bottom: 0;
 		max-height: none;
+		max-width: none;
 		overflow: hidden;
 		background-color: #fbfcfd;
 		border-left: 1px solid var(--border);
@@ -69,6 +79,10 @@
 		@include box(var(--paneWidth, 600px));
 		@include make-flex();
 		outline: none;
+
+		@include respondAt(600px) {
+			@include box(100vw);
+		}
 
 		& > header {
 			@include box(100%, auto);
