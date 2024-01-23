@@ -49,6 +49,7 @@ model EInstance {
   equipmentId String
   // manuals
   // TODO: new model to hold availability of each instance
+  // TODO: custom time for each instance
   equipment   Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
@@ -108,7 +109,27 @@ enum EStatus {
 }
 
 enum BookingStatus {
+  // While it is in pending, block the slot.
   pending
   approved
   rejected
 }
+
+// Booking info
+// mentor - text
+// description - text (course, our, research, etc)
+// deadline for the project
+// status - pending, approved, rejected
+// payment qr code for the materials
+
+// User
+// name
+// mobile
+// departments
+// branch
+// roll num
+// email
+// year
+// clubs they are part of
+
+// Default time for all instances
