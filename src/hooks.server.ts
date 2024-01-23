@@ -38,22 +38,36 @@ const createSupabaseClient: Handle = async ({ event, resolve }) => {
 
 const authorization: Handle = async ({ event, resolve }) => {
 	const session = await event.locals.getSession();
-	const isUserAdmin = session ? await isAdmin(event.locals.supabase, session.user.id) : false;
+	const userProfile = session
+		? await isAdmin(event.locals.supabase, session.user.id)
+		: {
+				role: 'user',
+				isNew: false
+			};
+
+	const isUserAdmin = userProfile.role === 'admin';
+	const isUserNew = userProfile.isnew;
 
 	// GET requests
-	if (event.url.pathname.startsWith('/dash') && event.request.method === 'GET') {
-		if (!session) {
-			throw redirect(303, '/');
-		} else if (isUserAdmin) {
-			throw redirect(303, '/admin');
-		}
-	}
+	if (event.request.method === 'GET') {
+		console.log('GET request');
+		// if user not signed in and trying to access dashboard or admin page
+		if (session) {
+			// if user is admin and tries to go to dashboard, redirect to admin page
+			if (event.url.pathname.startsWith('/dash') && isUserAdmin) {
+				throw redirect(303, '/admin');
+			} else if (
+				event.url.pathname.includes('/dash') &&
+				event.url.pathname !== '/dash' &&
+				isUserNew
+			) {
+				throw redirect(303, '/dash');
+			}
 
-	if (event.url.pathname.startsWith('/admin') && event.request.method === 'GET') {
-		if (!session) {
-			throw redirect(303, '/');
-		} else if (!isUserAdmin) {
-			throw redirect(303, '/dash');
+			// if user is new and tries to go to dashboard, redirect to onboarding page
+			if (event.url.pathname.startsWith('/admin') && !isUserAdmin) {
+				throw redirect(303, '/dash');
+			}
 		}
 	}
 
@@ -73,4 +87,4 @@ export const handle = sequence(createSupabaseClient, authorization);
 
 // Ref:
 // 1) https://github.com/fnimick/sveltekit-supabase-auth-starter/blob/main/src/hooks.server.ts
-// 
+//
