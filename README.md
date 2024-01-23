@@ -1,4 +1,10 @@
-## ToDo
+## Short run ToDo
+- [ ] Add cart contents to cart page(responsive)
+- [ ] Add user profile page to fill before changing is_new to false and give access to other pages
+- [ ] add condition to check if user is signed in and not admin before adding to cart
+- [ ] category editing option in admin page
+
+## Long run ToDo
 - [x] Change equipment schema
 - [x] Add equipment category
 - [x] Add multiple types 
@@ -17,6 +23,7 @@
 - [ ] (urgent) replace admin type from profile to custom claim
 - [ ] remove already booked slots from the times list
 - [ ] disabled buttons on panes if the forms are not filled properly
+- [ ] protected route redirect in client side
 
 For each equipment
 - *Generic Name eg: 3d printer
