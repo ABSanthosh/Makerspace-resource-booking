@@ -20,7 +20,7 @@
 - [ ] add error handling for equipment image upload
 - [ ] clear form on closing pane(new and edit equipment)
 - [x] seed data for inserting equipment data
-- [ ] (urgent) replace admin type from profile to custom claim
+- [x] (urgent) replace admin type from profile to custom claim
 - [ ] remove already booked slots from the times list
 - [ ] disabled buttons on panes if the forms are not filled properly
 - [ ] protected route redirect in client side
