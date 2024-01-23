@@ -1,5 +1,5 @@
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
-import { isAdmin } from '$lib/SupabaseUtils';
+import { getCustomClaim } from '$lib/SupabaseUtils';
 import { createServerClient } from '@supabase/ssr';
 import { redirect, type Handle, error } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
@@ -29,6 +29,9 @@ const createSupabaseClient: Handle = async ({ event, resolve }) => {
 		return session;
 	};
 
+	// This is the session data that gets trickled down to all parts of the app
+	event.locals.session = await event.locals.getSession();
+
 	return resolve(event, {
 		filterSerializedResponseHeaders(name) {
 			return name === 'content-range';
@@ -37,46 +40,32 @@ const createSupabaseClient: Handle = async ({ event, resolve }) => {
 };
 
 const authorization: Handle = async ({ event, resolve }) => {
-	const session = await event.locals.getSession();
-	const userProfile = session
-		? await isAdmin(event.locals.supabase, session.user.id)
-		: {
-				role: 'user',
-				isNew: false
-			};
+	const session = event.locals.session;
 
-	const isUserAdmin = userProfile.role === 'admin';
-	const isUserNew = userProfile.isnew;
+	if (!session && (event.url.pathname === '/dash' || event.url.pathname === '/admin')) {
+		throw redirect(303, '/');
+	}
+
+	const isUserAdmin = getCustomClaim(session).role === 'admin';
+	const isUserNew = getCustomClaim(session).isNew;
 
 	// GET requests
 	if (event.request.method === 'GET') {
-		console.log('GET request');
 		// if user not signed in and trying to access dashboard or admin page
-		if (session) {
-			// if user is admin and tries to go to dashboard, redirect to admin page
-			if (event.url.pathname.startsWith('/dash') && isUserAdmin) {
-				throw redirect(303, '/admin');
-			} else if (
-				event.url.pathname.includes('/dash') &&
-				event.url.pathname !== '/dash' &&
-				isUserNew
-			) {
-				throw redirect(303, '/dash');
-			}
-
-			// if user is new and tries to go to dashboard, redirect to onboarding page
-			if (event.url.pathname.startsWith('/admin') && !isUserAdmin) {
-				throw redirect(303, '/dash');
-			}
+		// if user is admin and tries to go to dashboard, redirect to admin page
+		if (event.url.pathname.startsWith('/dash') && isUserAdmin) {
+			throw redirect(303, '/admin');
+		} else if (
+			event.url.pathname.includes('/dash') &&
+			event.url.pathname !== '/dash' &&
+			isUserNew
+		) {
+			throw redirect(303, '/dash');
 		}
-	}
 
-	// POST requests
-	if (event.url.pathname.startsWith('/dash') && event.request.method === 'POST') {
-		if (!session) {
-			throw error(418, '/');
-		} else if (isUserAdmin) {
-			throw error(418, '/admin');
+		// if user is new and tries to go to dashboard, redirect to onboarding page
+		if (event.url.pathname.startsWith('/admin') && !isUserAdmin) {
+			throw redirect(303, '/dash');
 		}
 	}
 
@@ -87,4 +76,3 @@ export const handle = sequence(createSupabaseClient, authorization);
 
 // Ref:
 // 1) https://github.com/fnimick/sveltekit-supabase-auth-starter/blob/main/src/hooks.server.ts
-//
