@@ -1,15 +1,18 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Session } from '@supabase/supabase-js';
 import { PUBLIC_SUPABASE_URL } from '$env/static/public';
 import { SupabaseEnum } from './Enums';
+import { Role } from '@prisma/client';
 
-export async function isAdmin(supabase: SupabaseClient<any>, userId: string) {
+export function getCustomClaim(session: Session | null): {
+	role: Role;
+	isNew: boolean;
+} {
 	return (
-		(await supabase.from('profile').select('*').eq('id', userId).single()).data
+		(session && session.user.user_metadata.custom_claims) || {
+			role: Role.user,
+			isNew: false
+		}
 	);
-}
-
-export async function getUserProfile(supabase: SupabaseClient<any>, userId: string) {
-	return (await supabase.from('profile').select('*').eq('id', userId).single()).data;
 }
 
 export function getStorageUrl(name: string) {
