@@ -1,13 +1,15 @@
 ## Short run ToDo
+
 - [ ] Add cart contents to cart page(responsive)
 - [ ] Add user profile page to fill before changing is_new to false and give access to other pages
 - [ ] add condition to check if user is signed in and not admin before adding to cart
 - [ ] category editing option in admin page
 
 ## Long run ToDo
+
 - [x] Change equipment schema
 - [x] Add equipment category
-- [x] Add multiple types 
+- [x] Add multiple types
 - [ ] [User dashboard with editing](https://supabase.com/docs/guides/getting-started/tutorials/with-sveltekit?language=ts)
 - [x] Hook up new equipment schema to frontend
 - [ ] Error in nested instances loop not binding
@@ -25,21 +27,29 @@
 - [ ] disabled buttons on panes if the forms are not filled properly
 - [ ] protected route redirect in client side
 
+### Schema discussion
+
+<details>
+<summary>Equipment</summary>
+
 For each equipment
-- *Generic Name eg: 3d printer
-- *make and model
-- *description
-- *image
+
+- \*Generic Name eg: 3d printer
+- \*make and model
+- \*description
+- \*image
 - videos
 
 For each item
-- *name
-- *description
-- *cost
+
+- \*name
+- \*description
+- \*cost
 - manuals
 - status: operational, down-for-maintenance, out-of-service
 
 Equipment categories (as editable)
+
 - 3d printer
 - CNC (laser cutter)
 - welding
@@ -47,40 +57,53 @@ Equipment categories (as editable)
 - hand tools
 - Design station
 - testing eqquipment
-- PCB design 
+- PCB design
 - standalone Power tools
+</details>
+
+<details>
+<summary>Material</summary>
 
 Electronic repository (loanables)
-- *quantity
-- *make and model
-- *loaned quantity
-- *image
+
+- \*quantity
+- \*make and model
+- \*loaned quantity
+- \*image
 - description
 
 Material repository (consumables)
-- *name
-- *quantity
-- *dimensions
-  - *type: length, area, volume, breadths
-  - *value
-  - *unit: need the list of possible units 
+
+- \*name
+- \*quantity
+- \*dimensions
+  - \*type: length, area, volume, breadths
+  - \*value
+  - \*unit: need the list of possible units
 - description
+</details>
 
-1) Add `http://127.0.0.1:54321/auth/v1/callback` to google console to Authorised redirect URIs
-2) Add `http://localhost:5173/` in `site_url` to `config.toml`
+### To setup auth in prod
 
-## [To see errors in supabase db](https://github.com/supabase/cli/issues/271#issuecomment-1661981609)
+1. Add `http://127.0.0.1:54321/auth/v1/callback` to google console to Authorised redirect URIs
+2. Add `http://localhost:5173/` in `site_url` to `config.toml`
+
+### [To see errors in supabase db](https://github.com/supabase/cli/issues/271#issuecomment-1661981609)
+
 ```
 docker logs -f supabase_db_makerspace
 ```
 
-## Misc
+### Misc
+
+[To manually set time in nixos](https://discourse.nixos.org/t/manually-set-date-and-time-on-nixos/13016)
+
 ```
-<!-- https://discourse.nixos.org/t/manually-set-date-and-time-on-nixos/13016 -->
 sudo systemctl stop systemd-timesyncd.service
 ```
 
 To see supabase status
-``` 
+
+```
 supabase status
 ```
