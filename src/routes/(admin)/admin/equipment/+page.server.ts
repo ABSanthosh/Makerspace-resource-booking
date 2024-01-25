@@ -6,6 +6,7 @@ import { fail, type Actions } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { addEquipment, editEquipment, getAllEquipment, getECategories } from '$db/Equipment.db';
 
+// @ts-ignore
 export const load: PageServerLoad = async ({ locals }) => {
 	const newEquipmentForm = await superValidate(EZodSchema);
 	if (Object.keys(locals).length === 0) return { newEquipmentForm, ...locals };
