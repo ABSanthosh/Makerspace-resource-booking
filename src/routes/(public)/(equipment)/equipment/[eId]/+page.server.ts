@@ -5,7 +5,6 @@ import { CartItemZSchema } from '$lib/schemas';
 import { fail, type Actions } from '@sveltejs/kit';
 import { addToCart } from '$db/User.db';
 
-// @ts-ignore
 export const load: PageServerLoad = async ({ params }) => {
 	return {
 		equipment: await getEquipmentById(params.eId),
