@@ -9,9 +9,8 @@ export async function GET(event) {
 	const next = url.searchParams.get('next') ?? '/';
 	const errorCode = url.searchParams.get('error') as string;
 
-  console.log('code', code, errorCode);
 	if (errorCode) {
-		throw redirect(303, '/auth/error');
+		throw redirect(303, '/');
 	}
 	if (code) {
 		const { error } = await supabase.auth.exchangeCodeForSession(code);
