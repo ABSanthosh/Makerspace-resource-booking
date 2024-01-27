@@ -33,6 +33,28 @@ const queries = {
 				FOR EACH ROW
 				WHEN (old.role <> new.role)
 				EXECUTE PROCEDURE public.update_user_role();
+		`,
+		Prisma.sql`
+			-- When public.profile.isnew is updated, update the user's custom claims
+			CREATE or REPLACE FUNCTION update_user_isnew()
+			RETURNS trigger
+			LANGUAGE plpgsql
+			SECURITY DEFINER SET search_path = public
+			AS $$
+			BEGIN
+				UPDATE auth.users SET raw_user_meta_data = raw_user_meta_data
+				|| json_build_object('custom_claims', json_build_object('isNew', new.isnew))::jsonb
+				WHERE id = new.id;
+				RETURN new;
+			END;
+			$$;
+		`,
+		Prisma.sql`
+			CREATE or REPLACE TRIGGER on_profile_isnew_updated
+				AFTER UPDATE OF isnew ON public.profile
+				FOR EACH ROW
+				WHEN (old.isnew <> new.isnew)
+				EXECUTE PROCEDURE public.update_user_isnew();
 		`
 	],
 	onDeleteUser: [
@@ -72,17 +94,31 @@ async function onNewUser(columns: { [name: string]: string }) {
 		
 		-- set user custom claims
 		UPDATE auth.users SET raw_user_meta_data = raw_user_meta_data
-		|| json_build_object('custom_claims', json_build_object('role', ${columns.role
-		}, 'isNew', false))::jsonb
+		|| json_build_object(
+			'custom_claims', 
+			json_build_object(
+				'role', ${columns.role}, 
+				'isNew', ${columns.isnew}
+			)::jsonb
+		)::jsonb
+		WHERE id = new.id;
+
+		-- update default data from auth.users
+		UPDATE public.profile SET 
+			name = COALESCE(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name', ''),
+			mobile = COALESCE(new.phone, ''),
+			email = COALESCE(new.email, '')
 		WHERE id = new.id;
 		
 		RETURN new;
 		END;
 		$$;
 	`;
-	prisma.$executeRawUnsafe(query);
 
-	await prisma.$transaction(queries.onNewUser.map((query) => prisma.$executeRaw(query)));
+	await prisma.$transaction([
+		prisma.$executeRawUnsafe(query),
+		...queries.onNewUser.map((query) => prisma.$executeRaw(query))
+	]);
 }
 
 async function onDeleteUser() {
@@ -124,7 +160,7 @@ async function makeNewBucket(name: string) {
 			VALUES ('${name}', '${name}', true);`),
 			...Object.values(policies).map((policy) => prisma.$executeRawUnsafe(policy))
 		]);
-	} catch (e) { }
+	} catch (e) {}
 }
 
 async function seedEquipments() {
@@ -213,7 +249,7 @@ async function seedCategories() {
 		prisma.eCategories.createMany({
 			data: categories
 		})
-	])
+	]);
 }
 
 async function main() {
@@ -221,10 +257,21 @@ async function main() {
 		.then(() => console.log('✅ eCategories seeded'))
 		.catch((e) => console.error(`🚨 ${e}`));
 
+	// Values are passed without quotes and postgresql only considers
+	// single quotes as quotes and double quotes as identifiers.
+	// Postgres converts all uppercase identifiers to lowercase.
 	await onNewUser({
 		id: 'new.id',
 		role: "'user'",
-		isnew: 'true'
+		isnew: 'true',
+		name: "''",
+		mobile: "''",
+		email: "''",
+		department: "''",
+		branch: "''",
+		userid: "''",
+		year: 'null',
+		clubs: "'[]'"
 	})
 		.then(() => console.log('✅ onNewUser trigger created'))
 		.catch((e) => console.error(`🚨 ${e}`));

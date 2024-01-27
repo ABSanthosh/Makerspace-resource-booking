@@ -31,7 +31,6 @@
 
 <details>
 <summary>Equipment</summary>
-
 For each equipment
 
 - \*Generic Name eg: 3d printer
@@ -81,6 +80,19 @@ Material repository (consumables)
   - \*value
   - \*unit: need the list of possible units
 - description
+</details>
+
+<details>
+<summary>User profile</summary>
+- name
+- mobile
+- departments
+- branch
+- roll num
+- email
+- year
+- clubs they are part of
+
 </details>
 
 ### To setup auth in prod

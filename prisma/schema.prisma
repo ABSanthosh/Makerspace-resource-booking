@@ -11,18 +11,24 @@ datasource db {
   // directUrl = env("DATABASE_DIRECT_URL_POSTGRES")
 }
 
-enum Role {
-  admin
-  user
-}
-
 model Profile {
-  id    String  @id @db.Uuid
-  role  Role    @default(user)
-  isNew Boolean @default(true) @map("isnew")
+  // When new attributes are added, make sure to update the triggers
+  // /prisma/seed.ts > main() > onNewUser
+  id         String @id @db.Uuid
+  name       String
+  mobile     String
+  email      String
+  department String
+  branch     String
+  userId     String @map("userid") // This is for emp id or student id
+  year       Int?
+  clubs      Json?  @db.Json
 
+  // Needed in on_profile_role_updated trigger
+  role   Role    @default(user)
+  // Needed in on_profile_isnew_updated trigger
+  isNew  Boolean @default(true) @map("isnew")
   cart   Cart?
-  // More fields...
   cartId String?
 
   @@map("profile")
@@ -109,10 +115,15 @@ enum EStatus {
 }
 
 enum BookingStatus {
-  // While it is in pending, block the slot.
+  // TODO: While it is in pending, block the slot.
   pending
   approved
   rejected
+}
+
+enum Role {
+  admin
+  user
 }
 
 // Booking info
@@ -121,15 +132,5 @@ enum BookingStatus {
 // deadline for the project
 // status - pending, approved, rejected
 // payment qr code for the materials
-
-// User
-// name
-// mobile
-// departments
-// branch
-// roll num
-// email
-// year
-// clubs they are part of
 
 // Default time for all instances
