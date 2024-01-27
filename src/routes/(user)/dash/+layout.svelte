@@ -29,5 +29,9 @@
 			grid-template-columns: 1fr;
 			padding-left: 56px;
 		}
+
+		&__content {
+			overflow: auto;
+		}
 	}
 </style>

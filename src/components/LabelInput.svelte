@@ -23,7 +23,7 @@
 <label
 	for={name}
 	style={labelStyle}
-	class="LabelInput {orient === 'col' ? 'Col--center' : 'Row--center'}"
+	class="LabelInput {orient === 'col' ? 'LabelInput--col' : 'LabelInput--row'}"
 >
 	{#if !noLabel}
 		<span class="LabelInput__text" data-mandatory={mandatory ? 'true' : undefined}>
@@ -32,6 +32,7 @@
 	{/if}
 	{#if $$restProps.type === 'textarea'}
 		<textarea
+			class="FancyInput"
 			{name}
 			id={name}
 			bind:value
@@ -40,6 +41,7 @@
 		/>
 	{:else}
 		<input
+			class="FancyInput"
 			{name}
 			id={name}
 			bind:value
@@ -63,6 +65,14 @@
 		align-items: flex-start;
 		justify-content: space-between;
 
+		&--col {
+			@include make-flex($dir: column, $just: center);
+		}
+
+		&--row {
+			@include make-flex($dir: row, $just: space-between);
+		}
+
 		&__text {
 			@include box(auto, auto);
 			font-size: 14px;
@@ -80,54 +90,6 @@
 				font-size: 14px;
 				font-weight: 500;
 			}
-		}
-
-		& > input,
-		& > textarea {
-			@include box(var(--width, 100%), var(--height, 34px));
-			padding: 1px var(--padxy, 14px);
-			font-size: var(--font, 14px);
-			border-radius: 7px;
-			color: rgb(17, 24, 28);
-			background-color: #05294d07;
-			border: 1px solid #d4d8dc;
-			outline: none;
-			box-shadow:
-				rgba(255, 255, 255, 0.035) 0px 0px 0px 0px,
-				rgba(236, 238, 240, 0.035) 0px 0px 0px 0.0741246px,
-				rgba(0, 0, 0, 0.05) 0px 1.11119px 2.14825px -0.0370623px,
-				rgba(0, 0, 0, 0.004) 0px 0.0741246px 0.148249px -0.0741246px;
-
-			&:focus,
-			&:active {
-				border: 1px solid #889096;
-				box-shadow:
-					rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-					rgb(236, 238, 240) 0px 0px 0px 2px,
-					rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
-					rgba(0, 0, 0, 0.1) 0px 2px 4px -2px;
-			}
-			&:not([data-no-focus='true']) {
-				&:focus {
-					outline-offset: 2px;
-					outline: 0.125rem solid #0054f0;
-					transition: outline-offset 0.15s linear;
-				}
-			}
-
-			&:disabled {
-				color: #7e868c;
-				box-shadow: none;
-				user-select: none;
-				cursor: not-allowed;
-				background-color: #ebedf1;
-				border: 1px solid #d4d8dc;
-			}
-		}
-
-		& > textarea {
-			resize: none;
-			padding: 10px var(--padxy, 14px) !important;
 		}
 	}
 </style>

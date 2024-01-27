@@ -1,32 +1,84 @@
 .FancyInput {
-  &[type="text"],
-  &[type="password"],
-  &[type="email"],
-  &[type="number"] {
-    padding: 8px 10px;
-    font-size: 15.5px;
-    border-radius: 7px;
-    @include box($height: 38px);
-    box-shadow: var(--buttonShadow);
-    border: 1.5px solid var(--border);
-    background-color: var(--elevatedBG);
-  }
+	&:not([type]),
+	&[type='text'],
+	&[type='password'],
+	&[type='email'],
+	&[type='number'] {
+		&:not([data-type]) {
+			@include box(var(--width, 100%), var(--height, 34px));
+			padding: 1px var(--padxy, 14px);
+			font-size: var(--font, 14px);
+			border-radius: 7px;
+			color: rgb(17, 24, 28);
+			background-color: #05294d07;
+			border: 1px solid #d4d8dc;
+			outline: none;
+			box-shadow:
+				rgba(255, 255, 255, 0.035) 0px 0px 0px 0px,
+				rgba(236, 238, 240, 0.035) 0px 0px 0px 0.0741246px,
+				rgba(0, 0, 0, 0.05) 0px 1.11119px 2.14825px -0.0370623px,
+				rgba(0, 0, 0, 0.004) 0px 0.0741246px 0.148249px -0.0741246px;
 
-  &[type="number"] {
-    &::-webkit-outer-spin-button,
-    &::-webkit-inner-spin-button {
-      margin: 0;
-      -webkit-appearance: none;
-    }
-  }
+			&:focus,
+			&:active {
+				border: 1px solid #889096;
+				box-shadow:
+					rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+					rgb(236, 238, 240) 0px 0px 0px 2px,
+					rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
+					rgba(0, 0, 0, 0.1) 0px 2px 4px -2px;
+			}
 
-  &[type="textarea"] {
-    resize: none;
-    text-align: left;
-    padding: 0.75rem;
-    font-size: 15.5px;
-    border-radius: 7px;
-    @include box($height: 100px);
-    border: 1.5px solid var(--border);
-  }
+			&:not([data-no-focus='true']) {
+				&:focus {
+					outline-offset: 2px;
+					outline: 0.125rem solid #0054f0;
+					transition: outline-offset 0.15s linear;
+				}
+			}
+
+			&:disabled {
+				color: #7e868c;
+				box-shadow: none;
+				user-select: none;
+				cursor: not-allowed;
+				background-color: #ebedf1;
+				border: 1px solid #d4d8dc;
+			}
+		}
+
+		&[data-type='blue-outline'] {
+			padding: 8px 10px;
+			font-size: 15.5px;
+			border-radius: 7px;
+			@include box($height: 38px);
+			box-shadow: var(--buttonShadow);
+			border: 1.5px solid var(--border);
+			background-color: var(--elevatedBG);
+		}
+	}
+
+	&[type='number'] {
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			margin: 0;
+			-webkit-appearance: none;
+		}
+	}
+
+	&[type='textarea'] {
+		&[data-type='blue-outline'] {
+			resize: none;
+			text-align: left;
+			padding: 0.75rem;
+			font-size: 15.5px;
+			border-radius: 7px;
+			@include box($height: 100px);
+			border: 1.5px solid var(--border);
+		}
+		&:not([data-type]) {
+			resize: none;
+			padding: 10px var(--padxy, 14px) !important;
+		}
+	}
 }
