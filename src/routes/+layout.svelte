@@ -1,16 +1,15 @@
 <script lang="ts">
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { SupaStore, SessionStore, ProfileStore } from '$store/SupaStore';
+	import { SupaStore, SessionStore } from '$store/SupaStore';
 	import { navigating } from '$app/stores';
 	import BlurredSpinner from '$components/BlurredSpinner.svelte';
 	export let data;
 
 	// Supabase
-	$: ({ supabase, session, profile } = data);
+	$: ({ supabase, session } = data);
 	$: SupaStore.set(supabase);
 	$: SessionStore.set(session);
-	$: ProfileStore.set(profile);
 
 	onMount(() => {
 		const {
