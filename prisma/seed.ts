@@ -1,110 +1,92 @@
-import { EStatus, PrismaClient } from '@prisma/client';
+import { EStatus, Prisma, PrismaClient } from '@prisma/client';
 import { SupabaseEnum } from '../src/lib/Enums';
 
 const prisma = new PrismaClient();
 
+const queries = {
+	onNewUser: [
+		Prisma.sql`
+			-- When a new user signs up, insert a row into public.profile 
+			-- and set the user's custom claims
+			CREATE or REPLACE TRIGGER on_auth_user_created
+				AFTER INSERT ON auth.users
+				FOR EACH ROW EXECUTE PROCEDURE onNewUser();
+		`,
+		Prisma.sql`
+		  -- When user role is updated on public.profile, update the user's custom claims
+			CREATE or REPLACE FUNCTION update_user_role()
+			RETURNS trigger
+			LANGUAGE plpgsql
+			SECURITY DEFINER SET search_path = public
+			AS $$
+			BEGIN
+				UPDATE auth.users SET raw_user_meta_data = raw_user_meta_data
+				|| json_build_object('custom_claims', json_build_object('role', new.role))::jsonb
+				WHERE id = new.id;
+				RETURN new;
+			END;
+			$$;
+		`,
+		Prisma.sql`
+			CREATE or REPLACE TRIGGER on_profile_role_updated
+				AFTER UPDATE OF role ON public.profile
+				FOR EACH ROW
+				WHEN (old.role <> new.role)
+				EXECUTE PROCEDURE public.update_user_role();
+		`
+	],
+	onDeleteUser: [
+		Prisma.sql`
+			-- When a user is deleted, delete the corresponding row in public.profile
+			CREATE or REPLACE FUNCTION onDeleteUser()
+			RETURNS trigger
+			LANGUAGE plpgsql
+			SECURITY DEFINER SET search_path = public
+			AS $$
+			BEGIN
+				DELETE FROM public.profile WHERE id = old.id;
+				RETURN old;
+			END;
+			$$;
+		`,
+		Prisma.sql`
+			-- When a user is deleted, delete the corresponding row in public.profile
+			CREATE or REPLACE TRIGGER on_auth_user_deleted
+				AFTER DELETE ON auth.users
+				FOR EACH ROW EXECUTE PROCEDURE onDeleteUser();
+		`
+	]
+};
+
 async function onNewUser(columns: { [name: string]: string }) {
-	// Remove the function if it already exists
-	await prisma.$executeRawUnsafe(`
-		DROP FUNCTION IF EXISTS public.onNewUser() CASCADE;
-	`);
-
-	// Insert a row into public.profile on new user in auth.users
-	// -- set custom claim
-	// PERFORM set_claim(new.id, 'role', columns.role);
 	const query = `
-	create or replace function public.onNewUser()
-	returns trigger
-	language plpgsql
-	security definer set search_path = public
-	as $$
-	begin
-	
-	insert into public.profile (${Object.keys(columns).join(', ')})
-	values (${Object.values(columns).join(', ')});
-	
-	-- set user role
-	update auth.users set raw_user_meta_data = raw_user_meta_data
-	|| json_build_object('custom_claims', json_build_object('role', ${columns.role}))::jsonb
-	where id = new.id;
-	
-	return new;
-	end;
-	$$;
-	`;
-	await prisma.$executeRawUnsafe(query);
-	// Remove the trigger if it already exists
-	await prisma.$executeRawUnsafe(`
-		DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users CASCADE;
-	`);
-
-	// Add a trigger to the function every time a user is created
-	await prisma.$executeRawUnsafe(`
-		create trigger on_auth_user_created
-			after insert on auth.users
-			for each row execute procedure public.onNewUser();
-		`);
-
-	// function to update user role if profile.role is updated
-	await prisma.$executeRawUnsafe(`
-		create or replace function public.update_user_role()
-		returns trigger
-		language plpgsql
-		security definer set search_path = public
-		as $$
-		begin
-			update auth.users set raw_user_meta_data = raw_user_meta_data
-			|| json_build_object('custom_claims', json_build_object('role', new.role))::jsonb
-			where id = new.id;
-			return new;
-		end;
+		CREATE or REPLACE FUNCTION onNewUser()
+		RETURNS trigger
+		LANGUAGE plpgsql
+		SECURITY DEFINER SET search_path = public
+		AS $$
+		BEGIN
+		
+		INSERT INTO public.profile (${Object.keys(columns).join(', ')})
+		VALUES (${Object.values(columns).join(', ')});
+		
+		-- set user custom claims
+		UPDATE auth.users SET raw_user_meta_data = raw_user_meta_data
+		|| json_build_object('custom_claims', json_build_object('role', ${columns.role
+		}, 'isNew', false))::jsonb
+		WHERE id = new.id;
+		
+		RETURN new;
+		END;
 		$$;
-		`);
+	`;
+	prisma.$executeRawUnsafe(query);
 
-	// new trigger to update user role if profile.role is updated
-	await prisma.$executeRawUnsafe(`
-		DROP TRIGGER IF EXISTS on_profile_role_updated ON public.profile CASCADE;
-	`);
-	await prisma.$executeRawUnsafe(`
-		create trigger on_profile_role_updated
-			after update of role on public.profile
-			for each row
-			when (old.role <> new.role)
-			execute procedure public.update_user_role();
-		`);
+	await prisma.$transaction(queries.onNewUser.map((query) => prisma.$executeRaw(query)));
 }
 
 async function onDeleteUser() {
-	// Remove the function if it already exists
-	await prisma.$executeRawUnsafe(`
-		DROP FUNCTION IF EXISTS public.onDeleteUser() CASCADE;
-	`);
-
-	// Remove the trigger if it already exists
-	await prisma.$executeRawUnsafe(`
-		DROP TRIGGER IF EXISTS on_auth_user_deleted ON auth.users CASCADE;
-	`);
-
-	// Insert a row into public.profile on new user in auth.users
-	await prisma.$executeRawUnsafe(`
-		create or replace function public.onDeleteUser()
-		returns trigger
-		language plpgsql
-		security definer set search_path = public
-		as $$
-		begin
-			delete from public.profile where id = old.id;
-			return old;
-		end;
-		$$;
-		`);
-
-	// Add a trigger to the function every time a user is created
-	await prisma.$executeRawUnsafe(`
-		create trigger on_auth_user_deleted
-			after delete on auth.users
-			for each row execute procedure public.onDeleteUser();
-		`);
+	await prisma.$transaction(queries.onDeleteUser.map((query) => prisma.$executeRaw(query)));
 }
 
 async function makeNewBucket(name: string) {
@@ -112,43 +94,37 @@ async function makeNewBucket(name: string) {
 	// https://github.com/orgs/supabase/discussions/5786#discussioncomment-2291214
 	const policies = {
 		select: `
-			create policy "select_equipment_image"
-			on storage.objects for select
-			to authenticated
-			using (bucket_id = '${name}');`,
+			CREATE POLICY "select_equipment_image"
+			ON storage.objects FOR SELECT
+			TO authenticated
+			USING ( bucket_id = '${name}');`,
 		insert: `
-			create policy "insert_equipment_image"
-			on storage.objects for insert
-			to authenticated
-			with check (bucket_id = '${name}');`,
+			CREATE POLICY "insert_equipment_image"
+			ON storage.objects FOR INSERT
+			TO authenticated
+			WITH CHECK (bucket_id = '${name}');`,
 		update: `
-			create policy "update_equipment_image"
-			on storage.objects for update
-			to authenticated
-			using (bucket_id = '${name}');`,
+			CREATE POLICY "update_equipment_image"
+			ON storage.objects FOR UPDATE
+			TO authenticated
+			USING (bucket_id = '${name}');`,
 		delete: `
-			create policy "delete_equipment_image"
-			on storage.objects for delete
-			to authenticated
-			using (bucket_id = '${name}');`
+			CREATE POLICY "delete_equipment_image"
+			ON storage.objects FOR DELETE
+			TO authenticated
+			USING (bucket_id = '${name}');`
 	};
 
 	// We don't want to delete the bucket if it already exists
 	try {
-		// Create a new bucket
-		await prisma.$executeRawUnsafe(`
-		insert into storage.buckets
-		(id, name, public)
-		values
-		('${name}', '${name}', true);
-	`);
-
-		await prisma.$transaction(
-			Object.values(policies).map((policy) => prisma.$executeRawUnsafe(policy))
-		);
-	} catch (e) {
-		// console.log(e);
-	}
+		// Create a new bucket: https://supabase.com/docs/guides/storage/buckets/creating-buckets?language=sql
+		await prisma.$transaction([
+			prisma.$executeRawUnsafe(`
+			INSERT INTO storage.buckets (id, name, public)
+			VALUES ('${name}', '${name}', true);`),
+			...Object.values(policies).map((policy) => prisma.$executeRawUnsafe(policy))
+		]);
+	} catch (e) { }
 }
 
 async function seedEquipments() {
@@ -209,31 +185,39 @@ async function seedEquipments() {
 		}
 	];
 
-	await prisma.equipment.createMany({
-		data: equipments
-	});
+	await prisma.$transaction([
+		prisma.equipment.createMany({
+			data: equipments
+		}),
+		prisma.eInstance.createMany({
+			data: instances
+		})
+	]);
+}
 
-	await prisma.eInstance.createMany({
-		data: instances
-	});
+async function seedCategories() {
+	const categories = [
+		{ id: 'pw2mtah', name: '3D Printer' },
+		{ id: '384ieci', name: 'CNC (Laser cutter)' },
+		{ id: 'bgwbjwd', name: 'Welding' },
+		{ id: 'wec92q8', name: 'Hand power tools' },
+		{ id: 'cpwp422', name: 'Hand tools' },
+		{ id: '233g4pc', name: 'Design station' },
+		{ id: 'zyyymkp', name: 'Testing equipment' },
+		{ id: 'ex7r4z9', name: 'PCB design' },
+		{ id: 'htbyq6g', name: 'Standalone power tools' }
+	];
+
+	await prisma.$transaction([
+		prisma.eCategories.deleteMany(),
+		prisma.eCategories.createMany({
+			data: categories
+		})
+	])
 }
 
 async function main() {
-	await prisma.eCategories.deleteMany({});
-	await prisma.eCategories
-		.createMany({
-			data: [
-				{ id: 'pw2mtah', name: '3D Printer' },
-				{ id: '384ieci', name: 'CNC (Laser cutter)' },
-				{ id: 'bgwbjwd', name: 'Welding' },
-				{ id: 'wec92q8', name: 'Hand power tools' },
-				{ id: 'cpwp422', name: 'Hand tools' },
-				{ id: '233g4pc', name: 'Design station' },
-				{ id: 'zyyymkp', name: 'Testing equipment' },
-				{ id: 'ex7r4z9', name: 'PCB design' },
-				{ id: 'htbyq6g', name: 'Standalone power tools' }
-			]
-		})
+	await seedCategories()
 		.then(() => console.log('✅ eCategories seeded'))
 		.catch((e) => console.error(`🚨 ${e}`));
 
