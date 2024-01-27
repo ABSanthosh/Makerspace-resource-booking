@@ -1,5 +1,6 @@
 import { EStatus, PrismaClient } from '@prisma/client';
 import { SupabaseEnum } from '../src/lib/Enums';
+import { InstallCustomClaims, UninstallCustomClaims } from './CustomClaims';
 
 const prisma = new PrismaClient();
 
@@ -10,6 +11,8 @@ async function onNewUser(columns: { [name: string]: string }) {
 	`);
 
 	// Insert a row into public.profile on new user in auth.users
+	// -- set custom claim
+	// PERFORM set_claim(new.id, 'role', columns.role);
 	const query = `
 	create or replace function public.onNewUser()
 	returns trigger
@@ -17,14 +20,18 @@ async function onNewUser(columns: { [name: string]: string }) {
 	security definer set search_path = public
 	as $$
 	begin
-		insert into public.profile (${Object.keys(columns).join(', ')})
-		values (${Object.values(columns).join(', ')});
-		return new;
+	
+	insert into public.profile (${Object.keys(columns).join(', ')})
+	values (${Object.values(columns).join(', ')});
+	
+	update auth.users set raw_app_meta_data = raw_app_meta_data 
+		|| json_build_object('role', ${columns.role})::jsonb where id = 'new.id';
+
+	return new;
 	end;
 	$$;
 	`;
-	await prisma.$executeRawUnsafe(query);
-
+	await prisma.$executeRawUnsafe(query)
 	// Remove the trigger if it already exists
 	await prisma.$executeRawUnsafe(`
 		DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users CASCADE;
@@ -36,6 +43,13 @@ async function onNewUser(columns: { [name: string]: string }) {
 			after insert on auth.users
 			for each row execute procedure public.onNewUser();
 		`);
+
+	// new trigger to update custom claims if public.profile.role is updated
+	// await prisma.$executeRawUnsafe(`
+	// 	create trigger on_profile_role_updated
+	// 		after update of role on public.profile
+	// 		for each row execute procedure set_claim(new.id, 'role', new.role);
+	// 	`).catch((e) => console.error(`🚨 there ${e}`));
 }
 
 async function onDeleteUser() {
@@ -145,7 +159,7 @@ async function seedEquipments() {
 	const instances = [
 		{
 			name: 'CR-10 SE - 1',
-			status: EStatus.available	,
+			status: EStatus.available,
 			cost: '0',
 			description: '',
 			equipmentId: '_iPoLfl'
@@ -183,6 +197,9 @@ async function seedEquipments() {
 }
 
 async function main() {
+	await UninstallCustomClaims();
+	await InstallCustomClaims();
+
 	await prisma.eCategories.deleteMany({});
 	await prisma.eCategories
 		.createMany({
@@ -203,7 +220,7 @@ async function main() {
 
 	await onNewUser({
 		id: 'new.id',
-		role: 'user',
+		role: "'user'",
 		isnew: 'true'
 	})
 		.then(() => console.log('✅ onNewUser trigger created'))
