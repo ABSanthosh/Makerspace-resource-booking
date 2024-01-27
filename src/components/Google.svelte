@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { SupaStore, SessionStore, ProfileStore } from '$store/SupaStore';
+	import { SupaStore, SessionStore } from '$store/SupaStore';
 	import clickOutside from '$directive/clickOutside';
+	import { getCustomClaim } from '$lib/SupabaseUtils';
+	import { Role } from '@prisma/client';
 
 	$: isProfileOpen = false;
 </script>
@@ -59,10 +61,7 @@
 			<img src={$SessionStore.user.user_metadata.picture} alt="Avatar" />
 		</summary>
 		<ul class="Google__profile--box FancyMenu__content" data-align="right">
-			<!-- <a href={$ProfileStore?.role === 'admin' ? '/admin' : '/dash'} class="Google__profile--item">
-				{$ProfileStore?.role === 'admin' ? 'Admin Panel' : 'Dashboard'}
-			</a> -->
-			{#if $ProfileStore?.role === 'admin'}
+			{#if getCustomClaim($SessionStore).role === Role.admin}
 				<a href="/admin" class="Google__profile--item" data-icon={String.fromCharCode(61245)}>
 					Admin Panel
 				</a>
