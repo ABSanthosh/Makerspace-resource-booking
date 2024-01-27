@@ -1,6 +1,5 @@
 import { EStatus, PrismaClient } from '@prisma/client';
 import { SupabaseEnum } from '../src/lib/Enums';
-import { InstallCustomClaims, UninstallCustomClaims } from './CustomClaims';
 
 const prisma = new PrismaClient();
 
@@ -197,9 +196,6 @@ async function seedEquipments() {
 }
 
 async function main() {
-	await UninstallCustomClaims();
-	await InstallCustomClaims();
-
 	await prisma.eCategories.deleteMany({});
 	await prisma.eCategories
 		.createMany({
