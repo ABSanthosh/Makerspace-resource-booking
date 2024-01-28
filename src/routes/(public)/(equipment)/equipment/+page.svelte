@@ -30,7 +30,6 @@
 		<LabelInput
 			noLabel
 			label="Search"
-			type="search"
 			style="--width: 270px;"
 			bind:value={equipmentSearch}
 			placeholder="Search equipment"
