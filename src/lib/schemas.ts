@@ -1,17 +1,22 @@
-import { BookingStatus, EStatus } from '@prisma/client';
+import { BookingStatus, EStatus, Role } from '@prisma/client';
 import { z } from 'zod';
 
 const phoneRegex = new RegExp(/(\+91\s)?\d{10}/);
 
-// userId
-// string of numbers for emp id
-// OTP for mail
-// For students just netid and roll number
-// For faculty just netid and emp id
+export const UserProfileZodSchema = z.object({
+	name: z.string().min(2),
+	mobile: z.string().regex(phoneRegex),
+	email: z.string().email(),
+	department: z.string().min(2),
+	branch: z.string().min(2),
+	userId: z.string().min(2),
+	year: z.string().min(4),
+	role: z.nativeEnum(Role),
+	isNew: z.boolean().optional(),
+	clubs: z.array(z.string()).optional()
+});
 
-// Need in register page
-// User category
-// first name, last name
+export type UserProfileSchema = z.infer<typeof UserProfileZodSchema>;
 
 export const EItemZodSchema = z.object({
 	id: z.string().optional().or(z.literal('')),
