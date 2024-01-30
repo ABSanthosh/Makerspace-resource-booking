@@ -1,0 +1,114 @@
+.CrispButton {
+	--crp-button-gap: 10px;
+	--crp-button-width: auto;
+	--crp-button-height: 32px;
+	--crp-button-font-size: 15px;
+	--crp-button-padding-top: 8px;
+	--crp-button-border-radius: 6px;
+	--crp-button-padding-left: 10px;
+	--crp-button-padding-right: 10px;
+	--crp-button-padding-bottom: 8px;
+
+	&:not(&[data-type]) {
+		--crp-button-color: #11181c;
+		--crp-button-color-hover: #11181c;
+
+		--crp-button-background-color: #fbfcfd;
+		--crp-button-background-color-hover: #f1f3f5;
+
+		--crp-button-border: 1px solid #dfe3e6;
+		--crp-button-border-hover: 1px solid #d7dbdf;
+
+		--crp-button-box-shadow: #00000000 0px 0px 0px 0px, #00000000 0px 0px 0px 0px,
+			#0000000d 0px 1px 2px 0px;
+	}
+
+	&[data-type='dark'] {
+		--crp-button-color: #ededed;
+		--crp-button-color-hover: #ededed;
+
+		--crp-button-background-color: #2e2e2e;
+		--crp-button-background-color-hover: #343434;
+
+		--crp-button-border: 1px solid #3e3e3e;
+		--crp-button-border-hover: 1px solid #505050;
+
+		--crp-button-box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+			rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+	}
+
+	&[data-type='black-outline'] {
+		--crp-button-color: #ffffff;
+		--crp-button-color-hover: #000000;
+
+		--crp-button-background-color: #000000;
+		--crp-button-background-color-hover: #ffffff;
+
+		--crp-button-border: 1px solid #ffffff;
+		--crp-button-border-hover: 1px solid #000000;
+
+		--crp-button-box-shadow: transparent;
+	}
+
+	&[data-type='danger'] {
+		--crp-button-color: #11181c;
+		--crp-button-color-hover: #ffffff;
+
+		--crp-button-background-color: #fbfcfd;
+		--crp-button-background-color-hover: #ff605c;
+
+		--crp-button-border: 1px solid #dfe3e6;
+		--crp-button-border-hover: 1px solid #ff605c;
+
+		--crp-button-box-shadow: transparent;
+	}
+
+	&[data-type='success'] {
+		--crp-button-color: #11181c;
+		--crp-button-color-hover: #ffffff;
+
+		--crp-button-background-color: #fbfcfd;
+		--crp-button-background-color-hover: #3ecf8e;
+
+		--crp-button-border: 1px solid #dfe3e6;
+		--crp-button-border-hover: 1px solid #3ecf8e;
+
+		--crp-button-box-shadow: transparent;
+	}
+
+	// Basic
+	border: none;
+	outline: none;
+	cursor: pointer;
+	white-space: nowrap;
+	gap: var(--crp-button-gap);
+	transition: all 0.15s ease-in-out;
+	font-size: var(--crp-button-font-size);
+	border-radius: var(--crp-button-border-radius);
+
+	// Padding
+	padding-top: var(--crp-button-padding-top);
+	padding-left: var(--crp-button-padding-left);
+	padding-right: var(--crp-button-padding-right);
+	padding-bottom: var(--crp-button-padding-bottom);
+
+	// Layout
+	@include make-flex($dir: row);
+	@include box(var(--crp-button-width), var(--crp-button-height));
+
+	// Color
+	color: var(--crp-button-color);
+	border: var(--crp-button-border);
+	box-shadow: var(--crp-button-box-shadow);
+	background-color: var(--crp-button-background-color);
+
+	&:hover:not(:disabled) {
+		color: var(--crp-button-color-hover);
+		border: var(--crp-button-border-hover);
+		background-color: var(--crp-button-background-color-hover);
+	}
+
+	&:disabled {
+		cursor: not-allowed;
+	}
+}

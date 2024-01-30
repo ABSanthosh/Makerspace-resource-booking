@@ -35,7 +35,7 @@
 
 <AvailabilityPane
 	userId={user.id}
-	modal={availabilityPane}
+	bind:modal={availabilityPane}
 	equipmentId={data.equipment.id}
 	formStore={data.cartItemForm}
 	instanceId={selectedInstance?.id}

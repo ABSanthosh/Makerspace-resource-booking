@@ -1,0 +1,212 @@
+/**
+ * @usage
+<details class="CrispMenu Demo">
+	<summary> Navigation </summary>
+	<ul class="CrispMenu__content Demo__content" data-align={align} data-direction={direction}>
+		<li class="CrispMenu__item">Home</li>
+		<li class="CrispMenu__item">About</li>
+		<li class="CrispMenu__item">Contact</li>
+	</ul>
+</details>
+*/
+
+.CrispMenu {
+	--crp-menu-width: auto;
+	--crp-menu-height: 32px;
+	--crp-menu-min-width: 150px;
+	--crp-menu-offset: 8px;
+	--crp-menu-icon: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>');
+
+	--crp-menu-content-border-radius: 12px;
+	--crp-menu-content-border: 0.2px solid rgba(201, 201, 201, 0.4);
+	--crp-menu-content-padding: 5px;
+
+	--crp-menu-content-item-border-radius: 7px;
+
+	position: relative;
+	min-width: var(--crp-menu-min-width);
+	@include box(var(--crp-menu-width), var(--crp-menu-height));
+
+	&:not(&[data-type]) {
+		--crp-menu-color: #11181c;
+		--crp-menu-color-hover: #11181c;
+
+		--crp-menu-background-color: #fbfcfd;
+		--crp-menu-background-color-hover: #f1f3f5;
+
+		--crp-menu-border: 1px solid #dfe3e6;
+		--crp-menu-border-hover: 1px solid #d7dbdf;
+
+		--crp-menu-box-shadow: #00000000 0px 0px 0px 0px, #00000000 0px 0px 0px 0px,
+			#0000000d 0px 1px 2px 0px;
+
+		--crp-menu-content-box-shadow: 0 0px 15px rgba(0, 0, 0, 0.1);
+	}
+
+	summary {
+		// Basic
+		@include box();
+		cursor: pointer;
+		user-select: none;
+		position: relative;
+		border-radius: 6px;
+		padding: 0 20px 0 10px;
+		@include make-flex($dir: row, $just: flex-start);
+
+		// Colors
+		color: var(--crp-menu-color);
+		border: var(--crp-menu-border);
+		box-shadow: var(--crp-menu-box-shadow);
+		background-color: var(--crp-menu-background-color);
+
+		&::-webkit-details-marker {
+			display: none;
+		}
+
+		&:hover {
+			color: var(--crp-menu-color-hover);
+			border: var(--crp-menu-border-hover);
+			background-color: var(--crp-menu-background-color-hover);
+		}
+
+		&::after {
+			top: 50%;
+			content: '';
+			right: 6px;
+			width: 14px;
+			height: 14px;
+			position: absolute;
+			transform: translateY(-50%);
+			background-position: center;
+			background-repeat: no-repeat;
+			background-image: var(--crp-menu-icon);
+		}
+	}
+
+	&__content {
+		gap: 5px;
+		z-index: 3;
+		list-style: none;
+		user-select: none;
+		position: absolute;
+		@include make-flex();
+		@include box(auto, auto);
+
+		// If its a list, remove list styles
+		list-style: none;
+
+		color: var(--crp-menu-color);
+		border: var(--crp-menu-content-border);
+		padding: var(--crp-menu-content-padding);
+		box-shadow: var(--crp-menu-content-box-shadow);
+		background-color: var(--crp-menu-background-color);
+		border-radius: var(--crp-menu-content-border-radius);
+
+		/** 
+    * direction   align
+    * bottom      [left, center, right]
+    * top         [left, center, right]
+    * left        [top, center, bottom]
+    * right       [top, center, bottom]
+    */
+
+		&:not([data-direction]) {
+			top: calc(100% + var(--crp-menu-offset));
+		}
+
+		&:not([data-align]) {
+			right: 0;
+		}
+
+		&[data-direction='bottom'] {
+			&[data-align='left'] {
+				top: calc(100% + var(--crp-menu-offset));
+				left: 0;
+			}
+
+			&[data-align='center'] {
+				top: calc(100% + var(--crp-menu-offset));
+				left: 50%;
+				transform: translateX(-50%);
+			}
+
+			&[data-align='right'] {
+				top: calc(100% + var(--crp-menu-offset));
+				right: 0;
+			}
+		}
+
+		&[data-direction='top'] {
+			&[data-align='left'] {
+				bottom: calc(100% + var(--crp-menu-offset));
+				left: 0;
+			}
+
+			&[data-align='center'] {
+				bottom: calc(100% + var(--crp-menu-offset));
+				left: 50%;
+				transform: translateX(-50%);
+			}
+
+			&[data-align='right'] {
+				bottom: calc(100% + var(--crp-menu-offset));
+				right: 0;
+			}
+		}
+
+		&[data-direction='left'] {
+			&[data-align='top'] {
+				top: 0;
+				right: calc(100% + var(--crp-menu-offset));
+			}
+
+			&[data-align='center'] {
+				top: 50%;
+				right: calc(100% + var(--crp-menu-offset));
+				transform: translateY(-50%);
+			}
+
+			&[data-align='bottom'] {
+				bottom: 0;
+				right: calc(100% + var(--crp-menu-offset));
+			}
+		}
+
+		&[data-direction='right'] {
+			&[data-align='top'] {
+				top: 0;
+				left: calc(100% + var(--crp-menu-offset));
+			}
+
+			&[data-align='center'] {
+				top: 50%;
+				left: calc(100% + var(--crp-menu-offset));
+				transform: translateY(-50%);
+			}
+
+			&[data-align='bottom'] {
+				bottom: 0;
+				left: calc(100% + var(--crp-menu-offset));
+			}
+		}
+	}
+
+	&__item {
+		@include box($height: 30px);
+		cursor: pointer;
+		user-select: none;
+		position: relative;
+		padding: 5px 10px;
+		@include make-flex($dir: row, $just: flex-start);
+
+		// Colors
+		color: var(--crp-menu-color);
+		background-color: var(--crp-menu-background-color);
+		border-radius: var(--crp-menu-content-item-border-radius);
+
+		&:hover {
+			color: var(--crp-menu-color-hover);
+			background-color: var(--crp-menu-background-color-hover);
+		}
+	}
+}

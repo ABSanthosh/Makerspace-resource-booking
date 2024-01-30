@@ -1,0 +1,49 @@
+.CrispToggle {
+	--crp-toggle-height: 20px;
+	--crp-toggle-width: 40px;
+	--crp-toggle-active-color: #4cd964;
+	--crp-toggle-inactive-color: #c6c5c2;
+	--crp-toggle-box-shadow: 0 0.1em 0.3em rgba(0, 0, 0, 0.3);
+
+	cursor: pointer;
+	font-size: 20px;
+	border-radius: 1em;
+	position: relative;
+	display: inline-block;
+	background-size: 200% 200%;
+	background-position: right;
+	transition: background-position 300ms;
+	background-image: linear-gradient(
+		to right,
+		var(--crp-toggle-active-color) 50%,
+		var(--crp-toggle-inactive-color) 0
+	);
+	@include box(var(--crp-toggle-width), var(--crp-toggle-height));
+
+	&:has(input[type='checkbox']:checked) {
+		background-position: left;
+	}
+
+	& > input {
+		opacity: 0;
+		@include box();
+		cursor: pointer;
+		position: absolute;
+
+		&:checked + div {
+			left: calc(100% - var(--crp-toggle-height));
+		}
+	}
+
+	& > div {
+		left: 0;
+		cursor: pointer;
+		background: #fff;
+		border-radius: 50%;
+		position: absolute;
+		pointer-events: none;
+		transition: all 300ms;
+		@include box(var(--crp-toggle-height), var(--crp-toggle-height));
+		box-shadow: var(--crp-toggle-box-shadow);
+	}
+}

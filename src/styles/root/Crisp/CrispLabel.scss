@@ -1,0 +1,52 @@
+.CrispLabel {
+	--width: 100%;
+	--crp-label-color: #000000;
+	--crp-label-font-size: 16px;
+	--crp-label-font-weight: 400;
+	--crp-label-gap: 8px;
+
+	width: var(--width);
+	gap: var(--crp-label-gap);
+	color: var(--crp-label-color);
+	font-size: var(--crp-label-font-size);
+	font-weight: var(--crp-label-font-weight);
+
+	display: flex;
+
+	// Direction
+	&:not([data-direction]) {
+		flex-direction: column;
+	}
+
+	&[data-direction='row'] {
+		flex-direction: row;
+	}
+
+	// Align
+	&[data-align='center'] {
+		align-items: center;
+	}
+
+	&:not([data-align]),
+	&[data-align='start'] {
+		align-items: start;
+	}
+
+	&[data-align='end'] {
+		align-items: end;
+	}
+
+	// Justify
+	&[data-justify='center'] {
+		justify-content: center;
+	}
+
+	&:not([data-justify]),
+	&[data-justify='start'] {
+		justify-content: start;
+	}
+
+	&[data-justify='end'] {
+		justify-content: end;
+	}
+}
