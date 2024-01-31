@@ -20,7 +20,7 @@ const queries = {
 			SECURITY DEFINER SET search_path = public
 			AS $$
 			BEGIN
-				UPDATE auth.users SET raw_user_meta_data = raw_user_meta_data
+				UPDATE auth.users SET raw_app_meta_data = raw_app_meta_data
 				|| json_build_object('custom_claims', json_build_object('role', new.role))::jsonb
 				WHERE id = new.id;
 				RETURN new;
@@ -92,25 +92,14 @@ async function onNewUser(columns: { [name: string]: string }) {
 		INSERT INTO public.profile (${Object.keys(columns).join(', ')})
 		VALUES (${Object.values(columns).join(', ')});
 		
-		-- set user custom claims
-		UPDATE auth.users SET raw_user_meta_data = raw_user_meta_data
-		|| json_build_object(
-			'custom_claims', 
-			json_build_object(
-				'role', ${columns.role}, 
-				'isNew', ${columns.isnew}
-			)::jsonb
-		)::jsonb
-		WHERE id = new.id;
-
 		-- update default data from auth.users
 		UPDATE public.profile SET 
 			name = COALESCE(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name', ''),
 			mobile = COALESCE(new.phone, ''),
 			email = COALESCE(new.email, '')
-		WHERE id = new.id;
-		
-		RETURN new;
+			WHERE id = new.id;
+			
+		RETURN NEW;
 		END;
 		$$;
 	`;
@@ -160,7 +149,7 @@ async function makeNewBucket(name: string) {
 			VALUES ('${name}', '${name}', true);`),
 			...Object.values(policies).map((policy) => prisma.$executeRawUnsafe(policy))
 		]);
-	} catch (e) {}
+	} catch (e) { }
 }
 
 async function seedEquipments() {
