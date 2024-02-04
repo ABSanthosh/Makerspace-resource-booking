@@ -1,3 +1,4 @@
+import { initCustomClaim } from '$db/User.db';
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 import { getCustomClaim } from '$lib/SupabaseUtils';
 import { createServerClient } from '@supabase/ssr';
@@ -31,6 +32,12 @@ const createSupabaseClient: Handle = async ({ event, resolve }) => {
 
 	// This is the session data that gets trickled down to all parts of the app
 	event.locals.session = await event.locals.getSession();
+	if (event.locals.session?.user.app_metadata.provider !== undefined &&
+		event.locals.session?.user.app_metadata.custom_claims === undefined) {
+		await initCustomClaim(event.locals.session?.user.id)
+		event.locals.supabase.auth.refreshSession();
+		event.locals.session = await event.locals.getSession();
+	}
 
 	return resolve(event, {
 		filterSerializedResponseHeaders(name) {
