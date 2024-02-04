@@ -1,6 +1,18 @@
 import { db } from '$lib/prisma';
 import type { CartItemSchema, UserProfileSchema } from '$lib/schemas';
 
+export async function initCustomClaim(id: string) {
+	return await db.$executeRawUnsafe(`
+		UPDATE auth.users
+		SET raw_app_meta_data = jsonb_set(
+					COALESCE(raw_app_meta_data, '{}'::jsonb),
+					'{custom_claims}',
+					'{"role": "user", "isnew": true}',
+					true
+				) WHERE id = '${id}';
+	`);
+}
+
 export async function getUserProfile(id: string) {
 	return await db.profile.findUnique({
 		where: { id }
