@@ -9,7 +9,7 @@
 
 {#if $SessionStore === null}
 	<button
-		class="Google--button FancyButton"
+		class="Google--button CrispButton"
 		on:click={async () => {
 			await $SupaStore.auth.signInWithOAuth({
 				provider: 'google',
@@ -70,14 +70,16 @@
 					Dashboard
 				</a>
 			{/if}
-			<button
-				on:click={() => $SupaStore.auth.signOut()}
-				class="FancyButton Google__profile--item"
-				data-icon={String.fromCharCode(59834)}
-				data-type="close"
-			>
-				Logout
-			</button>
+			<form action="/auth?/logout" method="POST" class="w-100">
+				<button
+					class="FancyButton Google__profile--item"
+					type="submit"
+					data-icon={String.fromCharCode(59834)}
+					data-type="close"
+				>
+					Logout
+				</button>
+			</form>
 		</ul>
 	</details>
 {/if}
