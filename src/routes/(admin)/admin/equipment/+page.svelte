@@ -94,14 +94,15 @@
 
 <main class="AdminEquipment">
 	<header>
-		<LabelInput
+		<!-- <LabelInput
 			noLabel
 			label="Search"
 			type="search"
 			style="--width: 270px;"
 			bind:value={equipmentSearch}
 			placeholder="Search equipment"
-		/>
+		/> -->
+		
 		<span class="Row--center gap-15">
 			<button
 				class="FancyButton"
