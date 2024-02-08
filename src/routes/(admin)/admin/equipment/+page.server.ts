@@ -65,19 +65,17 @@ export const actions: Actions = {
 			(formData.get('eImage') as File).name ||
 			(formData.get('eImage') as File).name != 'undefined'
 		) {
-			console.log((formData.get('eImage') as File).name, editEquipmentForm.data);
 			const { data, error } = await supabase.storage
 				.from(SupabaseEnum.BUCKET)
 				.update(editEquipmentForm.data.image as string, formData.get('eImage') as File, {
 					upsert: true,
 					cacheControl: '0'
 				});
-			console.log(editEquipmentForm.data.image as string, data, error);
 			if (error) {
 				return fail(400, { error });
 			}
 
-			editEquipmentForm.data.image = data.path;
+			editEquipmentForm.data.image = data.path + '?cache=' + new Date().getTime();
 		}
 
 		if (!editEquipmentForm.valid) {

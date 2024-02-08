@@ -6,26 +6,27 @@
 		#0000001a 0px 2px 2px -1px, #0000001a 0px 2px 4px -2px;
 	--crp-input-border-color-disabled: #d9d9d9;
 	--crp-input-border-radius: 8px;
-	--crp-input-padding: 8px 12px;
 	--crp-input-color: #000000;
 	--crp-input-color-disabled: #d9d9d9;
 	--crp-input-color-placeholder: #bfbfbf;
 	--crp-input-color-placeholder-disabled: #d9d9d9;
-	--crp-input-font-size: 16px;
+	--crp-input-font-size: 14px;
 	--crp-input-box-shadow: #ffffff09 0px 0px 0px 0px, #eceef009 0px 0px 0px 0.075px,
 		#0000000d 0px 1.11119px 2.14825px -0.0370623px, #00000001 0px 0.075px 0.148249px -0.075px;
-	--crp-input-width: 100%;
+		--crp-input-width: 100%;
 	--crp-input-background-color: #F4F6F8;
 	--crp-text-area-max-height: 230px;
 	--crp-text-area-min-height: 34px;
-
+	
 	&:not([data-type='text-area']) {
+		--crp-input-padding: 8px 12px;
 		--crp-input-height: 34px;
 	}
 
 	&[data-type='text-area'] {
 		resize: vertical;
 		--crp-input-height: 100px;
+		--crp-input-padding: 12px;
 		min-height: var(--crp-text-area-min-height);
 		max-height: var(--crp-text-area-max-height);
 	}

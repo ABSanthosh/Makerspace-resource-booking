@@ -1,17 +1,15 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import type { ECategoriesSchema, EItemSchema, ESchema } from '$lib/schemas';
+	import type { ECategoriesSchema, ESchema } from '$lib/schemas';
 	import { type Writable } from 'svelte/store';
-	import NewEquipmentPane from './FormPanes/NewEquipmentPane.svelte';
-	import EditEquipmentPane from './FormPanes/EditEquipmentPane.svelte';
-	import LabelInput from '$components/LabelInput.svelte';
+	import EquipmentPane from './FormPanes/EquipmentPane.svelte';
 	import Pane from '$components/Pane.svelte';
 	export let data: PageData;
 
 	$: ({ newEquipmentForm, editEquipmentForm, allEquipment, eCategories } = data);
-	$: addEquipmentModal = true;
+	$: addEquipmentModal = false;
 	$: editEquipmentModal = false;
-	$: editItem = {} as ESchema;
+	$: editItem = {} as ESchema | null;
 
 	$: addCategoryModal = false;
 	$: eCategoriesModal = false;
@@ -35,19 +33,13 @@
 	);
 </script>
 
-<NewEquipmentPane
-	{resetForm}
-	bind:eCategories
-	bind:modal={addEquipmentModal}
-	bind:formStore={newEquipmentForm}
-/>
-
-<EditEquipmentPane
+<EquipmentPane
 	{resetForm}
 	bind:editItem
 	bind:eCategories
-	bind:modal={editEquipmentModal}
-	bind:formStore={editEquipmentForm}
+	bind:modal={addEquipmentModal}
+	bind:formStore={newEquipmentForm}
+	bind:editFormStore={editEquipmentForm}
 />
 
 <!-- <Pane
@@ -94,13 +86,14 @@
 
 <main class="AdminEquipment">
 	<header>
-		<input class="CrispInput"
+		<input
+			class="CrispInput"
 			type="search"
 			style="--crp-input-width: 270px;"
 			bind:value={equipmentSearch}
 			placeholder="Search equipment"
 		/>
-		
+
 		<span class="Row--center gap-15">
 			<button
 				class="FancyButton"
@@ -145,8 +138,12 @@
 									style="--height: 24px; --width: auto --font: 15px;"
 									data-type="empty"
 									on:click={() => {
-										editItem = { ...item };
-										editEquipmentModal = true;
+										editItem = {
+											...item,
+											image: item.image.split('?')[0]
+										};
+										addEquipmentModal = true;
+										// editEquipmentModal = true;
 									}}
 								/>
 							</td>
