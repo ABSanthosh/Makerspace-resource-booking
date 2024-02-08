@@ -8,7 +8,7 @@ export function getCustomClaim(session: Session | null): {
 	isNew: boolean;
 } {
 	return (
-		(session && session.user.user_metadata.custom_claims) || {
+		(session && session.user.app_metadata.custom_claims) || {
 			role: Role.user,
 			isNew: false
 		}
