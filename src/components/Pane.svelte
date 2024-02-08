@@ -23,7 +23,10 @@
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 {#if open}
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<dialog
 		on:close
 		class="Pane"
@@ -36,6 +39,13 @@
 			}
 		}}
 	>
+		<div
+			class="Pane__backdrop"
+			on:click={() => {
+				pane.close();
+				open = false;
+			}}
+		/>
 		<header>
 			<slot name="header" />
 			<button
@@ -69,6 +79,7 @@
 		max-height: none;
 		max-width: none;
 		overflow: hidden;
+		z-index: 1;
 		background-color: #fbfcfd;
 		border-left: 1px solid var(--border);
 		box-shadow:
@@ -82,6 +93,14 @@
 
 		@include respondAt(600px) {
 			@include box(100vw);
+		}
+
+		&__backdrop {
+			top: 0;
+			left: 0;
+			z-index: -1;
+			position: fixed;
+			@include box(100vw, 100vh);
 		}
 
 		& > header {
