@@ -36,91 +36,180 @@
 			id="userProfileForm"
 			class="Dashboard__section--content"
 		>
-			<SuperDebug data={$profileForm} />
-			<LabelInput
-				style="max-width: 530px;"
-				labelStyle="--width: 100%; gap: 15px"
-				orient="row"
-				disabled
-				name="name"
-				bind:value={$profileForm.name}
+			<label
+				for="name"
+				class="CrispLabel"
+				data-direction="row"
+				style="justify-content: space-between;"
 			>
-				Name
-			</LabelInput>
-			<LabelInput
-				style="max-width: 530px;"
-				labelStyle="--width: 100%; gap: 15px"
-				orient="row"
-				disabled
-				name="email"
-				bind:value={$profileForm.email}
+				<span style="color: inherit;"> Name </span>
+				<input
+					disabled
+					id="name"
+					type="text"
+					name="name"
+					class="CrispInput"
+					bind:value={$profileForm.name}
+				/>
+				{#if $errors.name}
+					<ul class="CrispMessageList w-100" data-type="error">
+						{#each $errors.name as error}
+							<li class="CrispMessageList__item">{error}</li>
+						{/each}
+					</ul>
+				{/if}
+			</label>
+
+			<label
+				for="email"
+				class="CrispLabel"
+				data-direction="row"
+				style="justify-content: space-between;"
 			>
-				Email
-			</LabelInput>
-			<LabelInput
-				style="max-width: 530px;"
-				labelStyle="--width: 100%; gap: 15px"
-				orient="row"
-				name="mobile"
-				bind:value={$profileForm.mobile}
-				bind:error={$errors.mobile}
-				aria-invalid={$profileForm.mobile ? 'true' : undefined}
+				<span style="color: inherit;"> Email </span>
+				<input
+					disabled
+					id="email"
+					type="email"
+					name="email"
+					class="CrispInput"
+					bind:value={$profileForm.email}
+				/>
+				{#if $errors.email}
+					<ul class="CrispMessageList w-100" data-type="error">
+						{#each $errors.email as error}
+							<li class="CrispMessageList__item">{error}</li>
+						{/each}
+					</ul>
+				{/if}
+			</label>
+
+			<label
+				for="mobile"
+				class="CrispLabel"
+				data-direction="row"
+				style="justify-content: space-between;"
 			>
-				Phone
-			</LabelInput>
-			<!-- branch -->
-			<LabelInput
-				style="max-width: 530px;"
-				labelStyle="--width: 100%; gap: 15px"
-				orient="row"
-				name="branch"
-				bind:value={$profileForm.branch}
-				bind:error={$errors.branch}
-				aria-invalid={$profileForm.branch ? 'true' : undefined}
+				<span style="color: inherit;"> Phone </span>
+				<input
+					id="mobile"
+					type="tel"
+					name="mobile"
+					class="CrispInput"
+					bind:value={$profileForm.mobile}
+				/>
+				{#if $errors.mobile}
+					<ul class="CrispMessageList w-100" data-type="error">
+						{#each $errors.mobile as error}
+							<li class="CrispMessageList__item">{error}</li>
+						{/each}
+					</ul>
+				{/if}
+			</label>
+
+			<label
+				for="branch"
+				class="CrispLabel"
+				data-direction="row"
+				style="justify-content: space-between;"
 			>
-				Branch
-			</LabelInput>
-			<!-- department -->
-			<LabelInput
-				style="max-width: 530px;"
-				labelStyle="--width: 100%; gap: 15px"
-				orient="row"
-				name="department"
-				bind:value={$profileForm.department}
-				bind:error={$errors.department}
-				aria-invalid={$profileForm.department ? 'true' : undefined}
+				<span style="color: inherit;"> Branch </span>
+				<input
+					id="branch"
+					type="text"
+					name="branch"
+					class="CrispInput"
+					bind:value={$profileForm.branch}
+				/>
+				{#if $errors.branch}
+					<ul class="CrispMessageList w-100" data-type="error">
+						{#each $errors.branch as error}
+							<li class="CrispMessageList__item">{error}</li>
+						{/each}
+					</ul>
+				{/if}
+			</label>
+
+			<label
+				for="department"
+				class="CrispLabel"
+				data-direction="row"
+				style="justify-content: space-between;"
 			>
-				Department
-			</LabelInput>
-			<!-- year -->
-			<LabelInput
-				style="max-width: 530px;"
-				labelStyle="--width: 100%; gap: 15px"
-				orient="row"
-				name="year"
-				type="number"
-				bind:value={$profileForm.year}
-				bind:error={$errors.year}
-				aria-invalid={$profileForm.year ? 'true' : undefined}
+				<span style="color: inherit;"> Department </span>
+				<input
+					id="department"
+					type="text"
+					name="department"
+					class="CrispInput"
+					bind:value={$profileForm.department}
+				/>
+				{#if $errors.department}
+					<ul class="CrispMessageList w-100" data-type="error">
+						{#each $errors.department as error}
+							<li class="CrispMessageList__item">{error}</li>
+						{/each}
+					</ul>
+				{/if}
+			</label>
+
+			<label
+				for="year"
+				class="CrispLabel"
+				data-direction="row"
+				style="justify-content: space-between;"
 			>
-				Year
-			</LabelInput>
-			<!-- rollno/ emp id-->
-			<LabelInput
-				style="max-width: 530px;"
-				labelStyle="--width: 100%; gap: 15px"
-				orient="row"
-				name="userId"
-				bind:value={$profileForm.userId}
-				bind:error={$errors.userId}
-				aria-invalid={$profileForm.userId ? 'true' : undefined}
+				<span style="color: inherit;"> Year </span>
+				<input
+					id="year"
+					type="number"
+					name="year"
+					class="CrispInput"
+					bind:value={$profileForm.year}
+				/>
+				{#if $errors.year}
+					<ul class="CrispMessageList w-100" data-type="error">
+						{#each $errors.year as error}
+							<li class="CrispMessageList__item">{error}</li>
+						{/each}
+					</ul>
+				{/if}
+			</label>
+
+			<label
+				for="userId"
+				class="CrispLabel"
+				data-direction="row"
+				style="justify-content: space-between;"
 			>
-				Roll No. / Employee ID
-			</LabelInput>
+				<span style="color: inherit;"> Roll No. / Employee ID </span>
+				<input
+					id="userId"
+					type="text"
+					name="userId"
+					class="CrispInput"
+					bind:value={$profileForm.userId}
+				/>
+				{#if $errors.userId}
+					<ul class="CrispMessageList w-100" data-type="error">
+						{#each $errors.userId as error}
+							<li class="CrispMessageList__item">{error}</li>
+						{/each}
+					</ul>
+				{/if}
+			</label>
+
 			<!-- TODO: add tagged inputs -->
 		</form>
 		<footer class="Dashboard__section--footer">
-			<button class="FancyButton" form="userProfileForm">Save</button>
+			<button
+				class="CrispButton"
+				data-type="success"
+				style="--crp-button-height: 25px;"
+				form="userProfileForm"
+			>
+				Save
+			</button>
 		</footer>
 	</section>
 </main>
@@ -149,14 +238,15 @@
 				#00000000 0px 0px 0px 0px,
 				#0000000d 0px 1px 2px 0px;
 			@include make-flex($dir: column, $just: flex-start, $align: flex-start);
+
 			&--header,
 			&--footer {
 				@include box($height: auto);
-				padding: 16px 24px;
 			}
 
 			&--header {
 				border-bottom: 1px solid #e6e8eb;
+				padding: 16px 24px;
 				& > h5 {
 					font-size: 18px;
 					font-weight: 500;
@@ -166,9 +256,26 @@
 			&--content {
 				gap: 15px;
 				@include make-flex();
+
+				.CrispLabel {
+					&[data-direction='row'] {
+						@include respondAt(620px) {
+							flex-direction: column;
+						}
+
+						input {
+							--crp-input-width: 60%;
+							@include respondAt(620px) {
+								flex-direction: column;
+								--crp-input-width: 100%;
+							}
+						}
+					}
+				}
 			}
 
 			&--footer {
+				padding: 13px 24px;
 				border-top: 1px solid #e6e8eb;
 				@include make-flex($dir: row, $just: flex-end);
 			}
