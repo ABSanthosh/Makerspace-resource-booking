@@ -2,9 +2,7 @@
 	import Pane from '$components/Pane.svelte';
 	import Calendar from '$components/Calendar.svelte';
 	import type { CartItemZSchema } from '$lib/schemas';
-	import LabelInput from '$components/LabelInput.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
-	import LabelSelect from '$components/LabelSelect.svelte';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
@@ -64,35 +62,48 @@
 		slot="free"
 		use:enhance
 		method="POST"
-		action="?/add"
 		id="cartItemForm"
 		class="CartItemPane__main"
+		action="equipment/[eId]?/add"
 	>
-		<SuperDebug data={$form} />
+		<!-- <SuperDebug data={$form} /> -->
 
 		<Calendar bind:value={dateSelector} />
 		<hr />
-		<LabelInput
-			disabled
-			labelStyle="--width: 100%;"
-			value={dateSelector.toLocaleDateString('en-GB', {
-				day: '2-digit',
-				month: '2-digit',
-				year: 'numeric'
-			})}
-		>
-			Date
-		</LabelInput>
-		<LabelSelect labelStyle="--width: 100%;" bind:value={startTime} options={times}>
-			Start Time
-		</LabelSelect>
-		<LabelSelect
-			bind:value={endTime}
-			labelStyle="--width: 100%;"
-			options={times.filter((item) => item > startTime)}
-		>
-			End Time
-		</LabelSelect>
+		<label class="CrispLabel" for="dateSelector">
+			<span data-mandatory style="color: inherit;"> Date </span>
+			<input
+				disabled
+				type="text"
+				id="dateSelector"
+				class="CrispInput"
+				value={dateSelector.toLocaleDateString('en-GB', {
+					day: '2-digit',
+					month: '2-digit',
+					year: 'numeric'
+				})}
+			/>
+		</label>
+
+		<label class="CrispLabel" for="startTime">
+			<span data-mandatory style="color: inherit;"> Start Time </span>
+			<select class="CrispSelect" style="--crp-select-width: 100%;" bind:value={startTime}>
+				<option value="" disabled selected> Select a start time </option>
+				{#each times.filter((item) => item > endTime) as item}
+					<option value={item}>{item}</option>
+				{/each}
+			</select>
+		</label>
+
+		<label class="CrispLabel" for="endTime">
+			<span data-mandatory style="color: inherit;"> End Time </span>
+			<select class="CrispSelect" style="--crp-select-width: 100%;" bind:value={endTime}>
+				<option value="" disabled selected> Select an end time </option>
+				{#each times.filter((item) => item > startTime) as item}
+					<option value={item}>{item}</option>
+				{/each}
+			</select>
+		</label>
 	</form>
 	<div class="Row--j-end gap-10" slot="footer">
 		<button class="FancyButton" data-type="black-outline" on:click={() => (modal = false)}>

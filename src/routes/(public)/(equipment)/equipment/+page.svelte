@@ -2,7 +2,6 @@
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import { BreadCrumbStore } from '$store/BreadCrumbStore';
-	import LabelInput from '$components/LabelInput.svelte';
 
 	export let data: PageData;
 
@@ -27,14 +26,16 @@
 
 <main class="Equipment">
 	<header class="Equipment__header w-100 gap-15">
-		<LabelInput
-			noLabel
-			label="Search"
-			style="--width: 270px;"
+		<input
+			type="text"
+			id="search"
+			class="CrispInput"
 			bind:value={equipmentSearch}
 			placeholder="Search equipment"
+			style="--crp-input-width: 270px;"
 		/>
-		<select class="FancySelect" style="--width: 270px;" bind:value={categoryFilter}>
+
+		<select class="CrispSelect" style="--crp-select-width: 270px;" bind:value={categoryFilter}>
 			<option value="">All Categories</option>
 			{#each data.categories as item}
 				<option value={item.id}>{item.name}</option>
@@ -77,7 +78,6 @@
 			@include box();
 			display: grid;
 			grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-			// grid-template-rows: repeat(auto-fill, minmax(430px, 1fr));
 			gap: 15px;
 		}
 
