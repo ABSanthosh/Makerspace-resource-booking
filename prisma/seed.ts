@@ -36,6 +36,7 @@ const queries = {
 		`,
 		Prisma.sql`
 			-- When public.profile.isnew is updated, update the user's custom claims
+			-- TODO: this trigger replaces the custom claims, it should only update the isNew field
 			CREATE or REPLACE FUNCTION update_user_isnew()
 			RETURNS trigger
 			LANGUAGE plpgsql
