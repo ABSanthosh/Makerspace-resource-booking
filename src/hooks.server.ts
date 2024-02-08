@@ -38,6 +38,8 @@ const createSupabaseClient: Handle = async ({ event, resolve }) => {
 		event.locals.supabase.auth.refreshSession();
 		event.locals.session = await event.locals.getSession();
 	}
+	// console.log('session', event.locals.session?.user.app_metadata.custom_claims);
+	// console.log('session', event.locals.session?.user.app_metadata.custom_claims);
 
 	return resolve(event, {
 		filterSerializedResponseHeaders(name) {
