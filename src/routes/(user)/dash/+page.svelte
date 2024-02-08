@@ -1,14 +1,11 @@
 <script lang="ts">
 	import { SessionStore } from '$store/SupaStore';
-	import LabelInput from '$components/LabelInput.svelte';
 	import type { PageData } from './$types';
 	import { superForm } from 'sveltekit-superforms/client';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
 	export let data: PageData;
-	$: ({ profileData } = data);
-	$: console.log(profileData);
-
+	// $: ({ profileData } = data);
 	$: user = $SessionStore!.user;
 
 	const {

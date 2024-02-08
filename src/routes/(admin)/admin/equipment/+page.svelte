@@ -60,7 +60,6 @@
 					{#each [...eCategories, ...eCategories, ...eCategories, ...eCategories] as item}
 						<tr>
 							<td>
-								<LabelInput bind:value={item.name} name={item.id} />
 
 								{item.name}
 							</td>
