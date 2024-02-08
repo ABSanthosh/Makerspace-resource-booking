@@ -76,6 +76,9 @@ export async function getEquipmentById(
 				...res,
 				image: getStorageUrl(res!.image)
 			};
+		})
+		.catch((err) => {
+			error: err;
 		});
 }
 

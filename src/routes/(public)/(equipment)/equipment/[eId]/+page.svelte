@@ -46,6 +46,7 @@
 		<h1 class="w-100">{data.equipment.name}</h1>
 		<p class="w-100">{data.equipment.model}</p>
 	</header>
+	<a href="/dash">dash</a>
 
 	<section class="Equipment__hero">
 		<div class="Equipment__imageBox">

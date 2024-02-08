@@ -12,19 +12,19 @@
 - [x] Add multiple types
 - [x] [User dashboard with editing](https://supabase.com/docs/guides/getting-started/tutorials/with-sveltekit?language=ts)
 - [x] Hook up new equipment schema to frontend
-- [ ] Error in nested instances loop not binding
-- [ ] try to refactor new and edit equipment pane into one
+- [x] Error in nested instances loop not binding
+- [x] try to refactor new and edit equipment pane into one
 - [x] make time sheet
-- [ ] return to equipment page if manually opened a wrong equipment id
+- [x] return to equipment page if manually opened a wrong equipment id
 - [x] image upload in equipment
 - [ ] Adding and deleting equipment is not working. Need to do it individually. Eg. If new instances are added, need to create it instead of upserting it and if deleted, need to delete. If it is edited, need to update it instead of upserting it.
-- [ ] add error handling for equipment image upload
-- [ ] clear form on closing pane(new and edit equipment)
+- [x] add error handling for equipment image upload
+- [x] clear form on closing pane(new and edit equipment)
 - [x] seed data for inserting equipment data
 - [x] (urgent) replace admin type from profile to custom claim
 - [ ] remove already booked slots from the times list
 - [ ] disabled buttons on panes if the forms are not filled properly. Maybe look into tainted property from superforms
-- [ ] protected route redirect in client side
+- [x] protected route redirect in client side
 - [ ] Input
   - [ ] Refactor input to FancyInput css
   - [ ] Refactor all lableInput components to use FancyInput style 
