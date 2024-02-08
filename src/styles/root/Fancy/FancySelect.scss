@@ -10,7 +10,7 @@
 	border: 1px solid var(--border);
 	box-shadow: var(--buttonShadow);
 	background-image: var(--downArrow);
-	background-color: #05294d07;//, var(--background);
+	background-color: #F4F6F8;//, var(--background);
 	background-position: right 5px top 50%;
 	@include box(var(--width, auto), var(--height, 35px));
 	transition: box-shadow 0.15s linear;

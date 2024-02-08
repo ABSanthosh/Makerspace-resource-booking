@@ -79,7 +79,7 @@
 			line-height: 20px;
 			font-weight: 500;
 			flex-wrap: nowrap;
-			color: rgb(104, 112, 118);
+			color: #687076;
 			@include make-flex($dir: row, $align: flex-start);
 		}
 

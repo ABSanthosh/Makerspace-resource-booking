@@ -9,7 +9,7 @@
 	export let data: PageData;
 
 	$: ({ newEquipmentForm, editEquipmentForm, allEquipment, eCategories } = data);
-	$: addEquipmentModal = false;
+	$: addEquipmentModal = true;
 	$: editEquipmentModal = false;
 	$: editItem = {} as ESchema;
 
@@ -94,14 +94,12 @@
 
 <main class="AdminEquipment">
 	<header>
-		<!-- <LabelInput
-			noLabel
-			label="Search"
+		<input class="CrispInput"
 			type="search"
-			style="--width: 270px;"
+			style="--crp-input-width: 270px;"
 			bind:value={equipmentSearch}
 			placeholder="Search equipment"
-		/> -->
+		/>
 		
 		<span class="Row--center gap-15">
 			<button
