@@ -1,14 +1,13 @@
 <script lang="ts">
-	import LabelInput from '$components/LabelInput.svelte';
+	import { EStatus } from '@prisma/client';
 	import Pane from '$components/Pane.svelte';
 	import type { Writable } from 'svelte/store';
-	import type { ESchema, EZodSchema } from '$lib/schemas';
-	import type { SuperValidated } from 'sveltekit-superforms';
-	import { superForm } from 'sveltekit-superforms/client';
 	import type { ECategories } from '@prisma/client';
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+	import type { ESchema, EZodSchema } from '$lib/schemas';
+	import { superForm } from 'sveltekit-superforms/client';
 	import UploadImage from '$components/UploadImage.svelte';
-	import { EStatus } from '@prisma/client';
+	import type { SuperValidated } from 'sveltekit-superforms';
+	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
 	export let { modal, formStore, resetForm, eCategories } = $$props as {
 		modal: boolean;
@@ -28,64 +27,74 @@
 		},
 		taintedMessage: null
 	});
+
+	$: console.log($errors);
 </script>
 
 <Pane bind:open={modal} style="--paneWidth: 450px;" on:close={() => resetForm(form)}>
 	<p slot="header">Add Equipment</p>
 	<svelte:fragment slot="main">
-		<SuperDebug data={$form} />
 		<form
 			use:enhance
 			method="POST"
-			action="?/add"
+			action="/admin/equipment?/add"
 			id="newEquipmentForm"
 			enctype="multipart/form-data"
 			class="Col--center gap-10 w-100"
 		>
-			<select class="FancySelect" style="--width: 100%;" bind:value={$form.eCategoriesId}>
+			<SuperDebug data={$form} />
+			<select
+				class="CrispSelect"
+				style="--crp-select-width: 100%;"
+				bind:value={$form.eCategoriesId}
+			>
 				<option value="" disabled selected>Select a Category</option>
 				{#each eCategories as item}
 					<option value={item.id}>{item.name}</option>
 				{/each}
 			</select>
-			<LabelInput
-				mandatory
-				style="--padxy: 10px;"
-				labelStyle="--width: 100%;"
-				name="name"
-				type="text"
-				bind:value={$form.name}
-				bind:error={$errors.name}
-				aria-invalid={$form.name ? 'true' : undefined}
-			>
-				Name
-			</LabelInput>
-			<LabelInput
-				mandatory
-				style="--padxy: 10px;"
-				labelStyle="--width: 100%;"
-				name="model"
-				type="text"
-				bind:value={$form.model}
-				bind:error={$errors.model}
-				aria-invalid={$form.model ? 'true' : undefined}
-			>
-				Model
-			</LabelInput>
 
+			<label class="CrispLabel" for="name">
+				<span data-mandatory style="color: inherit;"> Name </span>
+				<input class="CrispInput" type="text" name="name" id="name" bind:value={$form.name} />
+				{#if $errors.name}
+					<ul class="CrispMessageList w-100" data-type="error">
+						{#each $errors.name as error}
+							<li class="CrispMessageList__item">{error}</li>
+						{/each}
+					</ul>
+				{/if}
+			</label>
+
+			<label class="CrispLabel" for="model">
+				<span data-mandatory style="color: inherit;"> Model </span>
+				<input class="CrispInput" type="text" name="model" id="model" bind:value={$form.model} />
+				{#if $errors.model}
+					<ul class="CrispMessageList w-100" data-type="error">
+						{#each $errors.model as error}
+							<li class="CrispMessageList__item">{error}</li>
+						{/each}
+					</ul>
+				{/if}
+			</label>
 			<UploadImage name="eImage" />
-
-			<LabelInput
-				style="--padxy: 10px; --height: 120px;"
-				name="description"
-				labelStyle="--width: 100%;"
-				type="textarea"
-				bind:value={$form.description}
-				bind:error={$errors.description}
-				aria-invalid={$form.description ? 'true' : undefined}
-			>
-				Description
-			</LabelInput>
+			<label class="CrispLabel" for="description">
+				<span style="color: inherit;"> Description </span>
+				<textarea
+					class="CrispInput"
+					name="description"
+					data-type="text-area"
+					id="description"
+					bind:value={$form.description}
+				/>
+				{#if $errors.description}
+					<ul class="CrispMessageList w-100" data-type="error">
+						{#each $errors.description as error}
+							<li class="CrispMessageList__item">{error}</li>
+						{/each}
+					</ul>
+				{/if}
+			</label>
 			<span class="Row--between w-100">
 				<h3 class="w-100">Instances of this equipment</h3>
 				<button
@@ -114,55 +123,106 @@
 			<ul class="Col--center w-100 gap-10">
 				{#each $form.instances as item, i}
 					<li class="Col--a-end gap-10 w-100">
-						<LabelInput
-							mandatory
-							orient="row"
-							style="--padxy: 10px; --width: 70%;"
-							labelStyle="--width: 100%;"
-							name={`instances[${i}].name`}
-							type="text"
-							bind:value={item.name}
-							aria-invalid={item.name ? 'true' : undefined}
+						<label
+							class="CrispLabel"
+							data-align="center"
+							data-direction="row"
+							for={`instances[${i}].name`}
+							style="justify-content: space-between;"
 						>
-							Name
-						</LabelInput>
-						<LabelInput
-							mandatory
-							orient="row"
-							style="--padxy: 10px; --width: 70%;"
-							labelStyle="--width: 100%;"
-							name={`instances[${i}].cost`}
-							type="number"
-							bind:value={item.cost}
-							aria-invalid={item.cost ? 'true' : undefined}
+							<span data-mandatory style="color: inherit;"> Name </span>
+							<input
+								type="text"
+								class="CrispInput"
+								bind:value={item.name}
+								name={`instances[${i}].name`}
+								style="--crp-input-width: 70%;"
+							/>
+							{#if $errors.instances && $errors.instances[i] && $errors.instances[i].name}
+								<ul class="CrispMessageList w-100" data-type="error">
+									{#each $errors.instances[i].name ?? [] as error}
+										<li class="CrispMessageList__item">{error}</li>
+									{/each}
+								</ul>
+							{/if}
+						</label>
+
+						<label
+							class="CrispLabel"
+							data-align="center"
+							data-direction="row"
+							for={`instances[${i}].cost`}
+							style="justify-content: space-between;"
 						>
-							Cost
-						</LabelInput>
-						<div class="Row--between gap-10 w-100">
-							<label for={`instances[${i}].status`} data-mandatory> Status </label>
+							<span data-mandatory style="color: inherit;"> Cost </span>
+							<input
+								type="number"
+								class="CrispInput"
+								bind:value={item.cost}
+								name={`instances[${i}].cost`}
+								style="--crp-input-width: 70%;"
+							/>
+							{#if $errors.instances && $errors.instances[i] && $errors.instances[i].cost}
+								<ul class="CrispMessageList w-100" data-type="error">
+									{#each $errors.instances[i].cost ?? [] as error}
+										<li class="CrispMessageList__item">{error}</li>
+									{/each}
+								</ul>
+							{/if}
+						</label>
+
+						<label
+							class="CrispLabel"
+							data-align="center"
+							data-direction="row"
+							for={`instances[${i}].status`}
+							style="justify-content: space-between;"
+						>
+							<span data-mandatory style="color: inherit;"> Status </span>
 							<select
-								class="FancySelect"
-								style="--width: 70%;"
-								name={`instances[${i}].status`}
+								class="CrispSelect"
 								bind:value={item.status}
+								name={`instances[${i}].status`}
+								style="--crp-select-width: 70%;"
 							>
-								<option value="" disabled selected> Select a Status </option>
+								<option value="" disabled selected>Select a Status</option>
 								{#each Object.values(EStatus) as item}
 									<option value={item}>{item}</option>
 								{/each}
 							</select>
-						</div>
-						<LabelInput
-							orient="row"
-							style="--padxy: 10px; --height: 80px; --width: 70%;"
-							name={`instances[${i}].description`}
-							labelStyle="--width: 100%;"
-							type="textarea"
-							bind:value={item.description}
-							aria-invalid={item.description ? 'true' : undefined}
+							{#if $errors.instances && $errors.instances[i] && $errors.instances[i].status}
+								<ul class="CrispMessageList w-100" data-type="error">
+									{#each $errors.instances[i].status ?? [] as error}
+										<li class="CrispMessageList__item">{error}</li>
+									{/each}
+								</ul>
+							{/if}
+						</label>
+
+						<label
+							class="CrispLabel"
+							data-align="center"
+							data-direction="row"
+							for={`instances[${i}].description`}
+							style="justify-content: space-between;"
 						>
-							Description
-						</LabelInput>
+							<span style="color: inherit;"> Description </span>
+							<textarea
+								class="CrispInput"
+								data-type="text-area"
+								bind:value={item.description}
+								style="--crp-input-width: 70%;"
+								name={`instances[${i}].description`}
+							/>
+							{#if $errors.instances && $errors.instances[i] && $errors.instances[i].description}
+								<ul class="CrispMessageList w-100" data-type="error">
+									{#each $errors.instances[i].description ?? [] as error}
+										<li class="CrispMessageList__item">{error}</li>
+									{/each}
+								</ul>
+							{/if}
+						</label>
+
 						<button
 							type="button"
 							class="FancyButton"
@@ -170,7 +230,6 @@
 							data-icon={String.fromCharCode(59506)}
 							style="--height: 34px; --width: auto --font: 15px;"
 							on:click={() => {
-								// instances = instances.filter((_, index) => index !== i);
 								form.update(($form) => {
 									let { instances } = $form;
 									instances = instances.filter((_, index) => index !== i);
@@ -198,18 +257,9 @@
 			submit
 		</button>
 	</div>
-	<!-- </div> -->
 </Pane>
 
 <style lang="scss">
-	label {
-		font-size: 14px;
-		line-height: 20px;
-		font-weight: 500;
-		flex-wrap: nowrap;
-		color: rgb(104, 112, 118);
-	}
-
 	hr {
 		width: 100%;
 		border: none;
