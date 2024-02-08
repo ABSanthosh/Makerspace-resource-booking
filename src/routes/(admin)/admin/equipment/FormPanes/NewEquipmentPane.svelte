@@ -27,8 +27,6 @@
 		},
 		taintedMessage: null
 	});
-
-	$: console.log($errors);
 </script>
 
 <Pane bind:open={modal} style="--paneWidth: 450px;" on:close={() => resetForm(form)}>

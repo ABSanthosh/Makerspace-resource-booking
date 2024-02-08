@@ -23,29 +23,25 @@
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-{#if open}
+<dialog
+	class="Pane"
+	{...$$restProps}
+	bind:this={pane}
+	on:close
+	on:keydown={(e) => {
+		if (e.key === 'Escape') {
+			pane.close();
+			open = false;
+		}
+	}}
+	on:click|self={() => {
+		pane.close();
+		open = false;
+	}}
+>
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<dialog
-		on:close
-		class="Pane"
-		{...$$restProps}
-		bind:this={pane}
-		on:keydown={(e) => {
-			if (e.key === 'Escape') {
-				pane.close();
-				open = false;
-			}
-		}}
-	>
-		<div
-			class="Pane__backdrop"
-			on:click={() => {
-				pane.close();
-				open = false;
-			}}
-		/>
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
+	<div on:click|stopPropagation>
 		<header>
 			<slot name="header" />
 			<button
@@ -67,34 +63,11 @@
 		<footer>
 			<slot name="footer" />
 		</footer>
-	</dialog>
-{/if}
+	</div>
+</dialog>
 
 <style lang="scss">
 	.Pane {
-		border: none;
-		margin-top: 0;
-		margin-right: 0;
-		margin-bottom: 0;
-		max-height: none;
-		max-width: none;
-		overflow: hidden;
-		z-index: 1;
-		background-color: #fbfcfd;
-		border-left: 1px solid var(--border);
-		box-shadow:
-			rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-			rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-			rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
-			rgba(0, 0, 0, 0.1) 0px 8px 10px -6px;
-		@include box(var(--paneWidth, 600px));
-		@include make-flex();
-		outline: none;
-
-		@include respondAt(600px) {
-			@include box(100vw);
-		}
-
 		&__backdrop {
 			top: 0;
 			left: 0;
@@ -103,26 +76,53 @@
 			@include box(100vw, 100vh);
 		}
 
-		& > header {
-			@include box(100%, auto);
-			padding: 16px 24px;
-			@include make-flex($align: flex-start);
-			border-bottom: 1px solid var(--border);
-			position: relative;
-		}
+		margin-top: 0;
+		margin-right: 0;
+		margin-bottom: 0;
+		border: none;
+		@include box(var(--paneWidth, 600px), 100vh);
 
-		& > main {
-			@include box(100%, auto);
-			padding: 24px;
-			flex: 1 1 0%;
-			overflow-y: auto;
-		}
+		max-width: none;
+		max-height: none;
+		overflow: hidden;
+		& > div {
+			z-index: 1;
+			background-color: #fbfcfd;
+			border-left: 1px solid var(--border);
+			box-shadow:
+				rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+				rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+				rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
+				rgba(0, 0, 0, 0.1) 0px 8px 10px -6px;
+			@include box(auto, 100vh);
+			@include make-flex();
+			outline: none;
 
-		& > footer {
-			@include box(100%, auto);
-			padding: 12px 16px;
-			@include make-flex($align: flex-end);
-			border-top: 1px solid var(--border);
+			@include respondAt(600px) {
+				@include box(100vw);
+			}
+			// @include box();
+			& > header {
+				@include box(100%, auto);
+				padding: 16px 24px;
+				@include make-flex($align: flex-start);
+				border-bottom: 1px solid var(--border);
+				position: relative;
+			}
+
+			& > main {
+				@include box(100%, auto);
+				padding: 24px;
+				flex: 1 1 0%;
+				overflow-y: auto;
+			}
+
+			& > footer {
+				@include box(100%, auto);
+				padding: 12px 16px;
+				@include make-flex($align: flex-end);
+				border-top: 1px solid var(--border);
+			}
 		}
 
 		&::backdrop {
@@ -132,7 +132,7 @@
 		}
 
 		&[open] {
-			animation: slideIn 120ms ease-in-out;
+			animation: slideIn 0.2s cubic-bezier(0.87, 0, 0.13, 1);
 
 			&::backdrop {
 				animation: fadeIn 0.2s ease-out;
