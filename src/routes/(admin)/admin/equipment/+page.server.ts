@@ -15,7 +15,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		newEquipmentForm,
 		editEquipmentForm: await superValidate(EZodSchema),
 		allEquipment: await getAllEquipment(),
-		eCategories: await getECategories(),
+		eCategories: await getECategories()
 	};
 };
 
@@ -24,6 +24,9 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const newEquipmentForm = await superValidate(formData, EZodSchema);
 
+		if (!newEquipmentForm.valid) {
+			return fail(400, { newEquipmentForm });
+		}
 		if (
 			!(formData.get('eImage') as File).name ||
 			(formData.get('eImage') as File).name === 'undefined'
@@ -32,10 +35,6 @@ export const actions: Actions = {
 				error: true,
 				message: 'You must provide a file to upload'
 			});
-		}
-
-		if (!newEquipmentForm.valid) {
-			return fail(400, { newEquipmentForm });
 		}
 
 		const { data, error } = await supabase.storage
