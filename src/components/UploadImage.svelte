@@ -15,24 +15,24 @@
 	$: preview = preview || defaultVal;
 </script>
 
-<div class="UploadImage">
-	<span>Image</span>
-	<label for={name} class="UploadImage__dnd" data-image={preview === '' ? undefined : true}>
+<label class="CrispLabel UploadImage" for={name}>
+	<span data-mandatory style="color: inherit;"> Image </span>
+	<div class="UploadImage__dnd" data-image={preview === undefined ? undefined : true}>
 		<input
-			type="file"
-			id={name}
 			{name}
-			accept=".jpg, .jpeg, .png, .webp"
-			on:change={(e) => onImageUpload(e)}
+			id={name}
+			type="file"
 			bind:this={file}
+			class="CrispInput"
+			on:change={(e) => onImageUpload(e)}
 		/>
 		{#if preview}
 			<img src={preview} alt="Uploaded" />
 		{:else}
 			Upload image
 		{/if}
-	</label>
-</div>
+	</div>
+</label>
 
 <style lang="scss">
 	.UploadImage {
