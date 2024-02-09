@@ -24,5 +24,10 @@
 		display: grid;
 		grid-template-columns: min-content 1fr;
 		grid-template-areas: 'sidebar content';
+
+		@include respondAt(845px) {
+			padding-left: 56px;
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

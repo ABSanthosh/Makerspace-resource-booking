@@ -25,9 +25,9 @@
 - [ ] remove already booked slots from the times list
 - [ ] disabled buttons on panes if the forms are not filled properly. Maybe look into tainted property from superforms
 - [x] protected route redirect in client side
-- [ ] Input
-  - [ ] Refactor input to FancyInput css
-  - [ ] Refactor all lableInput components to use FancyInput style 
+- [x] Input
+  - [x] Refactor input to FancyInput css
+  - [x] Refactor all lableInput components to use CrispInput style 
 
 ### Schema discussion
 

@@ -116,6 +116,7 @@
 		border-right: 1px solid var(--border);
 		// padding: 20px 8px 10px 10px;
 		padding: 8px;
+		z-index: 1;
 		transition: all 0.3s ease-in-out;
 
 		@include respondAt(845px) {
