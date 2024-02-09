@@ -21,7 +21,9 @@
 	const {
 		form: newForm,
 		errors: newErrors,
-		enhance: newEnhance
+		enhance: newEnhance,
+		tainted: newTainted,
+		constraints: newConstraints
 	} = superForm(formStore, {
 		id: 'newEquipmentForm',
 		dataType: 'json',
@@ -37,7 +39,9 @@
 	const {
 		form: editForm,
 		errors: editErrors,
-		enhance: editEnhance
+		enhance: editEnhance,
+		tainted: editTainted,
+		constraints: editConstraints
 	} = superForm(editFormStore, {
 		id: 'editEquipmentForm',
 		dataType: 'json',
@@ -52,18 +56,21 @@
 				modal = false;
 				resetForm(editForm);
 			}
-		},
-		taintedMessage: null
+		}
+		// taintedMessage: null
 	});
 
 	$: if (editItem?.id !== undefined) {
 		editForm.set(editItem);
+		editTainted.set(undefined);
 	}
 
 	$: isEdit = editItem?.id !== undefined;
 	$: form = isEdit ? editForm : newForm;
 	$: errors = isEdit ? editErrors : newErrors;
 	$: actionType = isEdit ? 'edit' : 'add';
+	$: tainted = isEdit ? editTainted : newTainted;
+	$: constraints = isEdit ? editConstraints : newConstraints;
 </script>
 
 <Pane
@@ -89,20 +96,38 @@
 			action="/admin/equipment?/{actionType}"
 		>
 			<!-- <SuperDebug data={$form} /> -->
-			<select
-				class="CrispSelect"
-				style="--crp-select-width: 100%;"
-				bind:value={$form.eCategoriesId}
-			>
-				<option value="" disabled selected>Select a Category</option>
-				{#each eCategories as item}
-					<option value={item.id}>{item.name}</option>
-				{/each}
-			</select>
+			<label class="CrispLabel" for="eCategoriesId">
+				<span data-mandatory style="color: inherit;"> Category </span>
+				<select
+					class="CrispSelect"
+					style="--crp-select-width: 100%;"
+					bind:value={$form.eCategoriesId}
+					{...$constraints.eCategoriesId}
+				>
+					<option value="" disabled selected>Select a Category</option>
+					{#each eCategories as item}
+						<option value={item.id}>{item.name}</option>
+					{/each}
+				</select>
+				{#if $errors.eCategoriesId}
+					<ul class="CrispMessageList w-100" data-type="error">
+						{#each $errors.eCategoriesId as error}
+							<li class="CrispMessageList__item">{error}</li>
+						{/each}
+					</ul>
+				{/if}
+			</label>
 
 			<label class="CrispLabel" for="name">
 				<span data-mandatory style="color: inherit;"> Name </span>
-				<input class="CrispInput" type="text" name="name" id="name" bind:value={$form.name} />
+				<input
+					id="name"
+					type="text"
+					name="name"
+					class="CrispInput"
+					bind:value={$form.name}
+					{...$constraints.name}
+				/>
 				{#if $errors.name}
 					<ul class="CrispMessageList w-100" data-type="error">
 						{#each $errors.name as error}
@@ -114,7 +139,14 @@
 
 			<label class="CrispLabel" for="model">
 				<span data-mandatory style="color: inherit;"> Model </span>
-				<input class="CrispInput" type="text" name="model" id="model" bind:value={$form.model} />
+				<input
+					class="CrispInput"
+					type="text"
+					name="model"
+					id="model"
+					bind:value={$form.model}
+					{...$constraints.model}
+				/>
 				{#if $errors.model}
 					<ul class="CrispMessageList w-100" data-type="error">
 						{#each $errors.model as error}
@@ -123,7 +155,7 @@
 					</ul>
 				{/if}
 			</label>
-			<UploadImage name="eImage" bind:defaultVal={$form.image} />
+			<UploadImage name="eImage" bind:errors={$errors.image} bind:defaultVal={$form.image} />
 			<label class="CrispLabel" for="description">
 				<span style="color: inherit;"> Description </span>
 				<textarea
@@ -132,6 +164,7 @@
 					data-type="text-area"
 					id="description"
 					bind:value={$form.description}
+					{...$constraints.description}
 				/>
 				{#if $errors.description}
 					<ul class="CrispMessageList w-100" data-type="error">
@@ -309,6 +342,7 @@
 			class="CrispButton"
 			data-type="dark"
 			type="submit"
+			disabled={isEdit && $tainted === undefined}
 		>
 			{isEdit ? 'Update' : 'Submit'}
 		</button>
