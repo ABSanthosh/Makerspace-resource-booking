@@ -3,7 +3,7 @@ import { EZodSchema } from '$lib/schemas';
 import { SupabaseEnum } from '$lib/Enums';
 import type { PageServerLoad } from './$types';
 import { fail, type Actions } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms/server';
+import { setError, superValidate } from 'sveltekit-superforms/server';
 import { addEquipment, editEquipment, getAllEquipment, getECategories } from '$db/Equipment.db';
 
 // @ts-ignore
@@ -31,10 +31,9 @@ export const actions: Actions = {
 			!(formData.get('eImage') as File).name ||
 			(formData.get('eImage') as File).name === 'undefined'
 		) {
-			return fail(400, {
-				error: true,
-				message: 'You must provide a file to upload'
-			});
+			return setError(newEquipmentForm, 'image', 'Image is required');
+		} else {
+			setError(newEquipmentForm, 'image', '');
 		}
 
 		const { data, error } = await supabase.storage

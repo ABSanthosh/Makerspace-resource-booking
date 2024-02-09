@@ -3,9 +3,10 @@
 
 	let file: HTMLInputElement;
 
-	export let { name, defaultVal } = $$props as {
+	export let { name, defaultVal, errors } = $$props as {
 		name: string;
 		defaultVal: string;
+		errors: string[];
 	};
 
 	let preview: string | undefined;
@@ -40,6 +41,13 @@
 			Upload image
 		{/if}
 	</div>
+	{#if errors}
+		<ul class="CrispMessageList w-100" data-type="error">
+			{#each errors as error}
+				<li class="CrispMessageList__item">{error}</li>
+			{/each}
+		</ul>
+	{/if}
 </label>
 
 <style lang="scss">
