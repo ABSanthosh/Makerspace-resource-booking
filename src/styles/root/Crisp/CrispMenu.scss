@@ -15,7 +15,6 @@
 	--crp-menu-height: 32px;
 	--crp-menu-min-width: 150px;
 	--crp-menu-offset: 8px;
-	--crp-menu-icon: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>');
 
 	--crp-menu-content-border-radius: 12px;
 	--crp-menu-content-border: 0.2px solid rgba(201, 201, 201, 0.4);
@@ -27,12 +26,25 @@
 	min-width: var(--crp-menu-min-width);
 	@include box(var(--crp-menu-width), var(--crp-menu-height));
 
+	&:not([data-no-marker]) {
+		--crp-menu-icon: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>');
+	}
+
+	&[data-no-marker] {
+		& > summary {
+			&::after {
+				display: none;
+				background-image: none;
+			}
+		}
+	}
+
 	&:not(&[data-type]) {
 		--crp-menu-color: #11181c;
 		--crp-menu-color-hover: #11181c;
 
 		--crp-menu-background-color: #fbfcfd;
-		--crp-menu-background-color-hover: #F4F6F8;
+		--crp-menu-background-color-hover: #f4f6f8;
 
 		--crp-menu-border: 1px solid #dfe3e6;
 		--crp-menu-border-hover: 1px solid #d7dbdf;

@@ -14,7 +14,7 @@
 		--crp-button-color-hover: #11181c;
 
 		--crp-button-background-color: #fbfcfd;
-		--crp-button-background-color-hover: #F4F6F8;
+		--crp-button-background-color-hover: #f4f6f8;
 
 		--crp-button-border: 1px solid #dfe3e6;
 		--crp-button-border-hover: 1px solid #d7dbdf;
@@ -32,6 +32,10 @@
 
 		--crp-button-border: 1px solid #3e3e3e;
 		--crp-button-border-hover: 1px solid #505050;
+
+		--crp-button-disabled-background-color: #757575;
+		--crp-button-disabled-border: 1px solid #757575;
+		--crp-button-disabled-color: #b8b8b8;
 
 		--crp-button-box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
 			rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
@@ -110,5 +114,8 @@
 
 	&:disabled {
 		cursor: not-allowed;
+		color: var(--crp-button-disabled-color);
+		border: var(--crp-button-disabled-border);
+		background-color: var(--crp-button-disabled-background-color);
 	}
 }

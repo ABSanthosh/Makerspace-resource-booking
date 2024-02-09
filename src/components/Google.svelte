@@ -52,33 +52,58 @@
 	</button>
 {:else}
 	<details
+		data-no-marker
 		use:clickOutside
 		bind:open={isProfileOpen}
-		class="FancyMenu Google__profile"
+		class="CrispMenu Google__profile"
 		on:outclick={() => (isProfileOpen = false)}
 	>
-		<summary data-no-marker data-icon={String.fromCharCode(58839)}>
+		<summary>
 			<img src={$SessionStore.user.user_metadata.picture} alt="Avatar" />
 		</summary>
-		<ul class="Google__profile--box FancyMenu__content" data-align="right">
+		<ul class="Google__profile--box CrispMenu__content" data-align="right">
 			{#if getCustomClaim($SessionStore).role === Role.admin}
-				<a href="/admin" class="Google__profile--item" data-icon={String.fromCharCode(61245)}>
+				<a href="/admin" class="CrispMenu__item Google__profile--item">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="lucide lucide-shield"
+					>
+						<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+					</svg>
 					Admin Panel
 				</a>
 			{:else}
-				<a href="/dash" class="Google__profile--item" data-icon={String.fromCharCode(59475)}>
+				<a href="/dash" class="CrispMenu__item Google__profile--item">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="16"
+						height="16"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="lucide lucide-layout-dashboard"
+					>
+						<rect width="7" height="9" x="3" y="3" rx="1" />
+						<rect width="7" height="5" x="14" y="3" rx="1" />
+						<rect width="7" height="9" x="14" y="12" rx="1" />
+						<rect width="7" height="5" x="3" y="16" rx="1" />
+					</svg>
 					Dashboard
 				</a>
 			{/if}
 			<form action="/auth?/logout" method="POST" class="w-100">
-				<button
-					class="FancyButton Google__profile--item"
-					type="submit"
-					data-icon={String.fromCharCode(59834)}
-					data-type="close"
-				>
-					Logout
-				</button>
+				<button type="submit" data-type="danger" class="CrispButton w-100"> Logout </button>
 			</form>
 		</ul>
 	</details>
@@ -141,16 +166,16 @@
 
 			&--item {
 				gap: 8px;
-				padding: 8px;
-				display: grid;
-				align-items: center;
-				border-radius: 6px;
+				// padding: 8px;
+				// display: grid;
+				// align-items: center;
+				// border-radius: 6px;
 				text-decoration: none;
-				color: var(--foreground);
-				@include box($height: 36px);
+				// color: var(--foreground);
+				// @include box($height: 36px);
 				@include make-flex($dir: row, $just: flex-start);
-				transition: background-color 0.1s ease-in-out;
-				outline: none;
+				// transition: background-color 0.1s ease-in-out;
+				// outline: none;
 
 				&:not(.active):hover {
 					background-color: #f3f4f6;
