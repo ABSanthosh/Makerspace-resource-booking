@@ -110,7 +110,58 @@
 			</button>
 		</span>
 	</header>
-	<div class="AdminEquipment__content"></div>
+	<div class="AdminEquipment__content">
+		<table class="FancyTable">
+			<thead>
+				<tr>
+					<th> Equipment Name </th>
+					<th> Model </th>
+					<th> Category </th>
+					<th> No. of Instances </th>
+					<th> </th>
+				</tr>
+			</thead>
+			<tbody>
+				{#if searchEquipment && searchEquipment.length > 0}
+					{#each searchEquipment as item}
+						<tr>
+							<td> {item.name} </td>
+							<td> {item.model} </td>
+							<td> {item.category.name} </td>
+							<td> {item.instances.length} </td>
+							<td>
+								<button
+									class="FancyButton"
+									data-icon={String.fromCharCode(58835)}
+									style="--height: 24px; --width: auto --font: 15px;"
+									data-type="empty"
+									on:click={() => {
+										editItem = {
+											...item,
+											image: item.image.split('?')[0]
+										};
+										addEquipmentModal = true;
+										// editEquipmentModal = true;
+									}}
+								/>
+							</td>
+						</tr>
+					{/each}
+				{:else}
+					<tr class="empty">
+						<td colspan="5"> No results found </td>
+					</tr>
+				{/if}
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="5">
+						Showing {allEquipment?.length ?? 0} result(s)
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
 </main>
 
 <style lang="scss">
