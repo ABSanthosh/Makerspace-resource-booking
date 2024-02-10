@@ -27,7 +27,7 @@
 
 		@include respondAt(845px) {
 			padding-left: 56px;
-			grid-template-columns: 1fr;
+			grid-template-columns: minmax(0, 1fr);
 		}
 	}
 </style>
