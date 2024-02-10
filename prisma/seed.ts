@@ -13,49 +13,31 @@ const queries = {
 				FOR EACH ROW EXECUTE PROCEDURE onNewUser();
 		`,
 		Prisma.sql`
-		  -- When user role is updated on public.profile, update the user's custom claims
-			CREATE or REPLACE FUNCTION update_user_role()
+			-- When public.profile.{isnew|role} is updated, update the user's custom claims
+			CREATE or REPLACE FUNCTION on_user_profile_update()
 			RETURNS trigger
 			LANGUAGE plpgsql
 			SECURITY DEFINER SET search_path = public
 			AS $$
 			BEGIN
-				UPDATE auth.users SET raw_app_meta_data = raw_app_meta_data
-				|| json_build_object('custom_claims', json_build_object('role', new.role))::jsonb
-				WHERE id = new.id;
-				RETURN new;
+				UPDATE auth.users
+				SET raw_app_meta_data = jsonb_set(
+					COALESCE(raw_app_meta_data, '{}'::jsonb),
+					'{custom_claims}',
+					json_build_object('role', NEW.role, 'isnew', NEW.isnew)::jsonb,
+					true
+				) WHERE id = NEW.id;
+				RETURN NEW;
 			END;
 			$$;
 		`,
 		Prisma.sql`
-			CREATE or REPLACE TRIGGER on_profile_role_updated
-				AFTER UPDATE OF role ON public.profile
+			CREATE or REPLACE TRIGGER on_profile_updated
+				AFTER UPDATE OF isnew, role ON public.profile
 				FOR EACH ROW
-				WHEN (old.role <> new.role)
-				EXECUTE PROCEDURE public.update_user_role();
-		`,
-		Prisma.sql`
-			-- When public.profile.isnew is updated, update the user's custom claims
-			-- TODO: this trigger replaces the custom claims, it should only update the isNew field
-			CREATE or REPLACE FUNCTION update_user_isnew()
-			RETURNS trigger
-			LANGUAGE plpgsql
-			SECURITY DEFINER SET search_path = public
-			AS $$
-			BEGIN
-				UPDATE auth.users SET raw_user_meta_data = raw_user_meta_data
-				|| json_build_object('custom_claims', json_build_object('isNew', new.isnew))::jsonb
-				WHERE id = new.id;
-				RETURN new;
-			END;
-			$$;
-		`,
-		Prisma.sql`
-			CREATE or REPLACE TRIGGER on_profile_isnew_updated
-				AFTER UPDATE OF isnew ON public.profile
-				FOR EACH ROW
-				WHEN (old.isnew <> new.isnew)
-				EXECUTE PROCEDURE public.update_user_isnew();
+				WHEN (OLD.isnew IS DISTINCT FROM NEW.isnew
+				OR OLD.role IS DISTINCT FROM NEW.role)
+				EXECUTE PROCEDURE public.on_user_profile_update();
 		`
 	],
 	onDeleteUser: [
