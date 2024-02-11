@@ -8,7 +8,7 @@
 	// $: ({ profileData } = data);
 	$: user = $SessionStore!.user;
 
-	const {
+	const { 
 		form: profileForm,
 		errors,
 		enhance,
@@ -324,14 +324,6 @@
 						@include respondAt(620px) {
 							flex-direction: column;
 						}
-
-						// input {
-						// 	--crp-input-width: 60%;
-						// 	@include respondAt(620px) {
-						// 		flex-direction: column;
-						// 		--crp-input-width: 100%;
-						// 	}
-						// }
 					}
 				}
 			}
