@@ -81,16 +81,19 @@
 				<p title={userName}>{userName}</p>
 				<p title={userEmail}>{userEmail}</p>
 			</div>
-			<button
-				class="FancyButton"
-				data-icon={String.fromCharCode(59834)}
-				on:click={() => supabase.auth.signOut()}
-				title="Logout"
-				type="submit"
-			/>
+			<form action="/auth?/logout" method="POST">
+				<button
+					type="submit"
+					title="Logout"
+					data-type="danger"
+					class="CrispButton"
+					data-icon={String.fromCharCode(59834)}
+				/>
+			</form>
 		</div>
+
 		<button
-			class={`dark  Sidebar__toggle${navState ? '--active' : '--item'}`}
+			class={`CrispButton Sidebar__toggle${navState ? '--active' : '--item'}`}
 			on:click={() => {
 				navState = !navState;
 				collapsibleState = {
@@ -308,19 +311,28 @@
 			}
 
 			button {
-				@include box(auto);
-				@include make-flex();
-				font-size: 22px;
-				outline: none;
-				border: none;
-				background-color: transparent;
-				cursor: pointer;
-
-				&:hover,
-				&:focus {
-					outline: none;
-					background-color: #ebedf1;
+				@include box(25px, auto);
+				&::before {
+					font-size: 18px;
 				}
+				&:hover {
+					&::before {
+						color: white;
+					}
+				}
+				// 	@include box(auto);
+				// 	@include make-flex();
+				// 	font-size: 22px;
+				// 	outline: none;
+				// 	border: none;
+				// 	background-color: transparent;
+				// 	cursor: pointer;
+
+				// 	&:hover,
+				// 	&:focus {
+				// 		outline: none;
+				// 		background-color: #ebedf1;
+				// 	}
 			}
 		}
 
