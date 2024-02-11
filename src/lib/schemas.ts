@@ -68,3 +68,15 @@ export const CartZSchema = z.object({
 });
 
 export type CartSchema = z.infer<typeof CartZSchema>;
+
+// mentor - text
+// description - text (course, our, research, etc)
+// deadline for the project
+export const BookingZSchema = z.object({
+	mentor: z.string().min(2),
+	description: z.string().min(2),
+	deadline: z.date(),
+	instances: z.array(z.string()),
+})
+
+export type BookingSchema = z.infer<typeof BookingZSchema>;

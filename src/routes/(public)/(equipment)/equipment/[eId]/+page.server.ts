@@ -20,13 +20,13 @@ export const load: PageServerLoad = async ({ params }) => {
 export const actions: Actions = {
 	add: async ({ request, locals: { supabase } }) => {
 		const cartItemForm = await superValidate(request, CartItemZSchema);
-		console.log(cartItemForm);
 
 		if (!cartItemForm.valid) {
 			return fail(400, { cartItemForm });
 		}
 
 		return {
+			cartItemForm,
 			response: await addToCart({ ...cartItemForm.data, userId: cartItemForm.data.userId! })
 		};
 	}
