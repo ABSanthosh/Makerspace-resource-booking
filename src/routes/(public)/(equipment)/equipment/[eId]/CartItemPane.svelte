@@ -24,20 +24,28 @@
 				userId,
 				instanceId,
 				equipmentId,
-				start: new Date(
-					dateSelector.getFullYear(),
-					dateSelector.getMonth(),
-					dateSelector.getDate(),
-					parseInt(startTime.split(':')[0]),
-					parseInt(startTime.split(':')[1])
-				),
-				end: new Date(
-					dateSelector.getFullYear(),
-					dateSelector.getMonth(),
-					dateSelector.getDate(),
-					parseInt(endTime.split(':')[0]),
-					parseInt(endTime.split(':')[1])
-				)
+				// @ts-ignore
+				start:
+					startTime !== ''
+						? new Date(
+								dateSelector.getFullYear(),
+								dateSelector.getMonth(),
+								dateSelector.getDate(),
+								parseInt(startTime.split(':')[0]),
+								parseInt(startTime.split(':')[1])
+							)
+						: null,
+				// @ts-ignore
+				end:
+					endTime !== ''
+						? new Date(
+								dateSelector.getFullYear(),
+								dateSelector.getMonth(),
+								dateSelector.getDate(),
+								parseInt(endTime.split(':')[0]),
+								parseInt(endTime.split(':')[1])
+							)
+						: null
 			});
 		},
 		onResult(event) {
@@ -52,8 +60,8 @@
 		.flat();
 
 	$: dateSelector = new Date();
-	$: startTime = times[0];
-	$: endTime = times[0];
+	$: startTime = '';
+	$: endTime = '';
 </script>
 
 <Pane className="CartItemPane" bind:open={modal} style="--paneWidth: 450px;">
@@ -64,7 +72,7 @@
 		method="POST"
 		id="cartItemForm"
 		class="CartItemPane__main"
-		action="equipment/[eId]?/add"
+		action="/equipment/[eId]?/add"
 	>
 		<!-- <SuperDebug data={$form} /> -->
 
@@ -89,10 +97,17 @@
 			<span data-mandatory style="color: inherit;"> Start Time </span>
 			<select class="CrispSelect" style="--crp-select-width: 100%;" bind:value={startTime}>
 				<option value="" disabled selected> Select a start time </option>
-				{#each times.filter((item) => item > endTime) as item}
+				{#each times.filter((item) => (endTime !== '' ? item < endTime : true)) as item}
 					<option value={item}>{item}</option>
 				{/each}
 			</select>
+			{#if $errors.start}
+				<ul class="CrispMessageList" data-type="error">
+					{#each $errors.start as error}
+						<li class="CrispMessageList__item">{error}</li>
+					{/each}
+				</ul>
+			{/if}
 		</label>
 
 		<label class="CrispLabel" for="endTime">
@@ -103,6 +118,13 @@
 					<option value={item}>{item}</option>
 				{/each}
 			</select>
+			{#if $errors.end}
+				<ul class="CrispMessageList" data-type="error">
+					{#each $errors.end as error}
+						<li class="CrispMessageList__item">{error}</li>
+					{/each}
+				</ul>
+			{/if}
 		</label>
 	</form>
 	<div class="Row--j-end gap-10" slot="footer">

@@ -33,13 +33,15 @@
 	$: selectedInstance = null as EItemSchema | null;
 </script>
 
-<AvailabilityPane
-	userId={user.id}
-	bind:modal={availabilityPane}
-	equipmentId={data.equipment.id}
-	formStore={data.cartItemForm}
-	instanceId={selectedInstance?.id}
-/>
+{#if selectedInstance}
+	<AvailabilityPane
+		bind:userId={user.id}
+		bind:modal={availabilityPane}
+		bind:equipmentId={data.equipment.id}
+		bind:formStore={data.cartItemForm}
+		bind:instanceId={selectedInstance['id']}
+	/>
+{/if}
 
 <main class="Equipment">
 	<header class="Equipment__header w-100 gap-10">
