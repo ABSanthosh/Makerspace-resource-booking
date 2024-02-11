@@ -47,16 +47,17 @@ model Equipment {
 }
 
 model EInstance {
-  id          String    @id @unique @default(nanoid(7))
+  id          String     @id @unique @default(nanoid(7))
   name        String
-  description String    @db.VarChar(2500)
-  status      EStatus?  @default(available)
+  description String     @db.VarChar(2500)
+  status      EStatus?   @default(available)
   cost        String
   equipmentId String
   // manuals
   // TODO: new model to hold availability of each instance
   // TODO: custom time for each instance
-  equipment   Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  equipment   Equipment  @relation(fields: [equipmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  CartItem    CartItem[]
 }
 
 model Cart {
@@ -71,13 +72,14 @@ model Cart {
 }
 
 model CartItem {
-  id          String   @id @unique @default(nanoid(12))
+  id          String    @id @unique @default(nanoid(12))
   equipmentId String
   instanceId  String
   start       DateTime
   end         DateTime
   cartId      String
-  cart        Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  cart        Cart      @relation(fields: [cartId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  instance    EInstance @relation(fields: [instanceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model ECategories {

@@ -1,6 +1,8 @@
 ## Short run ToDo
 
 - [ ] Add cart contents to cart page(responsive)
+  - [x] UI
+  - [ ] Functionality
 - [ ] add condition to check if user is signed in and not admin before adding to cart
 - [ ] category editing option in admin page
 - [x] custom claim updating from profile table is replacing instead of modifying
