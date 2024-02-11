@@ -1,17 +1,18 @@
 <script lang="ts">
 	import Sidebar from '$components/Sidebar.svelte';
 	import { USER_ROUTES } from '$lib/routes';
-	// import type { User, Session } from '@supabase/supabase-js';
-	// import type { PageData } from './$types';
+	import type { Session } from '@supabase/supabase-js';
+	import type { PageData } from './$types';
 
-	// export let data;
-
-	// $: ({ user } = data!.session || ({} as Session));
-	// $: ({ supabase } = data);
+	export let data: PageData;
+	$: ({ user } = data!.session || ({} as Session));
+	$: isUserNew = user.app_metadata.custom_claims.isnew;
 </script>
 
 <main class="UserLayout">
-	<Sidebar routes={USER_ROUTES} />
+	<Sidebar
+		routes={isUserNew ? USER_ROUTES.filter((item) => item.name === 'Dashboard') : USER_ROUTES}
+	/>
 
 	<div class="UserLayout__content">
 		<slot />

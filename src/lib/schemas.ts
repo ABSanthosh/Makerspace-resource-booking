@@ -5,12 +5,12 @@ const phoneRegex = new RegExp(/(\+91\s)?\d{10}/);
 
 export const UserProfileZodSchema = z.object({
 	name: z.string().min(2),
-	mobile: z.string().regex(phoneRegex),
+	mobile: z.string().regex(phoneRegex, { message: 'Invalid phone number' }),
 	email: z.string().email(),
 	department: z.string().min(2),
 	branch: z.string().min(2),
 	userId: z.string().min(2),
-	year: z.string().min(4),
+	year: z.number().min(4),
 	role: z.nativeEnum(Role),
 	isNew: z.boolean().optional(),
 	clubs: z.array(z.string()).optional()

@@ -1,7 +1,7 @@
-import { superValidate } from 'sveltekit-superforms/server';
-import { UserProfileZodSchema } from '$lib/schemas';
-import { getUserProfile, updateUserProfile } from '$db/User.db';
 import type { Actions, PageServerLoad } from './$types';
+import { getUserProfile, updateUserProfile } from '$db/User.db';
+import { UserProfileZodSchema } from '$lib/schemas';
+import { superValidate } from 'sveltekit-superforms/server';
 
 // @ts-ignore
 export const load: PageServerLoad = async ({ locals }) => {
@@ -17,7 +17,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		mobile: dbUserProfile?.mobile ?? '',
 		branch: dbUserProfile?.branch ?? '',
 		department: dbUserProfile?.department ?? '',
-		year: `${dbUserProfile?.year}` ?? '',
+		year: dbUserProfile?.year ?? 0,
 		isNew: dbUserProfile?.isNew!,
 		role: dbUserProfile?.role!,
 		userId: dbUserProfile?.userId ?? '',
@@ -31,21 +31,27 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	// update
-	update: async ({ request, locals: { session } }) => {
+	update: async ({ request, locals: { session, supabase, getSession } }) => {
 		const userProfileForm = await superValidate(request, UserProfileZodSchema);
-		// console.log(userProfileForm);
 
 		if (!userProfileForm.valid) {
 			return { userProfileForm };
 		}
 
+		const newProfileData = await updateUserProfile({
+			...userProfileForm.data,
+			isNew: false,
+			id: session?.user.id!
+		});
+
+		// When the user updates their profile, we need to refresh the session
+		if (userProfileForm.data.isNew !== newProfileData.isNew) {
+			supabase.auth.refreshSession();
+			session = await getSession();
+		}
 		return {
-			response: await updateUserProfile({
-				...userProfileForm.data,
-				isNew: false,
-				id: session?.user.id!
-			})
+			userProfileForm,
+			profileData: newProfileData
 		};
 	}
 };

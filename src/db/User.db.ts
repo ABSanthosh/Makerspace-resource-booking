@@ -24,7 +24,7 @@ export async function updateUserProfile(profile: UserProfileSchema & { id: strin
 		where: { id: profile.id },
 		data: {
 			...profile,
-			year: parseInt(profile.year)
+			isNew: false
 		}
 	});
 }

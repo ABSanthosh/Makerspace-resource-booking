@@ -60,7 +60,6 @@ const authorization: Handle = async ({ event, resolve }) => {
 	const isUserAdmin = getCustomClaim(session).role === 'admin';
 	const isUserNew = getCustomClaim(session).isNew;
 
-	console.log(session?.user.app_metadata ,event.url.pathname.includes('/dash') && event.url.pathname !== '/dash' );
 	// GET requests
 	if (event.request.method === 'GET') {
 		// if user not signed in and trying to access dashboard or admin page
