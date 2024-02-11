@@ -11,17 +11,26 @@
 	const {
 		form: profileForm,
 		errors,
-		enhance
+		enhance,
+		constraints
 	} = superForm(data.userProfileForm, {
 		id: 'userProfileForm',
-		dataType: 'json'
+		dataType: 'json',
+		taintedMessage: null
 	});
+
+	$: isUserNew = user.app_metadata.custom_claims.isnew;
 </script>
 
 <main class="Dashboard">
 	<h1>
 		Hello, {user.user_metadata.name}!
 	</h1>
+	{#if isUserNew}
+		<section class="Dashboard__warning">
+			<h2>Please update your profile to continue using the app.</h2>
+		</section>
+	{/if}
 	<section class="Dashboard__section">
 		<header class="Dashboard__section--header">
 			<h5>Profile Information</h5>
@@ -29,7 +38,7 @@
 		<form
 			use:enhance
 			method="POST"
-			action="?/update"
+			action="/dash?/update"
 			id="userProfileForm"
 			class="Dashboard__section--content"
 		>
@@ -39,22 +48,25 @@
 				data-direction="row"
 				style="justify-content: space-between;"
 			>
-				<span style="color: inherit;"> Name </span>
-				<input
-					disabled
-					id="name"
-					type="text"
-					name="name"
-					class="CrispInput"
-					bind:value={$profileForm.name}
-				/>
-				{#if $errors.name}
-					<ul class="CrispMessageList w-100" data-type="error">
-						{#each $errors.name as error}
-							<li class="CrispMessageList__item">{error}</li>
-						{/each}
-					</ul>
-				{/if}
+				<span style="color: inherit;" data-mandatory> Name </span>
+				<div>
+					<input
+						disabled
+						id="name"
+						type="text"
+						name="name"
+						class="CrispInput"
+						bind:value={$profileForm.name}
+						{...$constraints.name}
+					/>
+					{#if $errors.name}
+						<ul class="CrispMessageList w-100" data-type="error">
+							{#each $errors.name as error}
+								<li class="CrispMessageList__item">{error}</li>
+							{/each}
+						</ul>
+					{/if}
+				</div>
 			</label>
 
 			<label
@@ -63,22 +75,25 @@
 				data-direction="row"
 				style="justify-content: space-between;"
 			>
-				<span style="color: inherit;"> Email </span>
-				<input
-					disabled
-					id="email"
-					type="email"
-					name="email"
-					class="CrispInput"
-					bind:value={$profileForm.email}
-				/>
-				{#if $errors.email}
-					<ul class="CrispMessageList w-100" data-type="error">
-						{#each $errors.email as error}
-							<li class="CrispMessageList__item">{error}</li>
-						{/each}
-					</ul>
-				{/if}
+				<span style="color: inherit;" data-mandatory> Email </span>
+				<div>
+					<input
+						disabled
+						id="email"
+						type="email"
+						name="email"
+						class="CrispInput"
+						bind:value={$profileForm.email}
+						{...$constraints.email}
+					/>
+					{#if $errors.email}
+						<ul class="CrispMessageList w-100" data-type="error">
+							{#each $errors.email as error}
+								<li class="CrispMessageList__item">{error}</li>
+							{/each}
+						</ul>
+					{/if}
+				</div>
 			</label>
 
 			<label
@@ -87,21 +102,25 @@
 				data-direction="row"
 				style="justify-content: space-between;"
 			>
-				<span style="color: inherit;"> Phone </span>
-				<input
-					id="mobile"
-					type="tel"
-					name="mobile"
-					class="CrispInput"
-					bind:value={$profileForm.mobile}
-				/>
-				{#if $errors.mobile}
-					<ul class="CrispMessageList w-100" data-type="error">
-						{#each $errors.mobile as error}
-							<li class="CrispMessageList__item">{error}</li>
-						{/each}
-					</ul>
-				{/if}
+				<span style="color: inherit;" data-mandatory> Phone </span>
+				<div>
+					<input
+						id="mobile"
+						type="tel"
+						name="mobile"
+						class="CrispInput"
+						placeholder="+91 9999999999"
+						bind:value={$profileForm.mobile}
+						{...$constraints.mobile}
+					/>
+					{#if $errors.mobile}
+						<ul class="CrispMessageList w-100" data-type="error">
+							{#each $errors.mobile as error}
+								<li class="CrispMessageList__item">{error}</li>
+							{/each}
+						</ul>
+					{/if}
+				</div>
 			</label>
 
 			<label
@@ -110,21 +129,24 @@
 				data-direction="row"
 				style="justify-content: space-between;"
 			>
-				<span style="color: inherit;"> Branch </span>
-				<input
-					id="branch"
-					type="text"
-					name="branch"
-					class="CrispInput"
-					bind:value={$profileForm.branch}
-				/>
-				{#if $errors.branch}
-					<ul class="CrispMessageList w-100" data-type="error">
-						{#each $errors.branch as error}
-							<li class="CrispMessageList__item">{error}</li>
-						{/each}
-					</ul>
-				{/if}
+				<span style="color: inherit;" data-mandatory> Branch </span>
+				<div>
+					<input
+						id="branch"
+						type="text"
+						name="branch"
+						class="CrispInput"
+						bind:value={$profileForm.branch}
+						{...$constraints.branch}
+					/>
+					{#if $errors.branch}
+						<ul class="CrispMessageList w-100" data-type="error">
+							{#each $errors.branch as error}
+								<li class="CrispMessageList__item">{error}</li>
+							{/each}
+						</ul>
+					{/if}
+				</div>
 			</label>
 
 			<label
@@ -133,21 +155,24 @@
 				data-direction="row"
 				style="justify-content: space-between;"
 			>
-				<span style="color: inherit;"> Department </span>
-				<input
-					id="department"
-					type="text"
-					name="department"
-					class="CrispInput"
-					bind:value={$profileForm.department}
-				/>
-				{#if $errors.department}
-					<ul class="CrispMessageList w-100" data-type="error">
-						{#each $errors.department as error}
-							<li class="CrispMessageList__item">{error}</li>
-						{/each}
-					</ul>
-				{/if}
+				<span style="color: inherit;" data-mandatory> Department </span>
+				<div>
+					<input
+						id="department"
+						type="text"
+						name="department"
+						class="CrispInput"
+						bind:value={$profileForm.department}
+						{...$constraints.department}
+					/>
+					{#if $errors.department}
+						<ul class="CrispMessageList w-100" data-type="error">
+							{#each $errors.department as error}
+								<li class="CrispMessageList__item">{error}</li>
+							{/each}
+						</ul>
+					{/if}
+				</div>
 			</label>
 
 			<label
@@ -156,21 +181,28 @@
 				data-direction="row"
 				style="justify-content: space-between;"
 			>
-				<span style="color: inherit;"> Year </span>
-				<input
-					id="year"
-					type="number"
-					name="year"
-					class="CrispInput"
-					bind:value={$profileForm.year}
-				/>
-				{#if $errors.year}
-					<ul class="CrispMessageList w-100" data-type="error">
-						{#each $errors.year as error}
-							<li class="CrispMessageList__item">{error}</li>
-						{/each}
-					</ul>
-				{/if}
+				<span style="color: inherit;" data-mandatory> Year </span>
+				<div>
+					<input
+						id="year"
+						type="number"
+						name="year"
+						class="CrispInput"
+						bind:value={$profileForm.year}
+						on:focus={(e) => {
+							// @ts-ignore
+							e.target.select();
+						}}
+						{...$constraints.year}
+					/>
+					{#if $errors.year}
+						<ul class="CrispMessageList w-100" data-type="error">
+							{#each $errors.year as error}
+								<li class="CrispMessageList__item">{error}</li>
+							{/each}
+						</ul>
+					{/if}
+				</div>
 			</label>
 
 			<label
@@ -179,21 +211,24 @@
 				data-direction="row"
 				style="justify-content: space-between;"
 			>
-				<span style="color: inherit;"> Roll No. / Employee ID </span>
-				<input
-					id="userId"
-					type="text"
-					name="userId"
-					class="CrispInput"
-					bind:value={$profileForm.userId}
-				/>
-				{#if $errors.userId}
-					<ul class="CrispMessageList w-100" data-type="error">
-						{#each $errors.userId as error}
-							<li class="CrispMessageList__item">{error}</li>
-						{/each}
-					</ul>
-				{/if}
+				<span style="color: inherit;" data-mandatory> Roll No. / Employee ID </span>
+				<div>
+					<input
+						id="userId"
+						type="text"
+						name="userId"
+						class="CrispInput"
+						bind:value={$profileForm.userId}
+						{...$constraints.userId}
+					/>
+					{#if $errors.userId}
+						<ul class="CrispMessageList w-100" data-type="error">
+							{#each $errors.userId as error}
+								<li class="CrispMessageList__item">{error}</li>
+							{/each}
+						</ul>
+					{/if}
+				</div>
 			</label>
 
 			<!-- TODO: add tagged inputs -->
@@ -213,7 +248,7 @@
 
 <style lang="scss">
 	.Dashboard {
-		gap: 64px;
+		gap: 24px;
 		padding: 16px;
 		margin: 64px auto;
 		max-width: $maxDashWidth;
@@ -223,6 +258,28 @@
 		& > h1 {
 			font-size: 30px;
 			font-weight: 500;
+		}
+
+		&__warning {
+			padding: 16px 24px;
+			border: 1px solid var(--lightRed);
+			border-radius: 6px;
+			@include box($height: auto);
+			background-color: var(--paleRed);
+			& > h2 {
+				gap: 8px;
+				font-size: 18px;
+				font-weight: 500;
+				color: var(--darkRed);
+				@include make-flex($dir: row, $just: flex-start, $align: flex-start);
+				&::before {
+					content: '';
+					@include box(22px, 22px);
+					background-size: contain;
+					background-repeat: no-repeat;
+					background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='23' height='21' viewBox='0 0 23 21' fill='none'%3E%3Cpath d='M11.9999 7.99998V12M11.9999 16H12.0099M21.7299 17L13.7299 2.99998C13.5555 2.69218 13.3025 2.43617 12.9969 2.25805C12.6912 2.07993 12.3437 1.98608 11.9899 1.98608C11.6361 1.98608 11.2887 2.07993 10.983 2.25805C10.6773 2.43617 10.4244 2.69218 10.2499 2.99998L2.24993 17C2.07361 17.3053 1.98116 17.6519 1.98194 18.0045C1.98272 18.3571 2.07671 18.7032 2.25438 19.0078C2.43204 19.3124 2.68708 19.5646 2.99362 19.7388C3.30017 19.9131 3.64734 20.0032 3.99993 20H19.9999C20.3508 19.9996 20.6955 19.9069 20.9992 19.7313C21.303 19.5556 21.5551 19.3031 21.7304 18.9991C21.9057 18.6951 21.998 18.3504 21.9979 17.9995C21.9978 17.6486 21.9054 17.3039 21.7299 17Z' stroke='%23FF605C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+				}
+			}
 		}
 
 		&__section {
@@ -255,18 +312,26 @@
 				@include make-flex();
 
 				.CrispLabel {
+					& > div {
+						gap: 10px;
+						width: 60%;
+						@include make-flex();
+						@include respondAt(620px) {
+							width: 100%;
+						}
+					}
 					&[data-direction='row'] {
 						@include respondAt(620px) {
 							flex-direction: column;
 						}
 
-						input {
-							--crp-input-width: 60%;
-							@include respondAt(620px) {
-								flex-direction: column;
-								--crp-input-width: 100%;
-							}
-						}
+						// input {
+						// 	--crp-input-width: 60%;
+						// 	@include respondAt(620px) {
+						// 		flex-direction: column;
+						// 		--crp-input-width: 100%;
+						// 	}
+						// }
 					}
 				}
 			}
