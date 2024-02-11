@@ -2,7 +2,13 @@
 // for information about these interfaces
 
 import type { Database } from '$lib/generated/supabase/types';
-import type { SupabaseClient, Session as SupabaseSession } from '@supabase/supabase-js';
+import type {
+	SupabaseClient,
+	Session as SupabaseSession,
+	UserAppMetadata
+} from '@supabase/supabase-js';
+
+import '@supabase/supabase-js';
 
 declare global {
 	namespace App {
@@ -22,9 +28,20 @@ declare global {
 
 	namespace svelteHTML {
 		interface HTMLAttributes<T> {
-			"on:outclick"?: () => boolean;
+			'on:outclick'?: () => boolean;
 		}
 	}
 }
 
-export { };
+// declare module '@supabase/supabase-js' {
+// 	interface User {
+// 		app_metadata: UserAppMetadata & {
+// 			custom_claim: {
+// 				role: string;
+// 				isnew: boolean;
+// 			};
+// 		};
+// 	}
+// }
+
+export {};
