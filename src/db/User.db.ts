@@ -61,3 +61,21 @@ export async function addToCart(cardItem: CartItemSchema & { userId: string }) {
 		}
 	});
 }
+
+// getUserCart
+export async function getUserCart(userId: string) {
+	return await db.cart.findUnique({
+		where: { userId },
+		include: {
+			items: {
+				include: {
+					instance: {
+						include: {
+							equipment: true
+						}
+					}
+				}
+			}
+		}
+	});
+}
