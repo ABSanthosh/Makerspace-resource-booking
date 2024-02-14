@@ -1,10 +1,17 @@
 import nanoid from '$lib/nanoid';
-import { EZodSchema } from '$lib/schemas';
+import { ECategoryCRUDZSchema, EZodSchema } from '$lib/schemas';
 import { SupabaseEnum } from '$lib/Enums';
 import type { PageServerLoad } from './$types';
 import { fail, type Actions } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms/server';
-import { addEquipment, editEquipment, getAllEquipment, getECategories } from '$db/Equipment.db';
+import {
+	addEquipment,
+	deleteECategories,
+	editEquipment,
+	getAllEquipment,
+	getECategories,
+	upsertECategories
+} from '$db/Equipment.db';
 
 // @ts-ignore
 export const load: PageServerLoad = async ({ locals }) => {
@@ -15,7 +22,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 		newEquipmentForm,
 		editEquipmentForm: await superValidate(EZodSchema),
 		allEquipment: await getAllEquipment(),
-		eCategories: await getECategories()
+		eCategories: await getECategories(),
+		categoryForm: await superValidate(ECategoryCRUDZSchema)
 	};
 };
 
@@ -86,6 +94,25 @@ export const actions: Actions = {
 				...editEquipmentForm,
 				response: await editEquipment(editEquipmentForm.data),
 				allEquipment: await getAllEquipment()
+			}
+		};
+	},
+	categoryCRUD: async ({ request }) => {
+		const categoryForm = await superValidate(request, ECategoryCRUDZSchema);
+		if (!categoryForm.valid) {
+			return fail(400, { categoryForm });
+		}
+
+		return {
+			form: {
+				response: {
+					upsert: await upsertECategories([...categoryForm.data.add, ...categoryForm.data.edit]),
+					delete:
+						categoryForm.data.delete.length > 0
+							? await deleteECategories(categoryForm.data.delete)
+							: []
+				},
+				eCategories: await getECategories()
 			}
 		};
 	}
