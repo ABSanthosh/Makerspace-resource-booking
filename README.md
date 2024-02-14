@@ -30,7 +30,7 @@
 - [x] protected route redirect in client side
 - [x] Input
   - [x] Refactor input to FancyInput css
-  - [x] Refactor all lableInput components to use CrispInput style 
+  - [x] Refactor all lableInput components to use CrispInput style
 
 ### Schema discussion
 
@@ -123,4 +123,22 @@ To see supabase status
 
 ```
 supabase status
+```
+
+### Bookmarklet to convert hex to decimal for google icons page
+
+```js
+javascript: (() => {
+	const hexContainer = document.querySelector(
+		'#mat-tab-content-0-0 > div > div > icons-side-nav-links > div > figure:nth-child(4) > div > gf-code-snippet > div > div.code-snippet__content > div'
+	);
+	const copyButton = document.querySelector(
+		'#mat-tab-content-0-0 > div > div > icons-side-nav-links > div > figure:nth-child(4) > div > gf-code-snippet > div > div.code-snippet__copy-button > copy-button > button'
+	);
+	const hexVal = hexContainer.innerText;
+	hexContainer.innerText = parseInt(hexVal, 16);
+	copyButton.onclick = () => {
+		navigator.clipboard.writeText(parseInt(hexVal, 16));
+	};
+})();
 ```

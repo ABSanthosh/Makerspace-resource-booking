@@ -1,6 +1,6 @@
 import { getStorageUrl } from '$lib/SupabaseUtils';
 import { db } from '$lib/prisma';
-import type { EItemSchema, ESchema } from '$lib/schemas';
+import type { ECategoriesSchema, EItemSchema, ESchema } from '$lib/schemas';
 import type { ECategories, Equipment } from '@prisma/client';
 
 export async function addEquipment(equipment: ESchema) {
@@ -126,4 +126,32 @@ export async function editEquipment(equipment: ESchema) {
 
 export async function getECategories() {
 	return await db.eCategories.findMany();
+}
+
+export async function upsertECategories(categories: ECategoriesSchema[]) {
+	return await db.$transaction(
+		categories.map((category) =>
+			db.eCategories.upsert({
+				where: {
+					id: category.id
+				},
+				update: {
+					name: category.name
+				},
+				create: {
+					name: category.name
+				}
+			})
+		)
+	);
+}
+
+export async function deleteECategories(ids: string[]) {
+	return await db.eCategories.deleteMany({
+		where: {
+			id: {
+				in: ids
+			}
+		}
+	});
 }
