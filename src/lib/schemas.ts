@@ -49,6 +49,14 @@ export const ECategoriesZSchema = z.object({
 
 export type ECategoriesSchema = z.infer<typeof ECategoriesZSchema>;
 
+export const ECategoryCRUDZSchema = z.object({
+	add: z.array(ECategoriesZSchema),
+	edit: z.array(ECategoriesZSchema),
+	delete: z.array(z.string())
+});
+
+export type ECategoryCRUDSchema = z.infer<typeof ECategoryCRUDZSchema>;
+
 export const CartItemZSchema = z.object({
 	end: z.date(),
 	start: z.date(),
@@ -76,7 +84,7 @@ export const BookingZSchema = z.object({
 	mentor: z.string().min(2),
 	description: z.string().min(2),
 	deadline: z.date(),
-	instances: z.array(z.string()),
-})
+	instances: z.array(z.string())
+});
 
 export type BookingSchema = z.infer<typeof BookingZSchema>;
