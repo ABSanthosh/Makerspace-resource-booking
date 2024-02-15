@@ -1,34 +1,39 @@
-[data-theme="light"] {
-  --body: #f8f9fa;
-  --footerBG: #24292e;
+[data-theme='light'] {
+	--body: #f8f9fa;
+	--footerBG: #24292e;
 
-  --scroll: #d0d0d0;
-  --paleRed: #ffe4e4;
-  --lightRed: #ff605c;
-  --darkRed: #d73a49;
+	--scroll: #d0d0d0;
+	--paleRed: #ffe4e4;
+	--lightRed: #ff605c;
+	--darkRed: #d73a49;
 
-  --border: #e6e8eb;
-  --background: white;
-  --foreground: #11181c;
-  --invertedForeground: #e6edf3;
+	--green: #25cf7a;
+	--orange: #f5793a;
+	--lightGreen: #dcffe6;
+	--lightOrange: #ffebd9;
 
-  --disabledColor: #eaeaea;
-  --buttonHoverBorder: #1f232826;
-  --buttonHoverBG: #eaecee;
-  --buttonShadow: #1f23280a 0px 1px 0px 0px, #ffffff40 0px 1px 0px 0px inset;
+	--border: #e6e8eb;
+	--background: white;
+	--foreground: #11181c;
+	--invertedForeground: #e6edf3;
 
-  --popoverBG: #ffffff;
-  --elevatedBG: #f6f8fa;
-  --subElevatedBG: #1f232814;
-  --subText: #91999e;
-  --elevatedShadow: #8c959f33 0px 8px 24px 0px;
-  --toastShadow: 0px 3px 35px 4px rgba(0, 0, 0, 0.25);
+	--disabledColor: #eaeaea;
+	--buttonHoverBorder: #1f232826;
+	--buttonHoverBG: #eaecee;
+	--buttonShadow: #1f23280a 0px 1px 0px 0px, #ffffff40 0px 1px 0px 0px inset;
 
-  --iconColor: #7e868c;
-  --headerBorder: rgb(208, 215, 222) 0px -1px 0px 0px inset;
+	--popoverBG: #ffffff;
+	--elevatedBG: #f6f8fa;
+	--subElevatedBG: #1f232814;
+	--subText: #91999e;
+	--elevatedShadow: #8c959f33 0px 8px 24px 0px;
+	--toastShadow: 0px 3px 35px 4px rgba(0, 0, 0, 0.25);
 
-  --downArrow: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+	--iconColor: #7e868c;
+	--headerBorder: rgb(208, 215, 222) 0px -1px 0px 0px inset;
 
-  --darkBlue: #005197;
-  --lightBlue: #e3f0ff;
+	--downArrow: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+
+	--darkBlue: #005197;
+	--lightBlue: #e3f0ff;
 }
