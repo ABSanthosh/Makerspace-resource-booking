@@ -97,7 +97,6 @@
 											image: item.image.split('?')[0]
 										};
 										equipmentModal = true;
-										// editEquipmentModal = true;
 									}}
 								/>
 							</td>
