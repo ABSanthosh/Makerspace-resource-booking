@@ -4,15 +4,15 @@
 	import { type Writable } from 'svelte/store';
 	import EquipmentPane from './FormPanes/EquipmentPane.svelte';
 	import Pane from '$components/Pane.svelte';
+	import CategoryPane from './FormPanes/CategoryPane.svelte';
 	export let data: PageData;
 
-	$: ({ newEquipmentForm, editEquipmentForm, allEquipment, eCategories } = data);
-	$: addEquipmentModal = false;
+	$: ({ newEquipmentForm, editEquipmentForm, allEquipment, eCategories, categoryForm } = data);
+	$: equipmentModal = false;
 	$: editEquipmentModal = false;
 	$: editItem = {} as ESchema | null;
 
-	$: addCategoryModal = false;
-	$: eCategoriesModal = false;
+	$: eCategoriesModal = true;
 	$: categoryItem = {} as ECategoriesSchema;
 
 	const resetForm = (form: Writable<ESchema>) => {
@@ -37,51 +37,12 @@
 	{resetForm}
 	bind:editItem
 	bind:eCategories
-	bind:modal={addEquipmentModal}
+	bind:modal={equipmentModal}
 	bind:formStore={newEquipmentForm}
 	bind:editFormStore={editEquipmentForm}
 />
 
-<!-- <Pane
-	bind:open={eCategoriesModal}
-	style="--paneWidth: 450px;"
-	on:close={() => (eCategoriesModal = false)}
->
-	<p slot="header">Categories</p>
-	{#if eCategories}
-		<form style="overflow:hidden" method="POST" action="">
-			<table class="FancyTable">
-				<thead>
-					<tr>
-						<th> Name </th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each [...eCategories, ...eCategories, ...eCategories, ...eCategories] as item}
-						<tr>
-							<td>
-
-								{item.name}
-							</td>
-						</tr>
-					{/each}
-				</tbody>
-				<tfoot>
-					<tr>
-						<td colspan="2">
-							Showing {eCategories?.length ?? 0} result(s)
-						</td>
-					</tr>
-				</tfoot>
-			</table>
-		</form>
-	{/if}
-	<svelte:fragment slot="footer">
-		<button class="FancyButton" style="--height: 30px" data-type="black-outline">
-			Add category
-		</button>
-	</svelte:fragment>
-</Pane> -->
+<CategoryPane bind:formStore={categoryForm} bind:eCategories bind:modal={eCategoriesModal} />
 
 <main class="AdminEquipment">
 	<header>
@@ -98,13 +59,13 @@
 				data-type="dark-outline"
 				on:click={() => (eCategoriesModal = !eCategoriesModal)}
 			>
-				Add category
+				Manage categories
 			</button>
 
 			<button
 				class="FancyButton"
 				data-type="dark-blue"
-				on:click={() => (addEquipmentModal = !addEquipmentModal)}
+				on:click={() => (equipmentModal = !equipmentModal)}
 			>
 				Add equipment
 			</button>
@@ -140,7 +101,7 @@
 											...item,
 											image: item.image.split('?')[0]
 										};
-										addEquipmentModal = true;
+										equipmentModal = true;
 										// editEquipmentModal = true;
 									}}
 								/>
