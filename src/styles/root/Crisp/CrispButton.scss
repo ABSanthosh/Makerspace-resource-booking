@@ -8,6 +8,9 @@
 	--crp-button-padding-left: 10px;
 	--crp-button-padding-right: 10px;
 	--crp-button-padding-bottom: 8px;
+	
+	--crp-button-disabled-color: #b8b8b8;
+	--crp-button-disabled-border: 1px solid #e8e8e8;
 
 	&:not(&[data-type]) {
 		--crp-button-color: #11181c;
@@ -34,8 +37,6 @@
 		--crp-button-border-hover: 1px solid #505050;
 
 		--crp-button-disabled-background-color: #757575;
-		--crp-button-disabled-border: 1px solid #757575;
-		--crp-button-disabled-color: #b8b8b8;
 
 		--crp-button-box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
 			rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
@@ -52,6 +53,10 @@
 		--crp-button-border-hover: 1px solid #000000;
 
 		--crp-button-box-shadow: transparent;
+
+		--crp-button-disabled-background-color: #757575;
+		--crp-button-disabled-border: 1px solid #757575;
+		--crp-button-disabled-color: #b8b8b8;
 	}
 
 	&[data-type='danger'] {
@@ -110,6 +115,10 @@
 		color: var(--crp-button-color-hover);
 		border: var(--crp-button-border-hover);
 		background-color: var(--crp-button-background-color-hover);
+
+		&::before {
+			color: var(--crp-button-color-hover);
+		}
 	}
 
 	&:disabled {
