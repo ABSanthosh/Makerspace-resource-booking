@@ -4,7 +4,7 @@
   - [x] UI
   - [ ] Functionality
 - [ ] add condition to check if user is signed in and not admin before adding to cart
-- [ ] category editing option in admin page
+- [x] category editing option in admin page
 - [x] custom claim updating from profile table is replacing instead of modifying
 - [x] Add user profile page to fill before changing is_new to false and give access to other pages
 

@@ -1,19 +1,16 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import type { ECategoriesSchema, ESchema } from '$lib/schemas';
+	import type { ESchema } from '$lib/schemas';
 	import { type Writable } from 'svelte/store';
 	import EquipmentPane from './FormPanes/EquipmentPane.svelte';
-	import Pane from '$components/Pane.svelte';
 	import CategoryPane from './FormPanes/CategoryPane.svelte';
 	export let data: PageData;
 
 	$: ({ newEquipmentForm, editEquipmentForm, allEquipment, eCategories, categoryForm } = data);
 	$: equipmentModal = false;
-	$: editEquipmentModal = false;
 	$: editItem = {} as ESchema | null;
 
-	$: eCategoriesModal = true;
-	$: categoryItem = {} as ECategoriesSchema;
+	$: eCategoriesModal = false;
 
 	const resetForm = (form: Writable<ESchema>) => {
 		form.set({
@@ -52,18 +49,13 @@
 			bind:value={equipmentSearch}
 			placeholder="Search equipment"
 		/>
-
 		<span class="Row--center gap-15">
-			<button
-				class="FancyButton"
-				data-type="dark-outline"
-				on:click={() => (eCategoriesModal = !eCategoriesModal)}
-			>
+			<button class="CrispButton" on:click={() => (eCategoriesModal = !eCategoriesModal)}>
 				Manage categories
 			</button>
 
 			<button
-				class="FancyButton"
+				class="CrispButton"
 				data-type="dark-blue"
 				on:click={() => (equipmentModal = !equipmentModal)}
 			>
@@ -92,10 +84,13 @@
 							<td> {item.instances.length} </td>
 							<td>
 								<button
-									class="FancyButton"
+									class="CrispButton"
 									data-icon={String.fromCharCode(58835)}
-									style="--height: 24px; --width: auto --font: 15px;"
-									data-type="empty"
+									style="--crp-button-height: 24px; 
+												--crp-button-width: auto; 
+												--crp-button-padding-left: 6px; 
+												--crp-button-padding-right: 6px;"
+									data-type="ghost"
 									on:click={() => {
 										editItem = {
 											...item,
