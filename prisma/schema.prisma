@@ -25,11 +25,12 @@ model Profile {
   clubs      Json?  @db.Json
 
   // Needed in on_profile_role_updated trigger
-  role   Role    @default(user)
+  role     Role      @default(user)
   // Needed in on_profile_isnew_updated trigger
-  isNew  Boolean @default(true) @map("isnew")
-  cart   Cart?
-  cartId String?
+  isNew    Boolean   @default(true) @map("isnew")
+  cart     Cart?
+  cartId   String?
+  bookings Booking[]
 
   @@map("profile")
 }
@@ -136,3 +137,16 @@ enum Role {
 // payment qr code for the materials
 
 // Default time for all instances
+
+model Booking {
+  id          String        @id @unique @default(nanoid(7))
+  userId      String        @db.Uuid
+  mentor      String
+  description String
+  deadline    DateTime
+  status      BookingStatus @default(pending)
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @default(now()) @map("updated_at")
+
+  user Profile @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
