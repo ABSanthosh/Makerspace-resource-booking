@@ -28,12 +28,12 @@
 		});
 	});
 
-	$: user = $SessionStore!.user;
+	$: user = $SessionStore?.user ?? null;
 	$: availabilityPane = false;
 	$: selectedInstance = null as EItemSchema | null;
 </script>
 
-{#if selectedInstance}
+{#if selectedInstance && user}
 	<AvailabilityPane
 		bind:userId={user.id}
 		bind:modal={availabilityPane}
@@ -48,8 +48,6 @@
 		<h1 class="w-100">{data.equipment.name}</h1>
 		<p class="w-100">{data.equipment.model}</p>
 	</header>
-	<a href="/dash">dash</a>
-
 	<section class="Equipment__hero">
 		<div class="Equipment__imageBox">
 			<img src={data.equipment.image} alt={data.equipment.name} />
@@ -59,7 +57,7 @@
 				Description
 				<hr />
 			</h3>
-			<p class="w-100">{data.equipment.description}</p>
+			<p class="w-100">{@html data.equipment.description}</p>
 			<h3 class="w-100">
 				Resources
 				<hr />
@@ -96,17 +94,21 @@
 							<td>{item.cost}</td>
 							<td>{item.status}</td>
 							<td>
-								<button
-									class="FancyButton"
-									disabled={item.status !== EStatus.available}
-									data-type="black-outline"
-									on:click={() => {
-										selectedInstance = item;
-										availabilityPane = true;
-									}}
-								>
-									View
-								</button>
+								{#if user}
+									<button
+										class="FancyButton"
+										disabled={item.status !== EStatus.available}
+										data-type="black-outline"
+										on:click={() => {
+											selectedInstance = item;
+											availabilityPane = true;
+										}}
+									>
+										View
+									</button>
+								{:else}
+									<i> Login to view availability </i>
+								{/if}
 							</td>
 						</tr>
 					{/each}

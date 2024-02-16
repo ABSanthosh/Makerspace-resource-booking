@@ -112,10 +112,9 @@
 <style lang="scss">
 	.Google {
 		&--button {
-			@include box(auto, 36px);
 			gap: 10px;
-			border: 1px solid transparent;
 			cursor: pointer;
+			@include box(auto, 36px);
 
 			& > span {
 				font-size: 15px;

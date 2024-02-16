@@ -3,7 +3,7 @@
 - [ ] Add cart contents to cart page(responsive)
   - [x] UI
   - [ ] Functionality
-- [ ] add condition to check if user is signed in and not admin before adding to cart
+- [x] add condition to check if user is signed in and not admin before adding to cart
 - [x] category editing option in admin page
 - [x] custom claim updating from profile table is replacing instead of modifying
 - [x] Add user profile page to fill before changing is_new to false and give access to other pages
@@ -21,7 +21,7 @@
 - [x] return to equipment page if manually opened a wrong equipment id
 - [x] image upload in equipment
 - [ ] Adding and deleting equipment is not working. Need to do it individually. Eg. If new instances are added, need to create it instead of upserting it and if deleted, need to delete. If it is edited, need to update it instead of upserting it.
-- [x] add error handling for equipment image upload
+- [x] add error handling for equipment image upload9
 - [x] clear form on closing pane(new and edit equipment)
 - [x] seed data for inserting equipment data
 - [x] (urgent) replace admin type from profile to custom claim
