@@ -3,7 +3,7 @@
 	import Pane from '$components/Pane.svelte';
 	import type { Writable } from 'svelte/store';
 	import type { ECategories } from '@prisma/client';
-	import type { ESchema, EZodSchema } from '$lib/schemas';
+	import type { ESchema } from '$lib/schemas';
 	import { superForm } from 'sveltekit-superforms/client';
 	import UploadImage from '$components/UploadImage.svelte';
 	import type { SuperValidated } from 'sveltekit-superforms';
@@ -14,8 +14,8 @@
 		editItem: ESchema | null;
 		eCategories: ECategories[];
 		resetForm: (form: Writable<ESchema>) => void;
-		formStore: SuperValidated<typeof EZodSchema>;
-		editFormStore: SuperValidated<typeof EZodSchema>;
+		formStore: SuperValidated<ESchema>;
+		editFormStore: SuperValidated<ESchema>;
 	};
 
 	const {
@@ -45,19 +45,12 @@
 	} = superForm(editFormStore, {
 		id: 'editEquipmentForm',
 		dataType: 'json',
-		onSubmit() {
-			editForm.set({
-				...$editForm,
-				image: editItem?.image ?? ''
-			});
-		},
 		onResult(event) {
 			if (event.result.status === 200) {
 				modal = false;
 				resetForm(editForm);
 			}
 		}
-		// taintedMessage: null
 	});
 
 	$: if (editItem?.id !== undefined) {
@@ -78,8 +71,7 @@
 	style="--paneWidth: 450px;"
 	on:close={() => {
 		resetForm(form);
-		// @ts-ignore
-		editItem = {};
+		editItem = null;
 	}}
 >
 	<p slot="header">
@@ -87,21 +79,22 @@
 	</p>
 	<svelte:fragment slot="main">
 		<form
-			use:editEnhance
-			use:newEnhance
 			method="POST"
-			id={isEdit ? 'editEquipmentForm' : 'newEquipmentForm'}
+			use:newEnhance
+			use:editEnhance
 			enctype="multipart/form-data"
 			class="Col--center gap-10 w-100"
 			action="/admin/equipment?/{actionType}"
+			id={isEdit ? 'editEquipmentForm' : 'newEquipmentForm'}
 		>
-			<!-- <SuperDebug data={$form} /> -->
+			<SuperDebug data={$form} />
 			<label class="CrispLabel" for="eCategoriesId">
 				<span data-mandatory style="color: inherit;"> Category </span>
 				<select
 					class="CrispSelect"
 					style="--crp-select-width: 100%;"
 					bind:value={$form.eCategoriesId}
+					aria-invalid={$errors.eCategoriesId ? 'true' : undefined}
 					{...$constraints.eCategoriesId}
 				>
 					<option value="" disabled selected>Select a Category</option>
@@ -110,11 +103,9 @@
 					{/each}
 				</select>
 				{#if $errors.eCategoriesId}
-					<ul class="CrispMessageList w-100" data-type="error">
-						{#each $errors.eCategoriesId as error}
-							<li class="CrispMessageList__item">{error}</li>
-						{/each}
-					</ul>
+					<p class="CrispMessage w-100" data-type="error">
+						{$errors.eCategoriesId}
+					</p>
 				{/if}
 			</label>
 
@@ -126,52 +117,51 @@
 					name="name"
 					class="CrispInput"
 					bind:value={$form.name}
+					aria-invalid={$errors.name ? 'true' : undefined}
 					{...$constraints.name}
 				/>
 				{#if $errors.name}
-					<ul class="CrispMessageList w-100" data-type="error">
-						{#each $errors.name as error}
-							<li class="CrispMessageList__item">{error}</li>
-						{/each}
-					</ul>
+					<p class="CrispMessage w-100" data-type="error">
+						{$errors.name}
+					</p>
 				{/if}
 			</label>
 
 			<label class="CrispLabel" for="model">
 				<span data-mandatory style="color: inherit;"> Model </span>
 				<input
-					class="CrispInput"
+					id="model"
 					type="text"
 					name="model"
-					id="model"
-					bind:value={$form.model}
+					class="CrispInput"
 					{...$constraints.model}
+					bind:value={$form.model}
+					aria-invalid={$errors.model ? 'true' : undefined}
 				/>
 				{#if $errors.model}
-					<ul class="CrispMessageList w-100" data-type="error">
-						{#each $errors.model as error}
-							<li class="CrispMessageList__item">{error}</li>
-						{/each}
-					</ul>
+					<p class="CrispMessage w-100" data-type="error">
+						{$errors.model}
+					</p>
 				{/if}
 			</label>
-			<UploadImage name="eImage" bind:errors={$errors.image} bind:defaultVal={$form.image} />
+
+			<UploadImage name="image" bind:errors={$errors.image} bind:image={$form.image} />
+
 			<label class="CrispLabel" for="description">
 				<span style="color: inherit;"> Description </span>
 				<textarea
+					id="description"
 					class="CrispInput"
 					name="description"
 					data-type="text-area"
-					id="description"
 					bind:value={$form.description}
+					aria-invalid={$errors.description ? 'true' : undefined}
 					{...$constraints.description}
 				/>
 				{#if $errors.description}
-					<ul class="CrispMessageList w-100" data-type="error">
-						{#each $errors.description as error}
-							<li class="CrispMessageList__item">{error}</li>
-						{/each}
-					</ul>
+					<p class="CrispMessage w-100" data-type="error">
+						{$errors.description}
+					</p>
 				{/if}
 			</label>
 			<span class="Row--between w-100">
@@ -187,7 +177,7 @@
 								name: `${$form.model} - ${instances.length + 1}`,
 								description: '',
 								status: EStatus.available,
-								cost: '0'
+								cost: '0',
 							});
 
 							$form.instances = instances;
@@ -199,7 +189,7 @@
 				</button>
 			</span>
 			<ul class="Col--center w-100 gap-10">
-				{#if $form && $form.instances && $form.instances.length > 0}
+				{#if $form && $form.instances && $form.instances.length > 0 && $constraints.instances}
 					{#each $form.instances as item, i}
 						<li class="Col--a-end gap-10 w-100">
 							<label
@@ -213,18 +203,18 @@
 								<input
 									type="text"
 									class="CrispInput"
-									bind:value={item.name}
+									bind:value={$form.instances[i].name}
 									name={`instances[${i}].name`}
 									style="--crp-input-width: 70%;"
 								/>
-								{#if $errors.instances && $errors.instances[i] && $errors.instances[i].name}
-									<ul class="CrispMessageList w-100" data-type="error">
-										{#each $errors.instances[i].name ?? [] as error}
-											<li class="CrispMessageList__item">{error}</li>
-										{/each}
-									</ul>
-								{/if}
 							</label>
+							{#if $errors.instances && $errors.instances[i] && $errors.instances[i].name}
+								<ul class="CrispMessageList w-100">
+									{#each $errors.instances[i].name ?? [] as error}
+										<li class="CrispMessage" data-type="error">{error}</li>
+									{/each}
+								</ul>
+							{/if}
 
 							<label
 								class="CrispLabel"
@@ -237,18 +227,16 @@
 								<input
 									type="number"
 									class="CrispInput"
-									bind:value={item.cost}
+									bind:value={$form.instances[i].cost}
 									name={`instances[${i}].cost`}
 									style="--crp-input-width: 70%;"
 								/>
-								{#if $errors.instances && $errors.instances[i] && $errors.instances[i].cost}
-									<ul class="CrispMessageList w-100" data-type="error">
-										{#each $errors.instances[i].cost ?? [] as error}
-											<li class="CrispMessageList__item">{error}</li>
-										{/each}
-									</ul>
-								{/if}
 							</label>
+							{#if $errors.instances && $errors.instances[i] && $errors.instances[i].cost}
+								<p class="CrispMessage w-100" data-type="error">
+									{$errors.instances[i].cost}
+								</p>
+							{/if}
 
 							<label
 								class="CrispLabel"
@@ -260,7 +248,7 @@
 								<span data-mandatory style="color: inherit;"> Status </span>
 								<select
 									class="CrispSelect"
-									bind:value={item.status}
+									bind:value={$form.instances[i].status}
 									name={`instances[${i}].status`}
 									style="--crp-select-width: 70%;"
 								>
@@ -270,11 +258,9 @@
 									{/each}
 								</select>
 								{#if $errors.instances && $errors.instances[i] && $errors.instances[i].status}
-									<ul class="CrispMessageList w-100" data-type="error">
-										{#each $errors.instances[i].status ?? [] as error}
-											<li class="CrispMessageList__item">{error}</li>
-										{/each}
-									</ul>
+									<p class="CrispMessage w-100" data-type="error">
+										{$errors.instances[i].status}
+									</p>
 								{/if}
 							</label>
 
@@ -289,18 +275,16 @@
 								<textarea
 									class="CrispInput"
 									data-type="text-area"
-									bind:value={item.description}
+									bind:value={$form.instances[i].description}
 									style="--crp-input-width: 70%;"
 									name={`instances[${i}].description`}
 								/>
-								{#if $errors.instances && $errors.instances[i] && $errors.instances[i].description}
-									<ul class="CrispMessageList w-100" data-type="error">
-										{#each $errors.instances[i].description ?? [] as error}
-											<li class="CrispMessageList__item">{error}</li>
-										{/each}
-									</ul>
-								{/if}
 							</label>
+							{#if $errors.instances && $errors.instances[i] && $errors.instances[i].description}
+								<p class="CrispMessage w-100" data-type="error">
+									{$errors.instances[i].description}
+								</p>
+							{/if}
 
 							<button
 								type="button"

@@ -3,10 +3,12 @@ import { ECategoryCRUDZSchema, EZodSchema } from '$lib/schemas';
 import { SupabaseEnum } from '$lib/Enums';
 import type { PageServerLoad } from './$types';
 import { fail, type Actions } from '@sveltejs/kit';
-import { setError, superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms/server';
+import { zod } from 'sveltekit-superforms/adapters';
 import {
 	addEquipment,
 	deleteECategories,
+	toggleEquipment,
 	editEquipment,
 	getAllEquipment,
 	getECategories,
@@ -15,42 +17,29 @@ import {
 
 // @ts-ignore
 export const load: PageServerLoad = async ({ locals }) => {
-	const newEquipmentForm = await superValidate(EZodSchema);
+	const newEquipmentForm = await superValidate(zod(EZodSchema));
 	if (Object.keys(locals).length === 0) return { newEquipmentForm };
 
 	return {
 		newEquipmentForm,
-		editEquipmentForm: await superValidate(EZodSchema),
+		editEquipmentForm: await superValidate(zod(EZodSchema)),
 		allEquipment: await getAllEquipment(),
 		eCategories: await getECategories(),
-		categoryForm: await superValidate(ECategoryCRUDZSchema)
+		categoryForm: await superValidate(zod(ECategoryCRUDZSchema))
 	};
 };
 
 export const actions: Actions = {
 	add: async ({ request, locals: { supabase } }) => {
-		const formData = await request.formData();
-		const newEquipmentForm = await superValidate(formData, EZodSchema);
+		const newEquipmentForm = await superValidate(request, zod(EZodSchema));
+		const imageFile = newEquipmentForm.data.image as File;
 
 		if (!newEquipmentForm.valid) {
 			return fail(400, { newEquipmentForm });
 		}
-		if (
-			!(formData.get('eImage') as File).name ||
-			(formData.get('eImage') as File).name === 'undefined'
-		) {
-			return setError(newEquipmentForm, 'image', 'Image is required');
-		} else {
-			setError(newEquipmentForm, 'image', '');
-		}
-
 		const { data, error } = await supabase.storage
 			.from(SupabaseEnum.BUCKET)
-			.upload(
-				`${nanoid()}.${(formData.get('eImage') as File).name.split('.').pop()}`,
-				formData.get('eImage') as File
-			);
-		// console.log(data, error);
+			.upload(`${nanoid()}.${imageFile.name.split('.').pop()}`, imageFile);
 
 		if (error) {
 			return fail(400, { error });
@@ -59,22 +48,25 @@ export const actions: Actions = {
 		return {
 			form: {
 				...newEquipmentForm,
-				response: await addEquipment({ ...newEquipmentForm.data, image: data.path }),
+				// Doc: Id will be filled in by the database
+				response: await addEquipment({
+					...newEquipmentForm.data,
+					id: '',
+					image: data.path,
+					isDeleted: newEquipmentForm.data.isDeleted!
+				}),
 				allEquipment: await getAllEquipment()
 			}
 		};
 	},
 	edit: async ({ request, locals: { supabase } }) => {
-		const formData = await request.formData();
-		const editEquipmentForm = await superValidate(formData, EZodSchema);
+		const editEquipmentForm = await superValidate(request, zod(EZodSchema));
+		const imageFile = editEquipmentForm.data.image as File;
 
-		if (
-			(formData.get('eImage') as File).name ||
-			(formData.get('eImage') as File).name != 'undefined'
-		) {
+		if (imageFile.name || imageFile != undefined) {
 			const { data, error } = await supabase.storage
 				.from(SupabaseEnum.BUCKET)
-				.update(editEquipmentForm.data.image as string, formData.get('eImage') as File, {
+				.update(imageFile.name, editEquipmentForm.data.image, {
 					upsert: true,
 					cacheControl: '0'
 				});
@@ -82,6 +74,7 @@ export const actions: Actions = {
 				return fail(400, { error });
 			}
 
+			// Doc: When the image is updated, the cache is invalidated so the new image is shown.
 			editEquipmentForm.data.image = data.path + '?cache=' + new Date().getTime();
 		}
 
@@ -92,21 +85,53 @@ export const actions: Actions = {
 		return {
 			form: {
 				...editEquipmentForm,
-				response: await editEquipment(editEquipmentForm.data),
+				response: await editEquipment({
+					...editEquipmentForm.data,
+					id: '',
+					image: imageFile.name,
+					isDeleted: editEquipmentForm.data.isDeleted!
+				}),
 				allEquipment: await getAllEquipment()
 			}
 		};
 	},
+	delete: async ({ request }) => {
+		const formData = await request.formData();
+		const id = formData.get('id') as string;
+
+		return {
+			response: await toggleEquipment(id, true)
+		};
+	},
+	enable: async ({ request }) => {
+		const formData = await request.formData();
+		const id = formData.get('id') as string;
+	
+		return {
+			response: await toggleEquipment(id, false)
+		};
+	},
 	categoryCRUD: async ({ request }) => {
-		const categoryForm = await superValidate(request, ECategoryCRUDZSchema);
+		const categoryForm = await superValidate(request, zod(ECategoryCRUDZSchema));
 		if (!categoryForm.valid) {
+			return fail(400, { categoryForm });
+		}
+
+		if (
+			categoryForm.data.add.length === 0 &&
+			categoryForm.data.edit.length === 0 &&
+			categoryForm.data.delete.length === 0
+		) {
 			return fail(400, { categoryForm });
 		}
 
 		return {
 			form: {
 				response: {
-					upsert: await upsertECategories([...categoryForm.data.add, ...categoryForm.data.edit]),
+					upsert:
+						categoryForm.data.add.length > 0 || categoryForm.data.edit.length > 0
+							? await upsertECategories([...categoryForm.data.add, ...categoryForm.data.edit])
+							: [],
 					delete:
 						categoryForm.data.delete.length > 0
 							? await deleteECategories(categoryForm.data.delete)

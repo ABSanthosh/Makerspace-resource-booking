@@ -1,22 +1,19 @@
 <script lang="ts">
 	import Pane from '$components/Pane.svelte';
 	import nanoid from '$lib/nanoid';
-	import type { ECategoriesSchema, ECategoryCRUDZSchema } from '$lib/schemas';
+	import type { ECategoriesSchema, ECategoryCRUDSchema } from '$lib/schemas';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms/client';
 
 	export let { eCategories, modal, formStore } = $$props as {
 		modal: boolean;
-		formStore: SuperValidated<typeof ECategoryCRUDZSchema>;
+		formStore: SuperValidated<ECategoryCRUDSchema>;
 		eCategories: ECategoriesSchema[];
 	};
 
 	const {
 		form: categoryForm,
-		errors: categoryErrors,
 		enhance: categoryEnhance,
-		tainted: categoryTainted,
-		constraints: categoryConstraints
 	} = superForm(formStore, {
 		id: 'categoryForm',
 		dataType: 'json',
@@ -81,12 +78,12 @@
 									class="CrispButton"
 									disabled={!operations.add.every((i) => i.name.trim() !== '')}
 									on:click={() => {
-										// if all of the operations are not empty, then the button is disabled
+										// Doc: if all of the operations are not empty, then the button is disabled
 										if (!operations.add.every((i) => i.name.trim() !== '')) {
 											return;
 										}
 
-										// if edit is already on, save it to the operations.edit and reset the editModeItem
+										// Doc: if edit is already on, save it to the operations.edit and reset the editModeItem
 										if (editModeItem !== null) {
 											operations.edit = [...operations.edit, editModeItem];
 											editModeItem = null;
