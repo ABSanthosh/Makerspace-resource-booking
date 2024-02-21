@@ -4,6 +4,9 @@
 	import { type Writable } from 'svelte/store';
 	import EquipmentPane from './FormPanes/EquipmentPane.svelte';
 	import CategoryPane from './FormPanes/CategoryPane.svelte';
+	import clickOutside from '$directive/clickOutside';
+	import { enhance } from '$app/forms';
+
 	export let data: PageData;
 
 	$: ({ newEquipmentForm, editEquipmentForm, allEquipment, eCategories, categoryForm } = data);
@@ -11,6 +14,7 @@
 	$: editItem = {} as ESchema | null;
 
 	$: eCategoriesModal = false;
+	$: editMenuId = '';
 
 	const resetForm = (form: Writable<ESchema>) => {
 		form.set({
@@ -19,8 +23,7 @@
 			image: '',
 			instances: [],
 			description: '',
-			eCategoriesId: '',
-			imageFile: undefined
+			eCategoriesId: ''
 		});
 	};
 
@@ -77,28 +80,81 @@
 			<tbody>
 				{#if searchEquipment && searchEquipment.length > 0}
 					{#each searchEquipment as item}
-						<tr>
+						<tr class:disabled={item.isDeleted} title="Equipment is disabled">
 							<td> {item.name} </td>
 							<td> {item.model} </td>
 							<td> {item.category.name} </td>
 							<td> {item.instances.length} </td>
 							<td>
-								<button
-									class="CrispButton"
-									data-icon={String.fromCharCode(58835)}
-									style="--crp-button-height: 24px; 
+								<details
+									data-no-marker
+									use:clickOutside
+									open={editMenuId === item.id}
+									class="CrispMenu AdminEquipment__content--menu"
+									on:outclick={() => {
+										editMenuId = '';
+										return false;
+									}}
+								>
+									<summary>
+										<button
+											class="CrispButton"
+											data-icon={String.fromCharCode(58835)}
+											style="--crp-button-height: 24px; 
 												--crp-button-width: auto; 
 												--crp-button-padding-left: 6px; 
 												--crp-button-padding-right: 6px;"
-									data-type="ghost"
-									on:click={() => {
-										editItem = {
-											...item,
-											image: item.image.split('?')[0]
-										};
-										equipmentModal = true;
-									}}
-								/>
+											data-type="ghost"
+											on:click={() => (editMenuId = item.id)}
+										/>
+									</summary>
+									<ul
+										class="AdminEquipment__content--box CrispMenu__content"
+										data-align="top"
+										data-direction="left"
+									>
+										<button
+											class="CrispButton"
+											data-border="false"
+											class:active={editMenuId === item.id}
+											on:click={() => {
+												editItem = {
+													...item,
+													// DOC: We have to remove the ?cache from the image URL so it won't be cycled
+													// the name of the image file when we update the image
+													image: item.image.split('?')[0]
+												};
+												equipmentModal = true;
+												editMenuId = '';
+											}}
+										>
+											Edit
+										</button>
+										<form
+											use:enhance
+											class="w-100"
+											method="POST"
+											action="/admin/equipment?/{item.isDeleted ? 'enable' : 'delete'}"
+											on:submit={() => {
+												return confirm(
+													`Are you sure you want to ${
+														item.isDeleted ? 're-enable' : 'delete'
+													} this equipment?`
+												);
+											}}
+										>
+											<input type="hidden" name="id" value={item.id} />
+											<button
+												class="CrispButton"
+												data-type={item.isDeleted ? 'success' : 'danger'}
+												data-border="false"
+												class:active={editMenuId === item.id}
+											>
+												{item.isDeleted ? 'Enable' : 'Delete'}
+											</button>
+										</form>
+									</ul>
+								</details>
 							</td>
 						</tr>
 					{/each}
@@ -153,6 +209,49 @@
 
 			&::-webkit-scrollbar {
 				width: 6px;
+			}
+
+			.disabled {
+				background-color: var(--lightOrangeBrown);
+				& > td {
+					font-style: italic;
+					color: var(--orangeBrown);
+					border-top: 1px solid var(--orangeBrown);
+					border-bottom: 1px solid var(--orangeBrown);
+				}
+			}
+
+			&--box {
+				@include box(100px, auto);
+
+				button {
+					width: 100%;
+					// border: 0px solid transparent;
+
+					&.active {
+						--crp-button-border: 1px solid #dfe3e6;
+					}
+				}
+			}
+
+			&--menu {
+				min-width: unset;
+				@include box(34px, 24px);
+				--crp-menu-offset: 4px;
+				& > summary {
+					@include box(34px, 24px);
+					border: 1px solid transparent;
+					box-shadow: 0px 0px 0px transparent;
+					padding: 0;
+
+					&:hover {
+						background-color: transparent;
+					}
+
+					&::before {
+						content: '';
+					}
+				}
 			}
 		}
 	}
