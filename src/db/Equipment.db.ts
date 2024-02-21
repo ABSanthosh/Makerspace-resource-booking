@@ -1,9 +1,9 @@
 import { getStorageUrl } from '$lib/SupabaseUtils';
 import { db } from '$lib/prisma';
-import type { ECategoriesSchema, EItemSchema, ESchema } from '$lib/schemas';
+import type { ECategoriesSchema, EItemSchema } from '$lib/schemas';
 import type { ECategories, Equipment } from '@prisma/client';
 
-export async function addEquipment(equipment: ESchema) {
+export async function addEquipment(equipment: Equipment & { instances: EItemSchema[] }) {
 	return await db.equipment.create({
 		data: {
 			name: equipment.name,
@@ -82,34 +82,7 @@ export async function getEquipmentById(
 		});
 }
 
-export async function editEquipment(equipment: ESchema) {
-	// await db.$transaction(
-	// 	equipment.instances.map((item) =>
-	// 		db.eInstances.upsert({
-	// 			where: {
-	// 				id: item.id!,
-	// 				AND: {
-	// 					equipmentId: equipment.id!
-	// 				}
-	// 			},
-	// 			update: {
-	// 				id: item.id,
-	// 				name: item.name,
-	// 				description: item.description!,
-	// 				status: item.status,
-	// 				cost: item.cost
-	// 			},
-	// 			create: {
-	// 				equipmentId: equipment.id!,
-	// 				name: item.name,
-	// 				description: item.description!,
-	// 				status: item.status,
-	// 				cost: item.cost
-	// 			}
-	// 		})
-	// 	)
-	// );
-
+export async function editEquipment(equipment: Equipment) {
 	return await db.equipment.update({
 		where: {
 			id: equipment.id

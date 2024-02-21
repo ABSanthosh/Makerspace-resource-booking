@@ -32,12 +32,17 @@ export const EZodSchema = z.object({
 	id: z.string().optional().or(z.literal('')),
 	name: z.string().min(2),
 	model: z.string().min(2),
-	// string needed for addEquipment function parameter image type
-	image: z.string(),
-	imageFile: z.instanceof(File).optional(),
+	image: z
+		.custom<File>((f) => f instanceof File, 'Please upload a file.')
+		.refine(
+			(f) => ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'].includes(f.type),
+			'.jpg, .jpeg, .png and .webp files are accepted.'
+		)
+		.refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
+		.or(z.string()),
 	description: z.string().optional().default(''),
 	instances: z.array(EItemZodSchema),
-	eCategoriesId: z.string().min(7)
+	eCategoriesId: z.string().min(7, { message: 'Category is required' })
 });
 
 export type ESchema = z.infer<typeof EZodSchema>;
