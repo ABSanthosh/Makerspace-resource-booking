@@ -1,31 +1,31 @@
-.CrispMessageList {
-	--crp-message-list-gap: 8px;
-
+.CrispMessage {
 	&[data-type='error'] {
 		--crp-message-list-color: #ff605c;
 		--crp-message-list-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='23' height='21' viewBox='0 0 23 21' fill='none'%3E%3Cpath d='M11.9999 7.99998V12M11.9999 16H12.0099M21.7299 17L13.7299 2.99998C13.5555 2.69218 13.3025 2.43617 12.9969 2.25805C12.6912 2.07993 12.3437 1.98608 11.9899 1.98608C11.6361 1.98608 11.2887 2.07993 10.983 2.25805C10.6773 2.43617 10.4244 2.69218 10.2499 2.99998L2.24993 17C2.07361 17.3053 1.98116 17.6519 1.98194 18.0045C1.98272 18.3571 2.07671 18.7032 2.25438 19.0078C2.43204 19.3124 2.68708 19.5646 2.99362 19.7388C3.30017 19.9131 3.64734 20.0032 3.99993 20H19.9999C20.3508 19.9996 20.6955 19.9069 20.9992 19.7313C21.303 19.5556 21.5551 19.3031 21.7304 18.9991C21.9057 18.6951 21.998 18.3504 21.9979 17.9995C21.9978 17.6486 21.9054 17.3039 21.7299 17Z' stroke='%23FF605C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 	}
 
 	gap: 8px;
+	@include box($height: auto);
+	color: var(--crp-message-list-color);
+	@include make-flex($dir: row, $just: flex-start, $align: flex-start);
+
+	&::before {
+		content: '';
+		width: 16px;
+		height: 20px;
+		flex-shrink: 0;
+		background-size: contain;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-image: var(--crp-message-list-icon);
+	}
+}
+
+.CrispMessageList {
+	--crp-message-list-gap: 8px;
+
 	list-style-type: none;
 	@include box($height: auto);
+	gap: var(--crp-message-list-gap);
 	@include make-flex($align: flex-start, $just: flex-start);
-
-	&__item {
-		gap: 8px;
-		@include box($height: auto);
-		color: var(--crp-message-list-color);
-		@include make-flex($dir: row, $just: flex-start, $align: flex-start);
-
-		&::before {
-			content: '';
-			width: 16px;
-			height: 20px;
-			flex-shrink: 0;
-			background-size: contain;
-			background-position: center;
-			background-repeat: no-repeat;
-			background-image: var(--crp-message-list-icon);
-		}
-	}
 }
