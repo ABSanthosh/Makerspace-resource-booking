@@ -24,7 +24,14 @@ export async function addEquipment(equipment: Equipment & { instances: EItemSche
 }
 
 export async function getAllEquipmentPreview(): Promise<
-	{ id: string; name: string; model: string; eCategoriesId: string; image: string }[]
+	{
+		id: string;
+		name: string;
+		model: string;
+		image: string;
+		isDeleted: boolean;
+		eCategoriesId: string;
+	}[]
 > {
 	// @ts-ignore
 	return await db.equipment
@@ -34,7 +41,8 @@ export async function getAllEquipmentPreview(): Promise<
 				name: true,
 				model: true,
 				image: true,
-				eCategoriesId: true
+				eCategoriesId: true,
+				isDeleted: true
 			}
 		})
 		.then((res) => {
@@ -95,6 +103,28 @@ export async function editEquipment(equipment: Equipment) {
 			eCategoriesId: equipment.eCategoriesId
 		}
 	});
+}
+
+export async function toggleEquipment(id: string, state: boolean) {
+	// Doc: Mark as deleted so that we can keep the data for historical purposes i.e bookings
+	return await db.$transaction([
+		db.equipment.update({
+			where: {
+				id
+			},
+			data: {
+				isDeleted: state
+			}
+		}),
+		db.eInstance.updateMany({
+			where: {
+				equipmentId: id
+			},
+			data: {
+				isDeleted: state
+			}
+		})
+	]);
 }
 
 export async function getECategories() {

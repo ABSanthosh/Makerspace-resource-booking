@@ -23,7 +23,8 @@ export const EItemZodSchema = z.object({
 	name: z.string().min(2),
 	description: z.string().optional().or(z.literal('')),
 	status: z.nativeEnum(EStatus),
-	cost: z.string().min(1).default('0')
+	cost: z.string().min(1).default('0'),
+	isDeleted: z.boolean().optional().or(z.literal(false))
 });
 
 export type EItemSchema = z.infer<typeof EItemZodSchema>;
@@ -42,7 +43,8 @@ export const EZodSchema = z.object({
 		.or(z.string()),
 	description: z.string().optional().default(''),
 	instances: z.array(EItemZodSchema),
-	eCategoriesId: z.string().min(7, { message: 'Category is required' })
+	eCategoriesId: z.string().min(7, { message: 'Category is required' }),
+	isDeleted: z.boolean().optional().or(z.literal(false))
 });
 
 export type ESchema = z.infer<typeof EZodSchema>;
