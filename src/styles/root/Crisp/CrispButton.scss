@@ -17,7 +17,7 @@
 		--crp-button-color-hover: #11181c;
 
 		--crp-button-background-color: #fbfcfd;
-		--crp-button-background-color-hover: #f4f6f8;
+		--crp-button-background-color-hover: #ecedf1;
 
 		--crp-button-border: 1px solid #dfe3e6;
 		--crp-button-border-hover: 1px solid #d7dbdf;
@@ -109,6 +109,12 @@
 		--crp-button-border-hover: 1px solid #005197;
 
 		--crp-button-box-shadow: transparent;
+	}
+
+	&[data-border='false'] {
+		--crp-button-border: none !important;
+		--crp-button-border-hover: none !important;
+		--crp-button-box-shadow: none !important;
 	}
 
 	// Basic

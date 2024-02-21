@@ -1,4 +1,10 @@
 ## Short run ToDo
+- [ ] Add dropdown in admin equipment page to edit or delete equipment
+
+## Long run ToDo
+- [ ] Convert isDeleted to SecondaryStatus enum with values: deleted, disabled, enabled with default value enabled so that we can delete the ones with no dependents
+
+## Completed Short run ToDo
 
 - [ ] Add cart contents to cart page(responsive)
   - [x] UI
@@ -8,7 +14,7 @@
 - [x] custom claim updating from profile table is replacing instead of modifying
 - [x] Add user profile page to fill before changing is_new to false and give access to other pages
 
-## Long run ToDo / Technical debt
+## Completed Long run ToDo / Technical debt
 
 - [x] Change equipment schema
 - [x] Add equipment category
