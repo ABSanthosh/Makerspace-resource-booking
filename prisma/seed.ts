@@ -132,7 +132,7 @@ async function makeNewBucket(name: string) {
 			VALUES ('${name}', '${name}', true);`),
 			...Object.values(policies).map((policy) => prisma.$executeRawUnsafe(policy))
 		]);
-	} catch (e) { }
+	} catch (e) {}
 }
 
 async function seedEquipments() {
@@ -224,6 +224,66 @@ async function seedCategories() {
 	]);
 }
 
+async function seedContentManagement() {
+	const content = {
+		header: {
+			logo: '',
+			snuLogo: ''
+		},
+		hero: {
+			header: 'Welcome to SNIoE Makerspace!',
+			description: `Welcome to SNIoE's Makerspace, an embodiment of our commitment to STEAM education and innovation. Here, we offer a dynamic collaborative environment fostering interdisciplinary research and project creation.\n\n\n Our Makerspace is equipped with cutting-edge, user-friendly tools and state-of-the-art technologies, ensuring accessibility and affordability. It serves as a hub for world-class research test-beds, facilitating the creation of quality publications.\n\n\n As a one-stop destination, our space fuels solutions in sustainability, green energy, intelligent building, robotics, networks, and AI. Additionally, we provide comprehensive training and workshops, ensuring efficient and safe utilization of tools and machines.`
+		},
+		hours: [
+			{
+				day: 'Monday',
+				from: '8:00 AM',
+				to: '5:00 PM'
+			},
+			{
+				day: 'Tuesday',
+				from: '8:00 AM',
+				to: '5:00 PM'
+			},
+			{
+				day: 'Wednesday',
+				from: '8:00 AM',
+				to: '5:00 PM'
+			},
+			{
+				day: 'Thursday',
+				from: '8:00 AM',
+				to: '5:00 PM'
+			}
+		],
+		location: `# Location & ContactA004, A-block, Ground floor, Shiv Nadar University, Greater Noida, Uttar Pradesh 203207\n\n# General Enquiries\n**Reception:** +91 (120)2663811\n**Email:**: [Jhon Doe](mailto:jhon.doe@gmail.com)\n\n`
+	};
+	// {
+	// 	header: 'Location & Contact',
+	// 	location:
+	// 		'A004, A-block, Ground floor, Shiv Nadar University, Greater Noida, Uttar Pradesh 203207',
+	// 	phone: [
+	// 		{
+	// 			role: 'Reception',
+	// 			number: '+91 (120)2663811'
+	// 		}
+	// 	],
+	// 	email: [
+	// 		{
+	// 			role: 'General',
+	// 			address: 'jhon.doe@gmail.com',
+	// 			name: 'Jhon Doe'
+	// 		}
+	// 	]
+	// }
+	await prisma.contentManagement.create({
+		data: {
+			path: '/',
+			data: content
+		}
+	});
+}
+
 async function main() {
 	await seedCategories()
 		.then(() => console.log('✅ eCategories seeded'))
@@ -258,6 +318,10 @@ async function main() {
 
 	await seedEquipments()
 		.then(() => console.log('✅ Equipments seeded'))
+		.catch((e) => console.error(`🚨 ${e}`));
+
+	await seedContentManagement()
+		.then(() => console.log('✅ Content Management seeded'))
 		.catch((e) => console.error(`🚨 ${e}`));
 }
 

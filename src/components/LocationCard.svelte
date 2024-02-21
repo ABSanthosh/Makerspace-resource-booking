@@ -21,7 +21,6 @@
 			</li>
 		</ul>
 	</div>
-	<!-- <img src="/assets/images/map.png" alt="map" /> -->
 	<span />
 </section>
 

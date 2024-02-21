@@ -153,3 +153,10 @@ model Booking {
 
   user Profile @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
+
+model ContentManagement {
+  id        String   @id @unique @default(nanoid(7))
+  path      String   @unique
+  data      Json
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
