@@ -4,6 +4,7 @@ import type { PageServerLoad } from './$types';
 import { CartItemZSchema } from '$lib/schemas';
 import { fail, type Actions, redirect } from '@sveltejs/kit';
 import { addToCart } from '$db/User.db';
+import { zod } from 'sveltekit-superforms/adapters';
 
 // @ts-ignore
 export const load: PageServerLoad = async ({ params }) => {
@@ -13,13 +14,14 @@ export const load: PageServerLoad = async ({ params }) => {
 	}
 	return {
 		equipment,
-		cartItemForm: await superValidate(CartItemZSchema)
+		cartItemForm: await superValidate(zod(CartItemZSchema)),
+		isDeleted: equipment.isDeleted ? params.eId : undefined
 	};
 };
 
 export const actions: Actions = {
 	add: async ({ request, locals: { supabase } }) => {
-		const cartItemForm = await superValidate(request, CartItemZSchema);
+		const cartItemForm = await superValidate(request, zod(CartItemZSchema));
 
 		if (!cartItemForm.valid) {
 			return fail(400, { cartItemForm });

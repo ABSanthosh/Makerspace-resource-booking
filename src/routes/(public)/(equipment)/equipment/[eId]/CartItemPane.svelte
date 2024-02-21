@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Pane from '$components/Pane.svelte';
 	import Calendar from '$components/Calendar.svelte';
-	import type { CartItemZSchema } from '$lib/schemas';
+	import type { CartItemSchema } from '$lib/schemas';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
@@ -11,7 +11,7 @@
 		userId: string;
 		instanceId: string;
 		equipmentId: string;
-		formStore: SuperValidated<typeof CartItemZSchema>;
+		formStore: SuperValidated<CartItemSchema>;
 	};
 
 	const { form, errors, enhance } = superForm(formStore, {
