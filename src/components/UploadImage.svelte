@@ -1,19 +1,11 @@
 <script lang="ts">
 	import { getStorageUrl } from '$lib/SupabaseUtils';
+	import type { ValidationErrors } from 'sveltekit-superforms';
 
-	let file: HTMLInputElement;
-
-	export let { name, defaultVal, errors } = $$props as {
+	export let { name, errors, image } = $$props as {
 		name: string;
-		defaultVal: string;
-		errors: string[];
-	};
-
-	let preview: string | undefined;
-
-	const onImageUpload = (e: Event) => {
-		const target = e.target as HTMLInputElement;
-		preview = URL.createObjectURL(target.files![0]);
+		image: File | string | null;
+		errors: string[] | ValidationErrors<any>;
 	};
 </script>
 
@@ -21,32 +13,43 @@
 	<span data-mandatory style="color: inherit;"> Image </span>
 	<div
 		class="UploadImage__dnd"
-		data-image={preview !== undefined || defaultVal !== '' ? true : undefined}
+		data-image={typeof image !== null && image !== '' ? true : undefined}
 	>
 		<input
 			{name}
 			id={name}
 			type="file"
-			bind:this={file}
+			accept="image/*"
+			on:input={(e) => {
+				const imageFile = e.currentTarget.files?.item(0) ?? null;
+				if (typeof image === 'string' && imageFile) {
+					// Rename the file to the same name as image. This will be used when equipment is updated
+					// to replace the old image with the new one.
+					const tempFile = new File([imageFile], image, {
+						type: imageFile.type,
+						lastModified: imageFile.lastModified
+					});
+					image = tempFile;
+				} else if (imageFile) {
+					image = imageFile;
+				}
+			}}
 			class="CrispInput"
-			on:change={(e) => onImageUpload(e)}
+			aria-invalid={errors ? 'true' : undefined}
 		/>
-		{#if preview || defaultVal !== ''}
-			<img
-				src={(defaultVal.includes('cache') ? getStorageUrl(defaultVal) : preview) ||
-					getStorageUrl(defaultVal)}
-				alt="Uploaded"
-			/>
+		{#if typeof image === 'string' && image !== ''}
+			<img src={getStorageUrl(image)} alt="Old" />
+		{:else if image}
+			<img src={URL.createObjectURL(image)} alt="Uploaded" />
 		{:else}
 			Upload image
 		{/if}
 	</div>
+
 	{#if errors}
-		<ul class="CrispMessageList w-100" data-type="error">
-			{#each errors as error}
-				<li class="CrispMessageList__item">{error}</li>
-			{/each}
-		</ul>
+		<p class="CrispMessage w-100" data-type="error">
+			{errors}
+		</p>
 	{/if}
 </label>
 
