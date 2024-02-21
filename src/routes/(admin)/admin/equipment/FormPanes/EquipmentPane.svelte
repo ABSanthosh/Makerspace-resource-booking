@@ -87,7 +87,7 @@
 			action="/admin/equipment?/{actionType}"
 			id={isEdit ? 'editEquipmentForm' : 'newEquipmentForm'}
 		>
-			<SuperDebug data={$form} />
+			<!-- <SuperDebug data={$form} /> -->
 			<label class="CrispLabel" for="eCategoriesId">
 				<span data-mandatory style="color: inherit;"> Category </span>
 				<select

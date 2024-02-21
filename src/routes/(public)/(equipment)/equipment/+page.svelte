@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
-	import { BreadCrumbStore } from '$store/BreadCrumbStore';
+	import { BreadCrumbStore, isEquipmentDeletedStore } from '$store/BreadCrumbStore';
 
 	export let data: PageData;
 
 	onMount(() => {
+		isEquipmentDeletedStore.set(false);
 		BreadCrumbStore.update(() => {
 			return [
 				{
@@ -48,7 +49,7 @@
 			if (categoryFilter === '') return item;
 			return item.eCategoriesId === categoryFilter;
 		}) as item (item.id)}
-			<div class="Equipment__card">
+			<div class="Equipment__card" class:disabled={item.isDeleted}>
 				<img src={item.image} alt={item.name} />
 				<h2 class="w-100">{item.name}</h2>
 				<p class="w-100">{item.model}</p>
@@ -86,9 +87,29 @@
 			padding: 20px;
 			@include box();
 			background: #fff;
+			position: relative;
 			border-radius: 10px;
 			@include make-flex($just: flex-start);
 			box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+
+			&.disabled {
+				border: 1px solid var(--darkYellowOrange);
+
+				&::before {
+					content: 'Deleted';
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 38px;
+					font-size: 20px;
+					border-radius: 10px 10px 0 0;
+					border-bottom: 1px solid var(--darkYellowOrange);
+					color: var(--orangeBrown);
+					background: var(--yellowOrange);
+					@include make-flex($just: center, $align: center);
+				}
+			}
 
 			& > img {
 				border-radius: 7px;

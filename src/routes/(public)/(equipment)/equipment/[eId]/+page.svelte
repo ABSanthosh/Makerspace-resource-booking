@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
-	import { BreadCrumbStore } from '$store/BreadCrumbStore';
+	import { BreadCrumbStore, isEquipmentDeletedStore } from '$store/BreadCrumbStore';
 	import AvailabilityPane from './CartItemPane.svelte';
 	import type { EItemSchema } from '$lib/schemas';
 	import { EStatus } from '@prisma/client';
@@ -10,6 +10,7 @@
 	export let data: PageData;
 	$: ({ equipment } = data);
 	onMount(() => {
+		isEquipmentDeletedStore.set(data.isDeleted);
 		BreadCrumbStore.update(() => {
 			return [
 				{
@@ -86,32 +87,40 @@
 					</tr>
 				</thead>
 				<tbody>
-					{#each equipment.instances as item}
+					{#if !equipment.isDeleted}
+						{#each equipment.instances as item}
+							<tr>
+								<td>{item.name}</td>
+								<td>{equipment.model}</td>
+								<td>{equipment.category.name}</td>
+								<td>{item.cost}</td>
+								<td>{item.status}</td>
+								<td>
+									{#if user}
+										<button
+											class="FancyButton"
+											disabled={item.status !== EStatus.available}
+											data-type="black-outline"
+											on:click={() => {
+												selectedInstance = item;
+												availabilityPane = true;
+											}}
+										>
+											View
+										</button>
+									{:else}
+										<i> Login to view availability </i>
+									{/if}
+								</td>
+							</tr>
+						{/each}
+					{:else}
 						<tr>
-							<td>{item.name}</td>
-							<td>{equipment.model}</td>
-							<td>{equipment.category.name}</td>
-							<td>{item.cost}</td>
-							<td>{item.status}</td>
-							<td>
-								{#if user}
-									<button
-										class="FancyButton"
-										disabled={item.status !== EStatus.available}
-										data-type="black-outline"
-										on:click={() => {
-											selectedInstance = item;
-											availabilityPane = true;
-										}}
-									>
-										View
-									</button>
-								{:else}
-									<i> Login to view availability </i>
-								{/if}
+							<td colspan="6">
+								<i class="w-100 Row--center"> This equipment has been deleted </i>
 							</td>
 						</tr>
-					{/each}
+					{/if}
 				</tbody>
 				<tfoot>
 					<tr>

@@ -1,12 +1,14 @@
 <script lang="ts">
 	import BreadCrumb from '$components/BreadCrumb.svelte';
-	import { BreadCrumbStore } from '$store/BreadCrumbStore';
+	import { BreadCrumbStore, isEquipmentDeletedStore } from '$store/BreadCrumbStore';
+	import { onMount } from 'svelte';
+	import type { PageData } from './equipment/$types';
 
 	// This is the layout for all the routes inside (equipment) group.
 </script>
 
 <div class="EquipmentLayout">
-	<BreadCrumb crumbs={$BreadCrumbStore} />
+	<BreadCrumb type={$isEquipmentDeletedStore ? 'disabled' : undefined} crumbs={$BreadCrumbStore} />
 	<slot />
 </div>
 
