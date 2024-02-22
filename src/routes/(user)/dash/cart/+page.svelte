@@ -38,13 +38,10 @@
 						class="CrispInput"
 						bind:value={$form.mentor}
 						{...$constraints.mentor}
+						aria-invalid={$errors.mentor ? 'true' : undefined}
 					/>
 					{#if $errors.mentor}
-						<ul class="CrispMessageList w-100" data-type="error">
-							{#each $errors.mentor as error}
-								<li class="CrispMessageList__item">{error}</li>
-							{/each}
-						</ul>
+						<p class="CrispMessage w-100" data-type="error">{$errors.mentor}</p>
 					{/if}
 				</div>
 			</label>
@@ -64,14 +61,11 @@
 						data-type="text-area"
 						placeholder="Tell us about your project...(Course, Research, etc)"
 						bind:value={$form.description}
+						aria-invalid={$errors.description ? 'true' : undefined}
 						{...$constraints.description}
 					></textarea>
 					{#if $errors.description}
-						<ul class="CrispMessageList w-100" data-type="error">
-							{#each $errors.description as error}
-								<li class="CrispMessageList__item">{error}</li>
-							{/each}
-						</ul>
+						<p class="CrispMessage w-100" data-type="error">{$errors.description}</p>
 					{/if}
 				</div>
 			</label>
@@ -91,13 +85,10 @@
 						class="CrispInput"
 						bind:value={$form.deadline}
 						{...$constraints.deadline}
+						aria-invalid={$errors.deadline ? 'true' : undefined}
 					/>
 					{#if $errors.deadline}
-						<ul class="CrispMessageList w-100" data-type="error">
-							{#each $errors.deadline as error}
-								<li class="CrispMessageList__item">{error}</li>
-							{/each}
-						</ul>
+						<p class="CrispMessage w-100" data-type="error">{$errors.deadline}</p>
 					{/if}
 				</div>
 			</label>

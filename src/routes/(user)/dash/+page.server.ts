@@ -2,13 +2,15 @@ import type { Actions, PageServerLoad } from './$types';
 import { getUserProfile, updateUserProfile } from '$db/User.db';
 import { UserProfileZodSchema } from '$lib/schemas';
 import { superValidate } from 'sveltekit-superforms/server';
+import { zod } from 'sveltekit-superforms/adapters';
 
 // @ts-ignore
 export const load: PageServerLoad = async ({ locals }) => {
-	const userProfileForm = await superValidate(UserProfileZodSchema);
+	const userProfileForm = await superValidate(zod(UserProfileZodSchema));
 	// console.log(userProfileForm);
 	if (Object.keys(locals).length === 0) return { userProfileForm };
 
+	// TODO: change to use v2 of superForms
 	const dbUserProfile = await getUserProfile(locals.session?.user.id!);
 	userProfileForm.data = {
 		...userProfileForm.data,
@@ -32,7 +34,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
 	update: async ({ request, locals: { session, supabase, getSession } }) => {
-		const userProfileForm = await superValidate(request, UserProfileZodSchema);
+		const userProfileForm = await superValidate(request, zod(UserProfileZodSchema));
 
 		if (!userProfileForm.valid) {
 			return { userProfileForm };

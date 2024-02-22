@@ -1,5 +1,6 @@
 ## Short run ToDo
 - [ ] Add dropdown in admin equipment page to edit or delete equipment
+- [ ] search and do "// TODO: change to use v2 of superForms", https://superforms.rocks/get-started#populate-form-from-database
 
 ## Long run ToDo
 - [ ] Convert isDeleted to SecondaryStatus enum with values: deleted, disabled, enabled with default value enabled so that we can delete the ones with no dependents
