@@ -144,7 +144,8 @@
 	box-shadow: var(--crp-button-box-shadow);
 	background-color: var(--crp-button-background-color);
 
-	&:hover:not(:disabled) {
+	&:hover:not(:disabled),
+	&:focus:not(:disabled) {
 		color: var(--crp-button-color-hover);
 		border: var(--crp-button-border-hover);
 		background-color: var(--crp-button-background-color-hover);
