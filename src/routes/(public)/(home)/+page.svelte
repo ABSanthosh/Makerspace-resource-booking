@@ -1,18 +1,12 @@
 <script lang="ts">
 	import LocationCard from '$components/LocationCard.svelte';
 	import { CMSStore } from '$store/SupaStore';
-
 </script>
 
 <div class="LandingPage">
 	<section class="LandingPage__hero">
 		<div class="LandingPage__hero--intro Col--a-start gap-15">
-			<h1>
-				{$CMSStore.data.hero.header}
-			</h1>
-			<p>
-				{@html $CMSStore.data.hero.description}
-			</p>
+			{@html $CMSStore.data.hero}
 		</div>
 		<div class="LandingPage__slot">
 			<h3>Makerspace Hours</h3>
@@ -47,7 +41,7 @@
 			}
 
 			&--intro {
-				& > h1 {
+				& > :global(h1) {
 					font-size: 36px;
 					font-weight: 700;
 					line-height: 1.5;
@@ -60,7 +54,7 @@
 						font-size: 28px;
 					}
 				}
-				& > p {
+				& > :global(p) {
 					font-size: 17px;
 					line-height: 1.5;
 					text-align: justify;
