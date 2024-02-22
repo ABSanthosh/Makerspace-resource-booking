@@ -156,6 +156,7 @@ model Booking {
 
 model ContentManagement {
   id        String   @id @unique @default(nanoid(7))
+  name      String
   pathname  String   @unique
   data      Json
   updatedAt DateTime @default(now()) @map("updated_at")

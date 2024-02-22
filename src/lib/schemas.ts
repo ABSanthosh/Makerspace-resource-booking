@@ -95,3 +95,10 @@ export const BookingZSchema = z.object({
 });
 
 export type BookingSchema = z.infer<typeof BookingZSchema>;
+
+export const CMSZSchema = z.object({
+	id: z.string(),
+	data: z.string()
+});
+
+export type CMSSchema = z.infer<typeof CMSZSchema>;
