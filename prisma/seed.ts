@@ -256,29 +256,33 @@ async function seedContentManagement() {
 				to: '5:00 PM'
 			}
 		],
-		location: `# Location & ContactA004, A-block, Ground floor, Shiv Nadar University, Greater Noida, Uttar Pradesh 203207\n\n# General Enquiries\n**Reception:** +91 (120)2663811\n**Email:**: [Jhon Doe](mailto:jhon.doe@gmail.com)\n\n`
+		location: {
+			header: 'Location & Contact',
+			location:
+				'A004, A-block, Ground floor, Shiv Nadar University, Greater Noida, Uttar Pradesh 203207',
+			phone: [
+				{
+					role: 'Reception',
+					number: '+91 (120)2663811'
+				},
+				{
+					role: 'General',
+					number: '+91 (120)2663811'
+				}
+			],
+			email: [
+				{
+					role: 'General',
+					address: 'jhon.doe@gmail.com',
+					name: 'Jhon Doe'
+				}
+			]
+		}
 	};
-	// {
-	// 	header: 'Location & Contact',
-	// 	location:
-	// 		'A004, A-block, Ground floor, Shiv Nadar University, Greater Noida, Uttar Pradesh 203207',
-	// 	phone: [
-	// 		{
-	// 			role: 'Reception',
-	// 			number: '+91 (120)2663811'
-	// 		}
-	// 	],
-	// 	email: [
-	// 		{
-	// 			role: 'General',
-	// 			address: 'jhon.doe@gmail.com',
-	// 			name: 'Jhon Doe'
-	// 		}
-	// 	]
-	// }
+	// `# Location & ContactA004, A-block, Ground floor, Shiv Nadar University, Greater Noida, Uttar Pradesh 203207\n\n# General Enquiries\n**Reception:** +91 (120)2663811\n**Email:**: [Jhon Doe](mailto:jhon.doe@gmail.com)\n\n`
 	await prisma.contentManagement.create({
 		data: {
-			path: '/',
+			pathname: '/',
 			data: content
 		}
 	});

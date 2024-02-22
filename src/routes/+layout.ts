@@ -22,6 +22,7 @@ export const load: LayoutLoad = async ({ fetch, data, depends, url }) => {
 		pathname:
 			decodeURIComponent(url.pathname)
 				.split('/')
-				.filter((key) => key !== '')[0] || ''
+				.filter((key) => key !== '')[0] || '',
+		content: data.content
 	};
 };

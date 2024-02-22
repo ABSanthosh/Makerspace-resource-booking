@@ -1,21 +1,27 @@
+<script lang="ts">
+	import { CMSStore } from '$store/SupaStore';
+</script>
+
 <section class="LocationCard">
 	<div class="LocationCard__content">
-		<h2>Location and Contact</h2>
-		<p>A004, A-block, Ground floor, Shiv Nadar University, Greater Noida, Uttar Pradesh 203207</p>
+		<h2>{$CMSStore.data.location.header}</h2>
+		<p>{$CMSStore.data.location.location}</p>
 
 		<h2>General Queries?</h2>
 		<ul>
-			<li>Email: <a href="mailto:" target="_blank"> jhon.doe@gmail.com </a></li>
+			<li>
+				Email: <a href="mailto:" target="_blank"> {$CMSStore.data.location.email[0].address} </a>
+			</li>
 			<li>
 				Phone:
 				<ul>
 					<li>
-						University Lan Ext.:
-						<a href="tel:">+91 1234567890</a>
+						{$CMSStore.data.location.phone[0].role}
+						<a href="tel:">{$CMSStore.data.location.phone[0].number}</a>
 					</li>
 					<li>
-						Lab Incharge:
-						<a href="tel:">+91 1234567890</a>
+						{$CMSStore.data.location.phone[1].role}
+						<a href="tel:">{$CMSStore.data.location.phone[1].number}</a>
 					</li>
 				</ul>
 			</li>

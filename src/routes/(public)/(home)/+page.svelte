@@ -1,56 +1,23 @@
 <script lang="ts">
 	import LocationCard from '$components/LocationCard.svelte';
-	// export let data;
-	// $: ({ supabase, session } = data);
+	import { CMSStore } from '$store/SupaStore';
 
-	const hours = [
-		{
-			day: 'Monday',
-			from: '8:00 AM',
-			to: '5:00 PM'
-		},
-		{
-			day: 'Tuesday',
-			from: '8:00 AM',
-			to: '5:00 PM'
-		},
-		{
-			day: 'Wednesday',
-			from: '8:00 AM',
-			to: '5:00 PM'
-		},
-		{
-			day: 'Thursday',
-			from: '8:00 AM',
-			to: '5:00 PM'
-		}
-	];
 </script>
 
 <div class="LandingPage">
 	<section class="LandingPage__hero">
 		<div class="LandingPage__hero--intro Col--a-start gap-15">
-			<h1>Welcome to SNIoE Makerspace!</h1>
+			<h1>
+				{$CMSStore.data.hero.header}
+			</h1>
 			<p>
-				Welcome to SNIoE's Makerspace, an embodiment of our commitment to STEAM education and
-				innovation. Here, we offer a dynamic collaborative environment fostering interdisciplinary
-				research and project creation.
-				<br />
-				<br />
-				Our Makerspace is equipped with cutting-edge, user-friendly tools and state-of-the-art technologies,
-				ensuring accessibility and affordability. It serves as a hub for world-class research test-beds,
-				facilitating the creation of quality publications.
-				<br />
-				<br />
-				As a one-stop destination, our space fuels solutions in sustainability, green energy, intelligent
-				building, robotics, networks, and AI. Additionally, we provide comprehensive training and workshops,
-				ensuring efficient and safe utilization of tools and machines.
+				{@html $CMSStore.data.hero.description}
 			</p>
 		</div>
 		<div class="LandingPage__slot">
 			<h3>Makerspace Hours</h3>
 			<ul>
-				{#each hours as hour}
+				{#each $CMSStore.data.hours as hour}
 					<li>
 						{hour.day}
 						<hr />
