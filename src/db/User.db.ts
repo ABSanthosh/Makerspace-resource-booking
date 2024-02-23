@@ -24,7 +24,9 @@ export async function updateUserProfile(profile: UserProfileSchema & { id: strin
 		where: { id: profile.id },
 		data: {
 			...profile,
-			isNew: false
+			isNew: false,
+			// No freaking idea why this is needed
+			typeData: profile.typeData ?? { null: null }
 		}
 	});
 }
