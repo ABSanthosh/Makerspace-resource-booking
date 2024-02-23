@@ -1,9 +1,9 @@
-import { getContentByPathname } from '$db/CMS.db';
+import { getAllContent } from '$db/CMS.db';
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({ locals, url }) => {
+export const load: LayoutServerLoad = async ({ locals }) => {
 	return {
 		session: locals.session,
-		content: await getContentByPathname(url.pathname)
+		content: await getAllContent()
 	};
 };

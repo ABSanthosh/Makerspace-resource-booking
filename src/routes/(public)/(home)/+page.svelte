@@ -1,17 +1,18 @@
 <script lang="ts">
 	import LocationCard from '$components/LocationCard.svelte';
 	import { CMSStore } from '$store/SupaStore';
+	const data = $CMSStore.find((item) => item.pathname === '/')?.data;
 </script>
 
 <div class="LandingPage">
 	<section class="LandingPage__hero">
 		<div class="LandingPage__hero--intro Col--a-start gap-15">
-			{@html $CMSStore.data.hero}
+			{@html data.hero}
 		</div>
 		<div class="LandingPage__slot">
 			<h3>Makerspace Hours</h3>
 			<ul>
-				{#each $CMSStore.data.hours as hour}
+				{#each data.hours as hour}
 					<li>
 						{hour.day}
 						<hr />

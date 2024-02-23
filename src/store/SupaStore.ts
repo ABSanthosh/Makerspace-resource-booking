@@ -12,4 +12,4 @@ export let CMSStore = writable<{
 	pathname: string;
 	data: any;
 	updatedAt: Date;
-}>();
+}[]>();
