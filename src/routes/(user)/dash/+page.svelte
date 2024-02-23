@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { SessionStore } from '$store/SupaStore';
+	import { ProfileType } from '@prisma/client';
 	import type { PageData } from './$types';
 	import { superForm } from 'sveltekit-superforms/client';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
@@ -8,7 +9,7 @@
 	// $: ({ profileData } = data);
 	$: user = $SessionStore!.user;
 
-	const { 
+	const {
 		form: profileForm,
 		errors,
 		enhance,
@@ -33,7 +34,7 @@
 	{/if}
 	<section class="Dashboard__section">
 		<header class="Dashboard__section--header">
-			<h5>Profile Information</h5>
+			<h5>General Information</h5>
 		</header>
 		<form
 			use:enhance
@@ -42,6 +43,7 @@
 			id="userProfileForm"
 			class="Dashboard__section--content"
 		>
+			<SuperDebug bind:data={$profileForm} />
 			<label
 				for="name"
 				class="CrispLabel"
@@ -60,11 +62,9 @@
 						{...$constraints.name}
 					/>
 					{#if $errors.name}
-						<ul class="CrispMessageList w-100" data-type="error">
-							{#each $errors.name as error}
-								<li class="CrispMessageList__item">{error}</li>
-							{/each}
-						</ul>
+						<p class="CrispMessage w-100" data-type="error">
+							{$errors.name}
+						</p>
 					{/if}
 				</div>
 			</label>
@@ -87,11 +87,9 @@
 						{...$constraints.email}
 					/>
 					{#if $errors.email}
-						<ul class="CrispMessageList w-100" data-type="error">
-							{#each $errors.email as error}
-								<li class="CrispMessageList__item">{error}</li>
-							{/each}
-						</ul>
+						<p class="CrispMessage w-100" data-type="error">
+							{$errors.email}
+						</p>
 					{/if}
 				</div>
 			</label>
@@ -114,124 +112,33 @@
 						{...$constraints.mobile}
 					/>
 					{#if $errors.mobile}
-						<ul class="CrispMessageList w-100" data-type="error">
-							{#each $errors.mobile as error}
-								<li class="CrispMessageList__item">{error}</li>
-							{/each}
-						</ul>
+						<p class="CrispMessage w-100" data-type="error">
+							{$errors.mobile}
+						</p>
 					{/if}
 				</div>
 			</label>
 
 			<label
-				for="branch"
+				for="profileType"
 				class="CrispLabel"
 				data-direction="row"
 				style="justify-content: space-between;"
 			>
-				<span style="color: inherit;" data-mandatory> Branch </span>
+				<span style="color: inherit;" data-mandatory> Category </span>
 				<div>
-					<input
-						id="branch"
-						type="text"
-						name="branch"
-						class="CrispInput"
-						bind:value={$profileForm.branch}
-						{...$constraints.branch}
-					/>
-					{#if $errors.branch}
-						<ul class="CrispMessageList w-100" data-type="error">
-							{#each $errors.branch as error}
-								<li class="CrispMessageList__item">{error}</li>
-							{/each}
-						</ul>
+					<select class="CrispSelect w-100" bind:value={$profileForm.type} {...$constraints.type}>
+						<option value={ProfileType.STUDENT}>Student</option>
+						<option value={ProfileType.FACULTY}>Faculty</option>
+						<option value={ProfileType.STAFF}>Staff</option>
+					</select>
+					{#if $errors.type}
+						<p class="CrispMessage w-100" data-type="error">
+							{$errors.type}
+						</p>
 					{/if}
 				</div>
 			</label>
-
-			<label
-				for="department"
-				class="CrispLabel"
-				data-direction="row"
-				style="justify-content: space-between;"
-			>
-				<span style="color: inherit;" data-mandatory> Department </span>
-				<div>
-					<input
-						id="department"
-						type="text"
-						name="department"
-						class="CrispInput"
-						bind:value={$profileForm.department}
-						{...$constraints.department}
-					/>
-					{#if $errors.department}
-						<ul class="CrispMessageList w-100" data-type="error">
-							{#each $errors.department as error}
-								<li class="CrispMessageList__item">{error}</li>
-							{/each}
-						</ul>
-					{/if}
-				</div>
-			</label>
-
-			<label
-				for="year"
-				class="CrispLabel"
-				data-direction="row"
-				style="justify-content: space-between;"
-			>
-				<span style="color: inherit;" data-mandatory> Year </span>
-				<div>
-					<input
-						id="year"
-						type="number"
-						name="year"
-						class="CrispInput"
-						bind:value={$profileForm.year}
-						on:focus={(e) => {
-							// @ts-ignore
-							e.target.select();
-						}}
-						{...$constraints.year}
-					/>
-					{#if $errors.year}
-						<ul class="CrispMessageList w-100" data-type="error">
-							{#each $errors.year as error}
-								<li class="CrispMessageList__item">{error}</li>
-							{/each}
-						</ul>
-					{/if}
-				</div>
-			</label>
-
-			<label
-				for="userId"
-				class="CrispLabel"
-				data-direction="row"
-				style="justify-content: space-between;"
-			>
-				<span style="color: inherit;" data-mandatory> Roll No. / Employee ID </span>
-				<div>
-					<input
-						id="userId"
-						type="text"
-						name="userId"
-						class="CrispInput"
-						bind:value={$profileForm.userId}
-						{...$constraints.userId}
-					/>
-					{#if $errors.userId}
-						<ul class="CrispMessageList w-100" data-type="error">
-							{#each $errors.userId as error}
-								<li class="CrispMessageList__item">{error}</li>
-							{/each}
-						</ul>
-					{/if}
-				</div>
-			</label>
-
-			<!-- TODO: add tagged inputs -->
 		</form>
 		<footer class="Dashboard__section--footer">
 			<button
@@ -239,6 +146,335 @@
 				data-type="success"
 				style="--crp-button-height: 25px;"
 				form="userProfileForm"
+			>
+				Save
+			</button>
+		</footer>
+	</section>
+	<section class="Dashboard__section">
+		<header class="Dashboard__section--header">
+			<h5>User specific Information</h5>
+		</header>
+		<form
+			use:enhance
+			method="POST"
+			action="/dash?/update"
+			id="updateTypeDataForm"
+			class="Dashboard__section--content"
+		>
+			{#if $profileForm.type === ProfileType.STUDENT && $profileForm.typeData.yearOfStudy}
+				<label
+					for="yearOfStudy"
+					class="CrispLabel"
+					data-direction="row"
+					style="justify-content: space-between;"
+				>
+					<span style="color: inherit;" data-mandatory> Year of Study </span>
+					<div>
+						<input
+							id="yearOfStudy"
+							type="number"
+							name="yearOfStudy"
+							class="CrispInput"
+							bind:value={$profileForm.typeData.yearOfStudy}
+						/>
+						<!-- {...$constraints.typeData.yearOfStudy} -->
+						<!-- {#if $errors.yearOfStudy}
+							<p class="CrispMessage w-100" data-type="error">
+								{$errors.yearOfStudy}
+							</p>
+						{/if} -->
+					</div>
+				</label>
+				<label
+					for="branch"
+					class="CrispLabel"
+					data-direction="row"
+					style="justify-content: space-between;"
+				>
+					<span style="color: inherit;" data-mandatory> Branch </span>
+					<div>
+						<input
+							id="branch"
+							type="text"
+							name="branch"
+							class="CrispInput"
+							bind:value={$profileForm.typeData.branch}
+							{...$constraints.branch}
+						/>
+						{#if $errors.branch}
+							<p class="CrispMessage w-100" data-type="error">
+								{$errors.branch}
+							</p>
+						{/if}
+					</div>
+				</label>
+				<label
+					for="department"
+					class="CrispLabel"
+					data-direction="row"
+					style="justify-content: space-between;"
+				>
+					<span style="color: inherit;" data-mandatory> Department </span>
+					<div>
+						<input
+							id="department"
+							type="text"
+							name="department"
+							class="CrispInput"
+							bind:value={$profileForm.typeData.department}
+						/>
+						<!-- {...$constraints.department}
+						{#if $errors.department}
+							<p class="CrispMessage w-100" data-type="error">
+								{$errors.department}
+							</p>
+						{/if} -->
+					</div>
+				</label>
+				<label
+					for="studentId"
+					class="CrispLabel"
+					data-direction="row"
+					style="justify-content: space-between;"
+				>
+					<span style="color: inherit;" data-mandatory> Student ID </span>
+					<div>
+						<input
+							id="studentId"
+							type="text"
+							name="studentId"
+							class="CrispInput"
+							bind:value={$profileForm.typeData.studentId}
+						/>
+						<!-- {...$constraints.studentId}
+						{#if $errors.studentId}
+							<p class="CrispMessage w-100" data-type="error">
+								{$errors.studentId}
+							</p>
+						{/if} -->
+					</div>
+				</label>
+				<label
+					for="clubs"
+					class="CrispLabel"
+					data-direction="row"
+					style="justify-content: space-between;"
+				>
+					<span style="color: inherit;"> Clubs </span>
+					<div>
+						<input
+							id="clubs"
+							type="text"
+							name="clubs"
+							class="CrispInput"
+							bind:value={$profileForm.typeData.clubs}
+						/>
+						<!-- {...$constraints.clubs}
+						{#if $errors.clubs}
+							<p class="CrispMessage w-100" data-type="error">
+								{$errors.clubs}
+							</p>
+						{/if} -->
+					</div>
+				</label>
+			{:else if $profileForm.type === ProfileType.FACULTY}
+				<label
+					for="department"
+					class="CrispLabel"
+					data-direction="row"
+					style="justify-content: space-between;"
+				>
+					<span style="color: inherit;" data-mandatory> Department </span>
+					<div>
+						<input
+							id="department"
+							type="text"
+							name="department"
+							class="CrispInput"
+							bind:value={$profileForm.typeData.department}
+						/>
+						<!-- {...$constraints.department}
+						{#if $errors.department}
+							<p class="CrispMessage w-100" data-type="error">
+								{$errors.department}
+							</p>
+						{/if} -->
+					</div>
+				</label>
+				<label
+					for="branch"
+					class="CrispLabel"
+					data-direction="row"
+					style="justify-content: space-between;"
+				>
+					<span style="color: inherit;" data-mandatory> Branch </span>
+					<div>
+						<input
+							id="branch"
+							type="text"
+							name="branch"
+							class="CrispInput"
+							bind:value={$profileForm.typeData.branch}
+						/>
+						<!-- {...$constraints.branch}
+						{#if $errors.branch}
+							<p class="CrispMessage w-100" data-type="error">
+								{$errors.branch}
+							</p>
+						{/if} -->
+					</div>
+				</label>
+				<label
+					for="designation"
+					class="CrispLabel"
+					data-direction="row"
+					style="justify-content: space-between;"
+				>
+					<span style="color: inherit;" data-mandatory> Designation </span>
+					<div>
+						<input
+							id="designation"
+							type="text"
+							name="designation"
+							class="CrispInput"
+							bind:value={$profileForm.typeData.designation}
+						/>
+						<!-- {...$constraints.designation}
+						{#if $errors.designation}
+							<p class="CrispMessage w-100" data-type="error">
+								{$errors.designation}
+							</p>
+						{/if} -->
+					</div>
+				</label>
+				<label
+					for="facultyId"
+					class="CrispLabel"
+					data-direction="row"
+					style="justify-content: space-between;"
+				>
+					<span style="color: inherit;" data-mandatory> Faculty ID </span>
+					<div>
+						<input
+							id="facultyId"
+							type="text"
+							name="facultyId"
+							class="CrispInput"
+							bind:value={$profileForm.typeData.facultyId}
+						/>
+						<!-- {...$constraints.facultyId}
+						{#if $errors.facultyId}
+							<p class="CrispMessage w-100" data-type="error">
+								{$errors.facultyId}
+							</p>
+						{/if} -->
+					</div>
+				</label>
+			{:else if $profileForm.type === ProfileType.STAFF}
+				<label
+					for="department"
+					class="CrispLabel"
+					data-direction="row"
+					style="justify-content: space-between;"
+				>
+					<span style="color: inherit;" data-mandatory> Department </span>
+					<div>
+						<input
+							id="department"
+							type="text"
+							name="department"
+							class="CrispInput"
+							bind:value={$profileForm.typeData.department}
+						/>
+						<!-- {...$constraints.department}
+						{#if $errors.department}
+							<p class="CrispMessage w-100" data-type="error">
+								{$errors.department}
+							</p>
+						{/if} -->
+					</div>
+				</label>
+				<label
+					for="branch"
+					class="CrispLabel"
+					data-direction="row"
+					style="justify-content: space-between;"
+				>
+					<span style="color: inherit;" data-mandatory> Branch </span>
+					<div>
+						<input
+							id="branch"
+							type="text"
+							name="branch"
+							class="CrispInput"
+							bind:value={$profileForm.typeData.branch}
+						/>
+						<!-- {...$constraints.branch}
+						{#if $errors.branch}
+							<p class="CrispMessage w-100" data-type="error">
+								{$errors.branch}
+							</p>
+						{/if} -->
+					</div>
+				</label>
+				<label
+					for="designation"
+					class="CrispLabel"
+					data-direction="row"
+					style="justify-content: space-between;"
+				>
+					<span style="color: inherit;" data-mandatory> Designation </span>
+					<div>
+						<input
+							id="designation"
+							type="text"
+							name="designation"
+							class="CrispInput"
+							bind:value={$profileForm.typeData.designation}
+						/>
+						<!-- {...$constraints.designation}
+						{#if $errors.designation}
+							<p class="CrispMessage w-100" data-type="error">
+								{$errors.designation}
+							</p>
+						{/if} -->
+					</div>
+				</label>
+				<label
+					for="staffId"
+					class="CrispLabel"
+					data-direction="row"
+					style="justify-content: space-between;"
+				>
+					<span style="color: inherit;" data-mandatory> Staff ID </span>
+					<div>
+						<input
+							id="staffId"
+							type="text"
+							name="staffId"
+							class="CrispInput"
+							bind:value={$profileForm.typeData.staffId}
+						/>
+						<!-- {...$constraints.staffId}
+						{#if $errors.staffId}
+							<p class="CrispMessage w-100" data-type="error">
+								{$errors.staffId}
+							</p>
+						{/if} -->
+					</div>
+				</label>
+			{:else}
+				<p>Choose a category to update the form.</p>
+			{/if}
+		</form>
+
+		<footer class="Dashboard__section--footer">
+			<button
+				class="CrispButton"
+				data-type="success"
+				style="--crp-button-height: 25px;"
+				form="updateTypeDataForm"
 			>
 				Save
 			</button>
