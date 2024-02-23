@@ -1,19 +1,53 @@
-import { BookingStatus, EStatus, Role } from '@prisma/client';
-import { z } from 'zod';
+import { BookingStatus, EStatus, ProfileType, Role } from '@prisma/client';
+import { ZodSchema, z } from 'zod';
 
 const phoneRegex = new RegExp(/(\+91\s)?\d{10}/);
+
+const studentZSchema = z.object({
+	yearOfStudy: z.number().min(1),
+	branch: z.string().min(2),
+	department: z.string().min(2),
+	studentId: z.string().min(2),
+	clubs: z.array(z.string()).optional()
+});
+
+const facultyZSchema = z.object({
+	department: z.string().min(2),
+	branch: z.string().min(2),
+	designation: z.string().min(2),
+	facultyId: z.string().min(2)
+});
+
+const staffZSchema = z.object({
+	department: z.string().min(2),
+	branch: z.string().min(2),
+	designation: z.string().min(2),
+	staffId: z.string().min(2)
+});
+
+const profileSchema = z.discriminatedUnion('type', [
+	z.object({
+		type: z.literal(ProfileType.STUDENT),
+		typeData: studentZSchema
+	}),
+	z.object({
+		type: z.literal(ProfileType.FACULTY),
+		typeData: facultyZSchema
+	}),
+	z.object({
+		type: z.literal(ProfileType.STAFF),
+		typeData: staffZSchema
+	})
+]);
 
 export const UserProfileZodSchema = z.object({
 	name: z.string().min(2),
 	mobile: z.string().regex(phoneRegex, { message: 'Invalid phone number' }),
 	email: z.string().email(),
-	department: z.string().min(2),
-	branch: z.string().min(2),
-	userId: z.string().min(2),
-	year: z.number().min(4),
 	role: z.nativeEnum(Role),
-	isNew: z.boolean().optional(),
-	clubs: z.array(z.string()).optional()
+	isNew: z.boolean(),
+	type: z.nativeEnum(ProfileType),
+	typeData: z.union([studentZSchema, facultyZSchema, staffZSchema])
 });
 
 export type UserProfileSchema = z.infer<typeof UserProfileZodSchema>;
