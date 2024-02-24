@@ -47,6 +47,7 @@
 	{#if editor}
 		<ul class="Editor__toolbar">
 			<button
+				type="button"
 				on:click={() => editor.chain().focus().toggleBold().run()}
 				disabled={!editor.can().chain().focus().toggleBold().run()}
 				class:isActive={editor.isActive('bold')}
@@ -56,6 +57,7 @@
 				{@html Icons.bold}
 			</button>
 			<button
+				type="button"
 				on:click={() => editor.chain().focus().toggleItalic().run()}
 				disabled={!editor.can().chain().focus().toggleItalic().run()}
 				class:isActive={editor.isActive('italic')}
@@ -65,6 +67,7 @@
 				{@html Icons.italic}
 			</button>
 			<button
+				type="button"
 				on:click={() => editor.chain().focus().toggleStrike().run()}
 				disabled={!editor.can().chain().focus().toggleStrike().run()}
 				class:isActive={editor.isActive('strike')}
@@ -74,6 +77,7 @@
 				{@html Icons.strikethrough}
 			</button>
 			<button
+				type="button"
 				on:click={() => editor.chain().focus().toggleCode().run()}
 				disabled={!editor.can().chain().focus().toggleCode().run()}
 				class:isActive={editor.isActive('code')}
@@ -83,6 +87,7 @@
 				{@html Icons.inlineCode}
 			</button>
 			<button
+				type="button"
 				on:click={() => editor.chain().focus().setParagraph().run()}
 				class:isActive={editor.isActive('paragraph')}
 				class="CrispButton"
@@ -92,6 +97,7 @@
 			</button>
 
 			<button
+				type="button"
 				on:click={() => editor.chain().focus().toggleUnderline().run()}
 				class:isActive={editor.isActive('underline')}
 				class="CrispButton"
@@ -126,6 +132,7 @@
 				</summary>
 				<ul class="CrispMenu__content" data-align="right" data-direction="bottom">
 					<button
+						type="button"
 						on:click={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
 						class:isActive={editor.isActive('heading', { level: 1 })}
 						class="CrispButton w-100"
@@ -136,6 +143,7 @@
 						<span> Biggest </span>
 					</button>
 					<button
+						type="button"
 						on:click={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
 						class:isActive={editor.isActive('heading', { level: 2 })}
 						class="CrispButton w-100"
@@ -146,6 +154,7 @@
 						<span> Bigger </span>
 					</button>
 					<button
+						type="button"
 						on:click={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
 						class:isActive={editor.isActive('heading', { level: 3 })}
 						class="CrispButton w-100"
@@ -156,6 +165,7 @@
 						<span> Medium </span>
 					</button>
 					<button
+						type="button"
 						on:click={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
 						class:isActive={editor.isActive('heading', { level: 4 })}
 						class="CrispButton w-100"
@@ -166,6 +176,7 @@
 						<span> Normal </span>
 					</button>
 					<button
+						type="button"
 						on:click={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
 						class:isActive={editor.isActive('heading', { level: 5 })}
 						class="CrispButton w-100"
@@ -176,6 +187,7 @@
 						<span> Small </span>
 					</button>
 					<button
+						type="button"
 						on:click={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
 						class:isActive={editor.isActive('heading', { level: 6 })}
 						class="CrispButton w-100"
@@ -214,6 +226,7 @@
 				</summary>
 				<ul class="CrispMenu__content" data-align="right" data-direction="bottom">
 					<button
+						type="button"
 						on:click={() => editor.chain().focus().toggleBulletList().run()}
 						class:isActive={editor.isActive('bulletList')}
 						class="CrispButton w-100"
@@ -224,6 +237,7 @@
 						<span> Bullet List </span>
 					</button>
 					<button
+						type="button"
 						on:click={() => editor.chain().focus().toggleOrderedList().run()}
 						class:isActive={editor.isActive('orderedList')}
 						class="CrispButton w-100"
@@ -234,6 +248,7 @@
 						<span> Ordered List </span>
 					</button>
 					<button
+						type="button"
 						on:click={() => editor.chain().focus().toggleCodeBlock().run()}
 						class:isActive={editor.isActive('codeBlock')}
 						class="CrispButton w-100"
@@ -244,6 +259,7 @@
 						<span> Code Block </span>
 					</button>
 					<button
+						type="button"
 						on:click={() => editor.chain().focus().toggleBlockquote().run()}
 						class:isActive={editor.isActive('blockquote')}
 						class="CrispButton w-100"
@@ -254,6 +270,7 @@
 						<span> Blockquote </span>
 					</button>
 					<button
+						type="button"
 						class="CrispButton w-100"
 						data-type="ghost"
 						on:click={() => editor.chain().focus().setHorizontalRule().run()}
@@ -263,6 +280,7 @@
 						<span> Horizontal Rule </span>
 					</button>
 					<button
+						type="button"
 						class="CrispButton w-100"
 						data-type="ghost"
 						on:click={() => editor.chain().focus().setHardBreak().run()}
@@ -272,6 +290,7 @@
 						<span> Hard Break </span>
 					</button>
 					<button
+						type="button"
 						class="CrispButton w-100"
 						data-type="clear"
 						on:click={() => editor.chain().focus().unsetAllMarks().run()}
@@ -280,6 +299,7 @@
 						<span> Clear marks </span>
 					</button>
 					<button
+						type="button"
 						class="CrispButton w-100"
 						data-type="clear"
 						on:click={() => editor.chain().focus().clearNodes().run()}
@@ -292,6 +312,7 @@
 
 			<div class="Row--center gap-10" style="margin-left: auto;">
 				<button
+					type="button"
 					class="CrispButton"
 					on:click={() => editor.chain().focus().undo().run()}
 					disabled={!editor.can().chain().focus().undo().run()}
@@ -300,6 +321,7 @@
 					{@html Icons.undo}
 				</button>
 				<button
+					type="button"
 					class="CrispButton"
 					on:click={() => editor.chain().focus().redo().run()}
 					disabled={!editor.can().chain().focus().redo().run()}
