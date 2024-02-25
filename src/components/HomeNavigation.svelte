@@ -23,13 +23,13 @@
 	<details
 		use:clickOutside
 		bind:open={isNavOpen}
-		class="FancyMenu HomeNav--mobile"
+		class="CrispMenu HomeNav--mobile"
 		on:outclick={() => (isNavOpen = false)}
 	>
-		<summary data-no-marker data-icon={String.fromCharCode(58839)}>
+		<summary>
 			{HOME_ROUTES.filter((path) => path.route === `/${pathname}`)[0].name}
 		</summary>
-		<ul class="HomeNav__box FancyMenu__content HomeNav--content" data-align="right">
+		<ul class="HomeNav__box CrispMenu__content HomeNav--content" data-align="right">
 			{#each HOME_ROUTES as path}
 				<a href={path.route} class="HomeNav--item" class:active={path.route === `/${pathname}`}>
 					{path.name}
