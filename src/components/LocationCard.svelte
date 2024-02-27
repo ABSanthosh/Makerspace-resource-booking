@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { CMSStore } from '$store/SupaStore';
+
+	const data = $CMSStore.find((item) => item.pathname === '/')?.data;
 </script>
 
 <section class="LocationCard">
 	<div class="LocationCard__content">
-		{@html $CMSStore.data.location}
+		{@html data.location}
 	</div>
 	<span />
 </section>
