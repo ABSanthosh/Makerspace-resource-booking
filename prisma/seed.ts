@@ -1,7 +1,13 @@
 import { EStatus, Prisma, PrismaClient } from '@prisma/client';
+import { createBrowserClient } from '@supabase/ssr';
 import { SupabaseEnum } from '../src/lib/Enums';
+import fs from 'fs';
 
 const prisma = new PrismaClient();
+const supabase = createBrowserClient(
+	process.env.PUBLIC_SUPABASE_URL!,
+	process.env.PUBLIC_SUPABASE_ANON_KEY!
+);
 
 const queries = {
 	onNewUser: [
@@ -120,16 +126,28 @@ async function makeNewBucket(name: string) {
 			CREATE POLICY "delete_equipment_image"
 			ON storage.objects FOR DELETE
 			TO authenticated
-			USING (bucket_id = '${name}');`
+			USING (bucket_id = '${name}');`,
+		seed:
+			// Doc: needed only in development to let seed.ts upload images
+			process.env.NODE_ENV === 'production'
+				? ''
+				: `
+			CREATE POLICY "seed_equipment_image"
+			ON storage.objects FOR INSERT
+			TO anon
+			WITH CHECK (bucket_id = '${name}');`
 	};
 
 	// We don't want to delete the bucket if it already exists
 	try {
 		// Create a new bucket: https://supabase.com/docs/guides/storage/buckets/creating-buckets?language=sql
+		await prisma.$executeRawUnsafe(`
+		INSERT INTO storage.buckets (id, name, public)
+		VALUES ('${name}', '${name}', true);`);
+	} catch (e) {}
+
+	try {
 		await prisma.$transaction([
-			prisma.$executeRawUnsafe(`
-			INSERT INTO storage.buckets (id, name, public)
-			VALUES ('${name}', '${name}', true);`),
 			...Object.values(policies).map((policy) => prisma.$executeRawUnsafe(policy))
 		]);
 	} catch (e) {}
@@ -144,8 +162,7 @@ async function seedEquipments() {
 			image: 'e6G_5Bt.png',
 			description:
 				'The CR-10 from Creality is a workhorse of a printer. Able to work for long periods non-stop, it is more than capable of handling large prints requiring many hours of print time. Likewise, parts, upgrades, and materials for this printer are very cost-effective and readily available.',
-			eCategoriesId: 'pw2mtah',
-			imageFile: undefined
+			eCategoriesId: 'pw2mtah'
 		},
 		{
 			id: 'cAZ0IdL',
@@ -157,8 +174,7 @@ async function seedEquipments() {
 			IMPRESSIVE POWER: With 8200W of power and a 220V input, this welding machine packs a punch. It provides the energy required for various welding tasks, whether you're working on thin materials or thicker pieces.
 			WHAT'S IN THE BOX: Along with the welding machine, your purchase includes essential accessories to enhance your welding experience, including a brush for cleaning, a belt for easy transport, a protective welding mask, an electrode holder, and ground clamps.
 			HOT START: Igniting the welding arc can sometimes be a challenge, especially in less than ideal conditions. The Hot Start function addresses this issue by providing a quick and easy ignition of the welding arc. This feature significantly reduces the risk of electrode sticking, ensuring a smooth start to your welding projects.`,
-			eCategoriesId: 'bgwbjwd',
-			imageFile: undefined
+			eCategoriesId: 'bgwbjwd'
 		}
 	];
 
@@ -192,6 +208,14 @@ async function seedEquipments() {
 			equipmentId: 'cAZ0IdL'
 		}
 	];
+
+	await supabase.storage
+		.from(SupabaseEnum.BUCKET)
+		.upload('e6G_5Bt.png', fs.readFileSync('prisma/seed/e6G_5Bt.png'));
+
+	await supabase.storage
+		.from(SupabaseEnum.BUCKET)
+		.upload('lYXj4np.jpg', fs.readFileSync('prisma/seed/lYXj4np.jpg'));
 
 	await prisma.$transaction([
 		prisma.equipment.createMany({
@@ -266,7 +290,6 @@ async function main() {
 	await seedCategories()
 		.then(() => console.log('✅ eCategories seeded'))
 		.catch((e) => console.error(`🚨 ${e}`));
-
 	// Values are passed without quotes and postgresql only considers
 	// single quotes as quotes and double quotes as identifiers.
 	// Postgres converts all uppercase identifiers to lowercase.
@@ -277,30 +300,23 @@ async function main() {
 		name: "''",
 		mobile: "''",
 		email: "''",
-		department: "''",
-		branch: "''",
-		userid: "''",
-		year: 'null',
-		clubs: "'[]'"
+		type: "'STUDENT'",
+		type_data: "'{}'"
 	})
 		.then(() => console.log('✅ onNewUser trigger created'))
 		.catch((e) => console.error(`🚨 ${e}`));
-
 	await onDeleteUser()
 		.then(() => console.log('✅ onDeleteUser trigger created'))
 		.catch((e) => console.error(`🚨 ${e}`));
-
 	await makeNewBucket(SupabaseEnum.BUCKET)
 		.then(() => console.log('✅ Bucket created'))
 		.catch((e) => console.error(`🚨 ${e}`));
-
 	await seedEquipments()
 		.then(() => console.log('✅ Equipments seeded'))
 		.catch((e) => console.error(`🚨 ${e}`));
-
 	await seedContentManagement()
 		.then(() => console.log('✅ Content Management seeded'))
-		.catch((e) => console.error(`🚨 ${e}`));
+		.catch((e) => console.error(`🚨 CMS Error`));
 }
 
 main()
