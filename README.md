@@ -1,136 +1,80 @@
-## Short run ToDo
-- [ ] Add dropdown in admin equipment page to edit or delete equipment
-- [ ] search and do "// TODO: change to use v2 of superForms", https://superforms.rocks/get-started#populate-form-from-database
+# Makerspace Resource management
+Content and resource management for SNIoE makerspace 
 
-## Long run ToDo
-- [ ] Convert isDeleted to SecondaryStatus enum with values: deleted, disabled, enabled with default value enabled so that we can delete the ones with no dependents
+## Notes
+1) [Todo](/notes/todo.md)
+2) [Meeting notes](/notes/meeting-notes.md)
+3) [Data flow](/notes/data-flow.md)
 
-## Completed Short run ToDo
+## Development Setup
+1) Fork and clone the repo
+2) Install dependencies
+```sh
+yarn 
+#or
+npm install 
+```
+3) Install supabase cli: [ref](https://supabase.com/docs/guides/cli/getting-started)
+```sh
+yarn add -D supabase
+#or
+npm install supabase --save-dev
+```
 
-- [ ] Add cart contents to cart page(responsive)
-  - [x] UI
-  - [ ] Functionality
-- [x] add condition to check if user is signed in and not admin before adding to cart
-- [x] category editing option in admin page
-- [x] custom claim updating from profile table is replacing instead of modifying
-- [x] Add user profile page to fill before changing is_new to false and give access to other pages
+4) Install [Docker Desktop](https://docs.docker.com/desktop/)
 
-## Completed Long run ToDo / Technical debt
+5) Start supabase </br>
+All the config for the local supabase dev environment is in [`config.toml`](/supabase/config.toml). We are basically self hosting the supabase server in a docker container. 
+```sh
+supabase start
+```
 
-- [x] Change equipment schema
-- [x] Add equipment category
-- [x] Add multiple types
-- [x] [User dashboard with editing](https://supabase.com/docs/guides/getting-started/tutorials/with-sveltekit?language=ts)
-- [x] Hook up new equipment schema to frontend
-- [x] Error in nested instances loop not binding
-- [x] try to refactor new and edit equipment pane into one
-- [x] make time sheet
-- [x] return to equipment page if manually opened a wrong equipment id
-- [x] image upload in equipment
-- [ ] Adding and deleting equipment is not working. Need to do it individually. Eg. If new instances are added, need to create it instead of upserting it and if deleted, need to delete. If it is edited, need to update it instead of upserting it.
-- [x] add error handling for equipment image upload9
-- [x] clear form on closing pane(new and edit equipment)
-- [x] seed data for inserting equipment data
-- [x] (urgent) replace admin type from profile to custom claim
-- [ ] remove already booked slots from the times list
-- [x] disabled buttons on panes if the forms are not filled properly. Maybe look into tainted property from superforms
-- [x] protected route redirect in client side
-- [x] Input
-  - [x] Refactor input to FancyInput css
-  - [x] Refactor all lableInput components to use CrispInput style
+6) Seed the database </br>
+Apart from [`prisma.schema`](/prisma/schema.prisma), we also have a seed file [`seed.ts`](/prisma/seed.ts) to seed the database with some triggers, functions and data for testing.
+```sh
+yarn db # check package.json for the script
+# or
+npm run db
+```
 
-### Schema discussion
+7) Start the dev server
+```sh
+yarn dev
+# or
+npm run dev
+```
 
-<details>
-<summary>Equipment</summary>
-For each equipment
 
-- *Generic Name eg: 3d printer
-- *make and model
-- *description
-- *image
-- videos
 
-For each item
-
-- *name
-- *description
-- *cost
-- manuals
-- status: operational, down-for-maintenance, out-of-service
-
-Equipment categories (as editable)
-
-- 3d printer
-- CNC (laser cutter)
-- welding
-- Hand power tools
-- hand tools
-- Design station
-- testing eqquipment
-- PCB design
-- standalone Power tools
-</details>
-
-<details>
-<summary>Material</summary>
-
-Electronic repository (loanables)
-
-- *quantity
-- *make and model
-- *loaned quantity
-- *image
-- description
-
-Material repository (consumables)
-
-- *name
-- *quantity
-- *dimensions
-  - *type: length, area, volume, breadths
-  - *value
-  - *unit: need the list of possible units
-- description
-</details>
-
-<details>
-<summary>User profile</summary>
-- name
-- mobile
-- departments
-- branch
-- roll num
-- email
-- year
-- clubs they are part of
-
-</details>
-
-### To setup auth in prod
-
-1. Add `http://127.0.0.1:54321/auth/v1/callback` to google console to Authorised redirect URIs
-2. Add `http://localhost:5173/` in `site_url` to `config.toml`
+### To see supabase status
+```
+supabase status
+```
 
 ### [To see errors in supabase db](https://github.com/supabase/cli/issues/271#issuecomment-1661981609)
 
 ```
-docker logs -f supabase_db_makerspace
+docker logs -f <type of container>
 ```
+Postgres database container: `supabase_db_makerspace` </br>
+Postgres config container: `supabase_config_makerspace` </br>
+Storage directory container: `supabase_storage_makerspace` </br>
+Functions cache container: `supabase_edge_runtime_makerspace` </br>
+Inbucket emails container: `supabase_inbucket_makerspace` </br>
 
-### Misc
+## Misc
 
-[To manually set time in nixos](https://discourse.nixos.org/t/manually-set-date-and-time-on-nixos/13016)
+### To setup auth in for local dev
+
+1. Add `http://127.0.0.1:54321/auth/v1/callback` to google console to Authorised redirect URIs
+2. Add `http://localhost:5173/` in `site_url` to `config.toml`
+
+### [To manually set time in nixos](https://discourse.nixos.org/t/manually-set-date-and-time-on-nixos/13016)
 
 ```
 sudo systemctl stop systemd-timesyncd.service
 ```
 
-To see supabase status
-
-```
-supabase status
-```
 
 ### Bookmarklet to convert hex to decimal for google icons page
 
