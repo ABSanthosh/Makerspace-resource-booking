@@ -60,3 +60,23 @@ Maybe we might have to change the user's role or any other custom claim, in the 
 
 - `on_auth_user_deleted`
 When a user is deleted, we also delete the user from the `public.profile` table.
+
+## Forms
+Sveltekit has a very nice way of handling forms and to make things even better, we use [Superforms](https://superforms.rocks/). We use [Zod](https://zod.dev) to validate the form fields and data. All the schemas for the forms are in the [`src/lib/schemas.ts`](/src/lib/schemas.ts) file.  
+
+### How it works
+- On every page load, from the `+page.server.ts` `load` function, we return a `superValidate` object that we can map to the form fields.  
+- In the `+page.svelte` file, we use the `superForm` to parse the form sent from server and also to handle the form submission.  
+- On submission, the form data is sent to `actions` hook in the same `+page.server.ts` file and again use `superValidate` to validate the form data. If its valid, we proceed with all the db related tasks. Otherwise, we return the errors to the client.
+- The client will return the errors in `$form.errors.<field>`.
+
+Read more on [Superforms](https://superforms.rocks/).
+
+## Styles
+We use SASS to style all the pages and components. To style and make wrappers for html tags like label and input|textarea|select or buttons or dropdowns, we use [Crisp](https://crisp.abs.moe) utility classes.  
+Basically, we use class name to style the elements and data attributes to cover different types of same element. It also uses standard html tags to make components without JS.  
+For instance, we use details tag to make a cool dropdown without using any additional JS except for closing the dropdown when clicked outside.  
+Search "Crisp" in the codebase to see how we use it.
+
+
+## _Goal is to use least number of libraries and code to make the app as fast and stable as possible._
