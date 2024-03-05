@@ -44,6 +44,15 @@ yarn dev
 npm run dev
 ```
 
+8) Restart supabase  
+Sometimes, the supabase server might crash. In that case, you can restart the server using the following command.
+```sh
+yarn sb-restart
+# or
+npm run sb-restart
+```
+We need to run `supabase stop` with `--backup` flag to persist the data in the container. 
+
 
 
 ### To see supabase status
@@ -67,7 +76,9 @@ Inbucket emails container: `supabase_inbucket_makerspace` </br>
 ### To setup auth in for local dev
 
 1. Add `http://127.0.0.1:54321/auth/v1/callback` to google console to Authorised redirect URIs
-2. Add `http://localhost:5173/` in `site_url` to `config.toml`
+2. Add `http://localhost:5173/` in `site_url` to `config.toml`  
+
+Ref: [Google OAuth](https://supabase.com/docs/guides/auth/auth-deep-dive/auth-google-oauth)
 
 ### [To manually set time in nixos](https://discourse.nixos.org/t/manually-set-date-and-time-on-nixos/13016)
 
