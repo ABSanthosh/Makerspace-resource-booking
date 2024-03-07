@@ -46,9 +46,7 @@ export const UserProfileZodSchema = z.object({
 	email: z.string().email(),
 	role: z.nativeEnum(Role),
 	isNew: z.boolean(),
-	type: z.nativeEnum(ProfileType),
-	typeData: z.union([studentZSchema, facultyZSchema, staffZSchema])
-});
+}).and(profileSchema);
 
 export type UserProfileSchema = z.infer<typeof UserProfileZodSchema>;
 
