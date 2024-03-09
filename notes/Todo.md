@@ -5,6 +5,7 @@
 
 ## Long run ToDo
 - [ ] Convert isDeleted to SecondaryStatus enum with values: deleted, disabled, enabled with default value enabled so that we can delete the ones with no dependents
+- [ ] gmail like editor for equipment description
 
 ## Completed Short run ToDo
 - [x] Test deleting single manual

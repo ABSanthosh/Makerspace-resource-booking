@@ -75,7 +75,10 @@ export async function getAllEquipment(): Promise<
 
 export async function getEquipmentById(
 	id: string
-): Promise<Equipment & { category: ECategories; instances: EItemSchema[] }> {
+): Promise<Equipment & {
+	category: ECategories; instances: EItemSchema[],
+	manuals: Manual[], videos: Video[]
+}> {
 	// @ts-ignore
 	return await db.equipment
 		.findUnique({
@@ -84,7 +87,9 @@ export async function getEquipmentById(
 			},
 			include: {
 				instances: true,
-				category: true
+				category: true,
+				manuals: true,
+				videos: true
 			}
 		})
 		.then((res) => {

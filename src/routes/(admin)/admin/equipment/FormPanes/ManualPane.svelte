@@ -1,14 +1,14 @@
 <script lang="ts">
-	import Pane from '$components/Pane.svelte';
-	import UploadPdf from '$components/UploadPDF.svelte';
-	import { SupabaseEnum } from '$lib/Enums';
-	import { getStorageUrl } from '$lib/SupabaseUtils';
 	import nanoid from '$lib/nanoid';
-	import type { EManualCRUDSchema, EManualSchema, ESchema } from '$lib/schemas';
+	import Pane from '$components/Pane.svelte';
+	import { SupabaseEnum } from '$lib/Enums';
 	import { addToast } from '$store/ToastStore';
+	import { getStorageUrl } from '$lib/SupabaseUtils';
 	import type { Manual, Video } from '@prisma/client';
-	import type { SuperValidated } from 'sveltekit-superforms';
+	import UploadPdf from '$components/UploadPDF.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
+	import type { SuperValidated } from 'sveltekit-superforms';
+	import type { EManualCRUDSchema, EManualSchema, ESchema } from '$lib/schemas';
 
 	export let { currentEquipment, modal, formStore } = $$props as {
 		modal: boolean;
