@@ -102,12 +102,23 @@ export const EManualCRUDZSchema = z.object({
 
 export type EManualCRUDSchema = z.infer<typeof EManualCRUDZSchema>;
 
+
 export const EVideoZSchema = z.object({
 	id: z.string().optional().or(z.literal('')),
 	name: z.string().min(2),
 	video: z.string().trim().url(),
 	equipmentId: z.string().min(7)
 });
+
+export type EVideoSchema = z.infer<typeof EVideoZSchema>;
+
+export const EVideoCRUDZSchema = z.object({
+	add: z.array(EVideoZSchema),
+	edit: z.array(EVideoZSchema),
+	delete: z.array(z.string())
+});
+
+export type EVideoCRUDSchema = z.infer<typeof EVideoCRUDZSchema>;
 
 export const ECategoriesZSchema = z.object({
 	id: z.string(),
