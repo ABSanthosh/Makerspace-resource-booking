@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SupabaseEnum } from '$lib/Enums';
 	import { getStorageUrl } from '$lib/SupabaseUtils';
 	import type { ValidationErrors } from 'sveltekit-superforms';
 
@@ -23,7 +24,7 @@
 			on:input={(e) => {
 				const imageFile = e.currentTarget.files?.item(0) ?? null;
 				if (typeof image === 'string' && imageFile) {
-					// Rename the file to the same name as image. This will be used when equipment is updated
+					// Doc: Rename the file to the same name as image. This will be used when equipment is updated
 					// to replace the old image with the new one.
 					const tempFile = new File([imageFile], image, {
 						type: imageFile.type,
@@ -38,7 +39,7 @@
 			aria-invalid={errors ? 'true' : undefined}
 		/>
 		{#if typeof image === 'string' && image !== ''}
-			<img src={getStorageUrl(image)} alt="Old" />
+			<img src={getStorageUrl(SupabaseEnum.EQUIPMENT, image)} alt="Old" />
 		{:else if image}
 			<img src={URL.createObjectURL(image)} alt="Uploaded" />
 		{:else}
