@@ -12,17 +12,12 @@ datasource db {
 }
 
 model Profile {
-  // When new attributes are added, make sure to update the triggers
+  // Doc: When new attributes are added, make sure to update the triggers
   // /prisma/seed.ts > main() > onNewUser
   id     String @id @db.Uuid
   name   String
   mobile String
   email  String
-  // department String
-  // branch     String
-  // userId String @map("userid") // This is for emp id or student id
-  // year       Int?
-  // clubs      Json?  @db.Json
 
   // Doc: Needed in on_profile_role_updated trigger
   role     Role      @default(user)
@@ -33,7 +28,7 @@ model Profile {
   bookings Booking[]
 
   type     ProfileType @default(STUDENT)
-  typeData Json?       @db.Json @default("{}") @map("type_data")
+  typeData Json?       @default("{}") @map("type_data") @db.Json
   // Doc: This will have the data for each type
   // student: { yearOfStudy: 1, branch: "CSE", department: "Computer Science", studentId: "1234", clubs: ["club1", "club2"], researchArea: "AI"}
   // faculty: { department: "CSE", branch: "Computer Science", designation: "Assistant Professor", facultyId: "1234"}
@@ -58,7 +53,24 @@ model Equipment {
   eCategoriesId String
   category      ECategories @relation(fields: [eCategoriesId], references: [id], onDelete: Cascade)
   isDeleted     Boolean     @default(false) @map("is_deleted")
-  // videos
+  manuals       Manual[]
+  videos        Video[]
+}
+
+model Manual {
+  id          String    @id @unique @default(nanoid(7))
+  name        String
+  pdf         String
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Video {
+  id          String    @id @unique @default(nanoid(7))
+  name        String
+  video       String
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model EInstance {

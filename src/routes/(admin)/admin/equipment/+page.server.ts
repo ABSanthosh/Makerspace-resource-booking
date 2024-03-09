@@ -1,5 +1,12 @@
 import nanoid from '$lib/nanoid';
-import { ECategoryCRUDZSchema, EZodSchema } from '$lib/schemas';
+import {
+	ECategoryCRUDZSchema,
+	EManualCRUDZSchema,
+	EManualZSchema,
+	EVideoCRUDZSchema,
+	EVideoZSchema,
+	EZodSchema
+} from '$lib/schemas';
 import { SupabaseEnum } from '$lib/Enums';
 import type { PageServerLoad } from './$types';
 import { fail, type Actions } from '@sveltejs/kit';
@@ -12,8 +19,11 @@ import {
 	editEquipment,
 	getAllEquipment,
 	getECategories,
-	upsertECategories
+	upsertECategories,
+	addMultipleManuals,
+	deleteManuals
 } from '$db/Equipment.db';
+import type { Prisma } from '@prisma/client';
 
 // @ts-ignore
 export const load: PageServerLoad = async ({ locals }) => {
@@ -25,7 +35,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 		editEquipmentForm: await superValidate(zod(EZodSchema)),
 		allEquipment: await getAllEquipment(),
 		eCategories: await getECategories(),
-		categoryForm: await superValidate(zod(ECategoryCRUDZSchema))
+		categoryForm: await superValidate(zod(ECategoryCRUDZSchema)),
+		manualForm: await superValidate(zod(EManualCRUDZSchema)),
+		videoForm: await superValidate(zod(EVideoCRUDZSchema))
 	};
 };
 
@@ -38,7 +50,7 @@ export const actions: Actions = {
 			return fail(400, { newEquipmentForm });
 		}
 		const { data, error } = await supabase.storage
-			.from(SupabaseEnum.BUCKET)
+			.from(SupabaseEnum.EQUIPMENT)
 			.upload(`${nanoid()}.${imageFile.name.split('.').pop()}`, imageFile);
 
 		if (error) {
@@ -65,7 +77,7 @@ export const actions: Actions = {
 
 		if (imageFile.name || imageFile != undefined) {
 			const { data, error } = await supabase.storage
-				.from(SupabaseEnum.BUCKET)
+				.from(SupabaseEnum.EQUIPMENT)
 				.update(imageFile.name, editEquipmentForm.data.image, {
 					upsert: true,
 					cacheControl: '0'
@@ -106,7 +118,7 @@ export const actions: Actions = {
 	enable: async ({ request }) => {
 		const formData = await request.formData();
 		const id = formData.get('id') as string;
-	
+
 		return {
 			response: await toggleEquipment(id, false)
 		};
@@ -138,6 +150,57 @@ export const actions: Actions = {
 							: []
 				},
 				eCategories: await getECategories()
+			}
+		};
+	},
+	manualCRUD: async ({ request, locals: { supabase } }) => {
+		const manualForm = await superValidate(request, zod(EManualCRUDZSchema));
+		if (!manualForm.valid) {
+			return fail(400, { manualForm });
+		}
+		
+		const addOperation = async () => {
+			if (manualForm.data.add.length > 0) {
+				for (const file of manualForm.data.add) {
+					const { data, error } = await supabase.storage
+						.from(SupabaseEnum.MANUAL)
+						.upload(`${nanoid()}.pdf`, file.pdf as File);
+					if (error) {
+						return fail(400, { error });
+					}
+					file.pdf = data.path;
+				}
+				return await addMultipleManuals(
+					manualForm.data.add.map((manual) => ({
+						...manual,
+						id: '',
+						pdf: manual.pdf as string
+					}))
+				);
+			} else {
+				return { count: 0 };
+			}
+		};
+
+		const deleteOperation = async () => {
+			if (manualForm.data.delete.length > 0) {
+				const { error } = await supabase.storage
+					.from(SupabaseEnum.MANUAL)
+					.remove(manualForm.data.delete);
+				if (error) {
+					return fail(400, { error });
+				}
+				return await deleteManuals(manualForm.data.delete);
+			} else {
+				return { count: 0 };
+			}
+		};
+
+		return {
+			form: manualForm,
+			response: {
+				add: await addOperation(),
+				delete: await deleteOperation()
 			}
 		};
 	}

@@ -1,5 +1,5 @@
 import { BookingStatus, EStatus, ProfileType, Role } from '@prisma/client';
-import { ZodSchema, z } from 'zod';
+import { z } from 'zod';
 
 const phoneRegex = new RegExp(/(\+91\s)?\d{10}/);
 
@@ -40,13 +40,15 @@ const profileSchema = z.discriminatedUnion('type', [
 	})
 ]);
 
-export const UserProfileZodSchema = z.object({
-	name: z.string().min(2),
-	mobile: z.string().regex(phoneRegex, { message: 'Invalid phone number' }),
-	email: z.string().email(),
-	role: z.nativeEnum(Role),
-	isNew: z.boolean(),
-}).and(profileSchema);
+export const UserProfileZodSchema = z
+	.object({
+		name: z.string().min(2),
+		mobile: z.string().regex(phoneRegex, { message: 'Invalid phone number' }),
+		email: z.string().email(),
+		role: z.nativeEnum(Role),
+		isNew: z.boolean()
+	})
+	.and(profileSchema);
 
 export type UserProfileSchema = z.infer<typeof UserProfileZodSchema>;
 
@@ -80,6 +82,32 @@ export const EZodSchema = z.object({
 });
 
 export type ESchema = z.infer<typeof EZodSchema>;
+
+export const EManualZSchema = z.object({
+	id: z.string(),
+	name: z.string().min(2),
+	pdf: z
+		.custom<File>((f) => f instanceof File, 'Please upload a file.')
+		.refine((f) => f.type === 'application/pdf', 'Only PDF files are accepted.')
+		.or(z.string().trim().url()),
+	equipmentId: z.string().min(7)
+});
+
+export type EManualSchema = z.infer<typeof EManualZSchema>;
+
+export const EManualCRUDZSchema = z.object({
+	add: z.array(EManualZSchema),
+	delete: z.array(z.string())
+});
+
+export type EManualCRUDSchema = z.infer<typeof EManualCRUDZSchema>;
+
+export const EVideoZSchema = z.object({
+	id: z.string().optional().or(z.literal('')),
+	name: z.string().min(2),
+	video: z.string().trim().url(),
+	equipmentId: z.string().min(7)
+});
 
 export const ECategoriesZSchema = z.object({
 	id: z.string(),
