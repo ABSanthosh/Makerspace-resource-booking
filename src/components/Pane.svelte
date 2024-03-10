@@ -60,9 +60,11 @@
 		{:else}
 			<slot name="free" />
 		{/if}
+		{#if $$slots.footer}
 		<footer>
 			<slot name="footer" />
 		</footer>
+		{/if}
 	</div>
 </dialog>
 
