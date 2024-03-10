@@ -8,6 +8,7 @@
 	import { enhance } from '$app/forms';
 	import ManualPane from './FormPanes/ManualPane.svelte';
 	import type { Manual, Video } from '@prisma/client';
+	import VideoPane from './FormPanes/VideoPane.svelte';
 
 	export let data: PageData;
 
@@ -22,6 +23,7 @@
 	} = data);
 	$: equipmentModal = false;
 	$: manualModal = false;
+	$: videoModal = false;
 	$: editItem = {} as (ESchema & { manuals: Manual[]; videos: Video[] }) | null;
 
 	$: eCategoriesModal = false;
@@ -54,6 +56,7 @@
 />
 
 <ManualPane bind:modal={manualModal} bind:formStore={manualForm} bind:currentEquipment={editItem} />
+<VideoPane bind:modal={videoModal} bind:formStore={videoForm} bind:currentEquipment={editItem} />
 
 <CategoryPane bind:formStore={categoryForm} bind:eCategories bind:modal={eCategoriesModal} />
 
@@ -142,6 +145,23 @@
 											}}
 										>
 											Edit
+										</button>
+										<button
+											class="CrispButton"
+											data-border="false"
+											class:active={editMenuId === item.id}
+											on:click={() => {
+												editItem = {
+													...item,
+													image: item.image.split('?')[0],
+													manuals: item.manuals,
+													videos: item.videos
+												};
+												videoModal = true;
+												editMenuId = '';
+											}}
+										>
+											Videos
 										</button>
 										<button
 											class="CrispButton"

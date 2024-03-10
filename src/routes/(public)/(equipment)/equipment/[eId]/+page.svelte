@@ -7,6 +7,7 @@
 	import { EStatus } from '@prisma/client';
 	import { SessionStore } from '$store/SupaStore';
 	import ManualViewPane from './Panes/ManualViewPane.svelte';
+	import VideoViewPane from './Panes/VideoViewPane.svelte';
 
 	export let data: PageData;
 	$: ({ equipment } = data);
@@ -33,6 +34,7 @@
 	$: user = $SessionStore?.user ?? null;
 	$: availabilityPane = false;
 	$: manualPane = false;
+	$: videoPane = false;
 	$: selectedInstance = null as EItemSchema | null;
 </script>
 
@@ -47,6 +49,7 @@
 {/if}
 
 <ManualViewPane bind:modal={manualPane} bind:currentEquipment={data.equipment} />
+<VideoViewPane bind:modal={videoPane} bind:currentEquipment={data.equipment} />
 
 <main class="Equipment">
 	<header class="Equipment__header w-100 gap-10">
@@ -68,14 +71,24 @@
 				<hr />
 			</h3>
 			<div class="Row--start w-100 gap-15">
-				<a href={'#'} target="_blank" class="FancyButton" data-type="black-outline">Videos</a>
+				<button
+					class="CrispButton"
+					data-type="black-outline"
+					on:click={() => {
+						videoPane = true;
+					}}
+				>
+					Videos
+				</button>
 				<button
 					class="CrispButton"
 					data-type="black-outline"
 					on:click={() => {
 						manualPane = true;
-					}}>Manual</button
+					}}
 				>
+					Manual
+				</button>
 			</div>
 		</div>
 	</section>

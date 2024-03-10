@@ -21,9 +21,10 @@ import {
 	getECategories,
 	upsertECategories,
 	addMultipleManuals,
-	deleteManuals
+	deleteManuals,
+	addMultipleVideos,
+	deleteVideos
 } from '$db/Equipment.db';
-import type { Prisma } from '@prisma/client';
 
 // @ts-ignore
 export const load: PageServerLoad = async ({ locals }) => {
@@ -158,7 +159,7 @@ export const actions: Actions = {
 		if (!manualForm.valid) {
 			return fail(400, { manualForm });
 		}
-		
+
 		const addOperation = async () => {
 			if (manualForm.data.add.length > 0) {
 				for (const file of manualForm.data.add) {
@@ -201,6 +202,20 @@ export const actions: Actions = {
 			response: {
 				add: await addOperation(),
 				delete: await deleteOperation()
+			}
+		};
+	},
+	videoCRUD: async ({ request }) => {
+		const videoForm = await superValidate(request, zod(EVideoCRUDZSchema));
+		if (!videoForm.valid) {
+			return fail(400, { videoForm });
+		}
+
+		return {
+			form: videoForm,
+			response: {
+				add: videoForm.data.add.length > 0 ? await addMultipleVideos(videoForm.data.add) : [],
+				delete: videoForm.data.delete.length > 0 ? await deleteVideos(videoForm.data.delete) : []
 			}
 		};
 	}

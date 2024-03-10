@@ -73,12 +73,14 @@ export async function getAllEquipment(): Promise<
 	});
 }
 
-export async function getEquipmentById(
-	id: string
-): Promise<Equipment & {
-	category: ECategories; instances: EItemSchema[],
-	manuals: Manual[], videos: Video[]
-}> {
+export async function getEquipmentById(id: string): Promise<
+	Equipment & {
+		category: ECategories;
+		instances: EItemSchema[];
+		manuals: Manual[];
+		videos: Video[];
+	}
+> {
 	// @ts-ignore
 	return await db.equipment
 		.findUnique({
@@ -173,7 +175,7 @@ export async function deleteECategories(ids: string[]) {
 }
 
 export async function addMultipleManuals(manuals: Manual[]) {
-	// Doc: Since we are using Manual type from Prisma, we have to pass "id" but 
+	// Doc: Since we are using Manual type from Prisma, we have to pass "id" but
 	// we don't have to pass it to db since it's auto-generated. This means
 	// a little bandwidth is saved.
 	return await db.manual.createMany({
@@ -187,6 +189,22 @@ export async function addMultipleManuals(manuals: Manual[]) {
 
 export async function deleteManuals(ids: string[]) {
 	return await db.manual.deleteMany({
+		where: {
+			id: {
+				in: ids
+			}
+		}
+	});
+}
+
+export async function addMultipleVideos(videos: Video[]) {
+	return await db.video.createMany({
+		data: videos
+	});
+}
+
+export async function deleteVideos(ids: string[]) {
+	return await db.video.deleteMany({
 		where: {
 			id: {
 				in: ids
