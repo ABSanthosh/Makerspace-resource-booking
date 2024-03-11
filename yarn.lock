@@ -815,9 +815,9 @@
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
 "@vinejs/compiler@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@vinejs/compiler/-/compiler-2.4.0.tgz#41c610ab90f28380bbcd933f7c967c87457b658a"
-  integrity sha512-qEhp+Ux4wCeyYlQpB5TddjlRRyxbZz4RVYG/UHGnnnn3eOw326dZGCJldOOEl6huBFoOguMUQfhKLLSjJ0v+XQ==
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/@vinejs/compiler/-/compiler-2.4.1.tgz#dbde3d81edaad68e18099c5925bad821835c4092"
+  integrity sha512-WZqCZEQBvuPEghAxnpvNLclyyfqkmU+2V2K4zoZhOUJRD9KRJ+hCNQQ6LSzt7ZwSh+wwxq0r9FpAfeC3tswB8Q==
 
 "@vinejs/vine@^1.7.1":
   version "1.7.1"
@@ -1812,9 +1812,9 @@ normalize-range@^0.1.2:
   integrity sha512-bdok/XvKII3nUpklnV6P2hxtMNrCboOjAcyBuQnWEhO665FwrSNRxU+AqpsyvO6LgGYPspN+lu5CLtw4jPRKNA==
 
 normalize-url@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-8.0.0.tgz#593dbd284f743e8dcf6a5ddf8fadff149c82701a"
-  integrity sha512-uVFpKhj5MheNBJRTiMZ9pE/7hD1QTeEvugSJW/OmLzAp78PB5O6adfMNTvmfKhXBkvCzC+rqifWcVYpGFwTjnw==
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-8.0.1.tgz#9b7d96af9836577c58f5883e939365fa15623a4a"
+  integrity sha512-IO9QvjUMWxPQQhs60oOu10CRkWCiZzSUkzbXGGV9pviYl1fXYcvkzQ5jV9z8Y6un8ARoVRl4EtC6v6jNqbaJ/w==
 
 object.omit@^3.0.0:
   version "3.0.0"
@@ -2310,9 +2310,9 @@ strip-json-comments@^3.1.1:
   integrity sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==
 
 superstruct@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/superstruct/-/superstruct-1.0.3.tgz#de626a5b49c6641ff4d37da3c7598e7a87697046"
-  integrity sha512-8iTn3oSS8nRGn+C2pgXSKPI3jmpm6FExNazNpjvqS6ZUJQCej3PUXEKM8NjHBOs54ExM+LPW/FBRhymrdcCiSg==
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/superstruct/-/superstruct-1.0.4.tgz#0adb99a7578bd2f1c526220da6571b2d485d91ca"
+  integrity sha512-7JpaAoX2NGyoFlI9NBh66BQXGONc+uE+MRS5i2iOBKuS4e+ccgMDjATgZldkah+33DakBxDHiss9kvUcGAO8UQ==
 
 supports-color@^7.1.0:
   version "7.2.0"
@@ -2381,10 +2381,10 @@ svelte@^4.2.7:
     magic-string "^0.30.4"
     periscopic "^3.1.0"
 
-sveltekit-superforms@^2.8.0:
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/sveltekit-superforms/-/sveltekit-superforms-2.8.0.tgz#3439f7883aac0d5bd74eda3da32001e7252c2053"
-  integrity sha512-Ac3GlnVOjZ6q4m6+1xcPEznJsoet4tNn3FqbgZ83UJP5O/io4fWXioGFDztuZXmIDPeaBoAx22A0TMmS61pCxA==
+sveltekit-superforms@^2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/sveltekit-superforms/-/sveltekit-superforms-2.9.0.tgz#e602daf196917b326bbb8b416b4be7ef2bd965a7"
+  integrity sha512-sF/8nlFmyTcxtoFmIsudNV03O0GS1nB/y1U8L0CM0xY4yfcDeL7KvqqvtEWOA3xW01LSZz5pbvf1UYrrt1nuxw==
   dependencies:
     devalue "^4.3.2"
     just-clone "^6.2.0"
@@ -2399,7 +2399,7 @@ sveltekit-superforms@^2.8.0:
     joi "^17.12.2"
     superstruct "^1.0.3"
     valibot "^0.29.0"
-    yup "^1.3.3"
+    yup "^1.4.0"
     zod "^3.22.4"
     zod-to-json-schema "^3.22.4"
 
@@ -2596,10 +2596,10 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-yup@^1.3.3:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/yup/-/yup-1.3.3.tgz#d2f6020ad1679754c5f8178a29243d5447dead04"
-  integrity sha512-v8QwZSsHH2K3/G9WSkp6mZKO+hugKT1EmnMqLNUcfu51HU9MDyhlETT/JgtzprnrnQHPWsjc6MUDMBp/l9fNnw==
+yup@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/yup/-/yup-1.4.0.tgz#898dcd660f9fb97c41f181839d3d65c3ee15a43e"
+  integrity sha512-wPbgkJRCqIf+OHyiTBQoJiP5PFuAXaWiJK6AmYkzQAh5/c2K9hzSApBZG5wV9KoKSePF7sAxmNSvh/13YHkFDg==
   dependencies:
     property-expr "^2.0.5"
     tiny-case "^1.0.3"

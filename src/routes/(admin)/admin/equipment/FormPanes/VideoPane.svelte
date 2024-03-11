@@ -111,7 +111,6 @@
 									colspan="2"
 									style="max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
 								>
-									<!-- Video embed -->
 									<YtEmbed bind:url={item.video} />
 									<br />
 									<div class="w-100 Row--j-end">
@@ -139,7 +138,7 @@
 								<td colspan="2">
 									<div class="Row--center gap-10">
 										<input
-											type="text"
+											type="url"
 											class="CrispInput"
 											bind:value={item.video}
 											use:newInputFocus={item.id}
