@@ -144,7 +144,7 @@ async function makeNewBucket(name: string) {
 		await prisma.$executeRawUnsafe(`
 		INSERT INTO storage.buckets (id, name, public)
 		VALUES ('${name}', '${name}', true);`);
-	} catch (e) { }
+	} catch (e) {}
 
 	try {
 		await prisma.$transaction([
@@ -152,7 +152,7 @@ async function makeNewBucket(name: string) {
 		]);
 	} catch (e) {
 		console.error(e);
-	 }
+	}
 }
 
 async function seedEquipments() {
@@ -288,6 +288,21 @@ async function seedContentManagement() {
 	});
 }
 
+async function seedVideos() {
+	await prisma.video.createMany({
+		data: [
+			{
+				equipmentId: '_iPoLfl',
+				video: 'https://youtu.be/GvMaw-cEFR4?si=Oc_R3bUNP-zsge96'
+			},
+			{
+				equipmentId: '_iPoLfl',
+				video: 'https://www.youtube.com/watch?v=VQMXBjj7waQ'
+			}
+		]
+	});
+}
+
 async function main() {
 	await seedCategories()
 		.then(() => console.log('✅ eCategories seeded'))
@@ -322,6 +337,9 @@ async function main() {
 	await seedContentManagement()
 		.then(() => console.log('✅ Content Management seeded'))
 		.catch((e) => console.error(`🚨 CMS Error`));
+	await seedVideos()
+		.then(() => console.log('✅ Videos seeded'))
+		.catch((e) => console.error(`🚨 ${e}`));
 }
 
 main()
