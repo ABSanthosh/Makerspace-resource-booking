@@ -1,7 +1,7 @@
 <script lang="ts">
 	import StarterKit from '@tiptap/starter-kit';
 	import Placeholder from '@tiptap/extension-placeholder';
-	import { Editor, isActive } from '@tiptap/core';
+	import { Editor } from '@tiptap/core';
 	import { onDestroy, onMount } from 'svelte';
 	import clickOutside from '$directive/clickOutside';
 	import Icons from '../utils/Icons';
@@ -34,7 +34,15 @@
 				editor = editor;
 			},
 			onUpdate: ({ editor }) => {
-				content = editor.getHTML();
+				// Doc: The stupid editor isn't all wysiwyg. It inserts a <br/> tag inside empty <p> tags
+				// only in the editor but not in the content. So, we need to replace it with a <br> tag
+				// Ref: https://github.com/ueberdosis/tiptap/issues/412#issuecomment-1077961832
+				const P_REGEX = /(<p\s?((style=")([a-zA-Z0-9:;.\s()\-,]*)("))?>)(<\/p>)/g;
+
+				content = editor.getHTML().replaceAll(P_REGEX, '$1<br>$6');
+			},
+			parseOptions: {
+				preserveWhitespace: 'full'
 			}
 		});
 	});
@@ -461,10 +469,10 @@
 				pointer-events: none;
 			}
 
-			> * + * {
-				margin-top: 0.75em;
-				font-size: 17px;
-			}
+			// > * + * {
+			// 	margin-top: 0.75em;
+			font-size: 17px;
+			// }
 
 			ul,
 			ol {
