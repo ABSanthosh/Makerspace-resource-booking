@@ -6,7 +6,7 @@
 
 <div class="LandingPage">
 	<section class="LandingPage__hero">
-		<div class="LandingPage__hero--intro Col--a-start gap-15">
+		<div class="LandingPage__hero--intro Col--a-start">
 			{@html data.hero}
 		</div>
 		<div class="LandingPage__slot">
