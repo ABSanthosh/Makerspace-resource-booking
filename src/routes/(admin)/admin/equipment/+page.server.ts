@@ -10,7 +10,7 @@ import {
 import { SupabaseEnum } from '$lib/Enums';
 import type { PageServerLoad } from './$types';
 import { fail, type Actions } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms/server';
+import { superValidate, withFiles } from 'sveltekit-superforms/server';
 import { zod } from 'sveltekit-superforms/adapters';
 import {
 	addEquipment,
@@ -23,7 +23,8 @@ import {
 	addMultipleManuals,
 	deleteManuals,
 	addMultipleVideos,
-	deleteVideos
+	deleteVideos,
+	deleteEquipment
 } from '$db/Equipment.db';
 
 // @ts-ignore
@@ -46,37 +47,39 @@ export const actions: Actions = {
 	add: async ({ request, locals: { supabase } }) => {
 		const newEquipmentForm = await superValidate(request, zod(EZodSchema));
 		const imageFile = newEquipmentForm.data.image as File;
+		console.log(newEquipmentForm.data.image);
 
 		if (!newEquipmentForm.valid) {
-			return fail(400, { newEquipmentForm });
+			// Doc: https://superforms.rocks/concepts/files#form-action-caveat---withfiles
+			return fail(400, withFiles({ newEquipmentForm }));
 		}
 		const { data, error } = await supabase.storage
 			.from(SupabaseEnum.EQUIPMENT)
 			.upload(`${nanoid()}.${imageFile.name.split('.').pop()}`, imageFile);
 
 		if (error) {
-			return fail(400, { error });
+			console.log(error);
+			return fail(400, withFiles({ newEquipmentForm, error }));
 		}
 
-		return {
-			form: {
-				...newEquipmentForm,
+		return withFiles({
+			newEquipmentForm,
+			response: await addEquipment({
 				// Doc: Id will be filled in by the database
-				response: await addEquipment({
-					...newEquipmentForm.data,
-					id: '',
-					image: data.path,
-					isDeleted: newEquipmentForm.data.isDeleted!
-				}),
-				allEquipment: await getAllEquipment()
-			}
-		};
+				...newEquipmentForm.data,
+				id: '',
+				image: data.path,
+				isDeleted: false
+			}),
+			allEquipment: await getAllEquipment()
+		});
 	},
 	edit: async ({ request, locals: { supabase } }) => {
 		const editEquipmentForm = await superValidate(request, zod(EZodSchema));
 		const imageFile = editEquipmentForm.data.image as File;
+		console.log(editEquipmentForm.data);
 
-		if (imageFile.name || imageFile != undefined) {
+		if ((imageFile.name || imageFile != undefined) && typeof imageFile !== 'string') {
 			const { data, error } = await supabase.storage
 				.from(SupabaseEnum.EQUIPMENT)
 				.update(imageFile.name, editEquipmentForm.data.image, {
@@ -84,7 +87,7 @@ export const actions: Actions = {
 					cacheControl: '0'
 				});
 			if (error) {
-				return fail(400, { error });
+				return fail(400, { editEquipmentForm, error });
 			}
 
 			// Doc: When the image is updated, the cache is invalidated so the new image is shown.
@@ -96,24 +99,32 @@ export const actions: Actions = {
 		}
 
 		return {
-			form: {
-				...editEquipmentForm,
-				response: await editEquipment({
-					...editEquipmentForm.data,
-					id: '',
-					image: imageFile.name,
-					isDeleted: editEquipmentForm.data.isDeleted!
-				}),
-				allEquipment: await getAllEquipment()
-			}
+			editEquipmentForm,
+			response: await editEquipment({
+				...editEquipmentForm.data,
+				id: '',
+				image: imageFile.name,
+				isDeleted: editEquipmentForm.data.isDeleted!
+			}),
+			allEquipment: await getAllEquipment()
 		};
 	},
-	delete: async ({ request }) => {
+	disable: async ({ request }) => {
 		const formData = await request.formData();
 		const id = formData.get('id') as string;
 
 		return {
 			response: await toggleEquipment(id, true)
+		};
+	},
+	delete: async ({ request, locals: { supabase } }) => {
+		const formData = await request.formData();
+		const id = formData.get('id') as string;
+		const imageId = formData.get('imageId') as string;
+
+		return {
+			image: await supabase.storage.from(SupabaseEnum.EQUIPMENT).remove([imageId]),
+			response: await deleteEquipment(id)
 		};
 	},
 	enable: async ({ request }) => {

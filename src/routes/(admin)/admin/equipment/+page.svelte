@@ -184,7 +184,7 @@
 											use:enhance
 											class="w-100"
 											method="POST"
-											action="/admin/equipment?/{item.isDeleted ? 'enable' : 'delete'}"
+											action="/admin/equipment?/{item.isDeleted ? 'enable' : 'disable'}"
 											on:submit={() => {
 												return confirm(
 													`Are you sure you want to ${
@@ -200,9 +200,30 @@
 												data-border="false"
 												class:active={editMenuId === item.id}
 											>
-												{item.isDeleted ? 'Enable' : 'Delete'}
+												{item.isDeleted ? 'Enable' : 'Disable'}
 											</button>
 										</form>
+										<form
+											use:enhance
+											class="w-100"
+											method="POST"
+											action="/admin/equipment?/delete"
+											on:submit={() => {
+												return confirm('Are you sure you want to delete this equipment permanently?');
+											}}
+										>
+											<input type="hidden" name="id" value={item.id} />
+											<input type="hidden" name="imageId" value={item.image} />
+											<button
+												class="CrispButton"
+												data-type='danger'
+												data-border="false"
+												class:active={editMenuId === item.id}
+											>
+												Delete
+											</button>
+										</form>
+
 									</ul>
 								</details>
 							</td>

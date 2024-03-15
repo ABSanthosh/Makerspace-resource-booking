@@ -64,6 +64,7 @@
 	$: actionType = isEdit ? 'edit' : 'add';
 	$: tainted = isEdit ? editTainted : newTainted;
 	$: constraints = isEdit ? editConstraints : newConstraints;
+	$: enhance = isEdit ? editEnhance : newEnhance;
 </script>
 
 <Pane
@@ -80,8 +81,7 @@
 	<svelte:fragment slot="main">
 		<form
 			method="POST"
-			use:newEnhance
-			use:editEnhance
+			use:enhance
 			enctype="multipart/form-data"
 			class="Col--center gap-10 w-100"
 			action="/admin/equipment?/{actionType}"

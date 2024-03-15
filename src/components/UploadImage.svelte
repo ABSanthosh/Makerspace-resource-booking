@@ -23,7 +23,7 @@
 			accept="image/*"
 			on:input={(e) => {
 				const imageFile = e.currentTarget.files?.item(0) ?? null;
-				if (typeof image === 'string' && imageFile) {
+				if (typeof image === 'string' && imageFile && image !== '') {
 					// Doc: Rename the file to the same name as image. This will be used when equipment is updated
 					// to replace the old image with the new one.
 					const tempFile = new File([imageFile], image, {

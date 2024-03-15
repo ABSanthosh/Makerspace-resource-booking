@@ -120,6 +120,14 @@ export async function editEquipment(equipment: Equipment) {
 	});
 }
 
+export async function deleteEquipment(id: string) {
+	return await db.equipment.delete({
+		where: {
+			id
+		}
+	});
+}
+
 export async function toggleEquipment(id: string, state: boolean) {
 	// Doc: Mark as deleted so that we can keep the data for historical purposes i.e bookings
 	return await db.$transaction([
