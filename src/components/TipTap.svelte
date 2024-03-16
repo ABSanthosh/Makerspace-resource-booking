@@ -38,8 +38,14 @@
 				// only in the editor but not in the content. So, we need to replace it with a <br> tag
 				// Ref: https://github.com/ueberdosis/tiptap/issues/412#issuecomment-1077961832
 				const P_REGEX = /(<p\s?((style=")([a-zA-Z0-9:;.\s()\-,]*)("))?>)(<\/p>)/g;
-
 				content = editor.getHTML().replaceAll(P_REGEX, '$1<br>$6');
+			},
+			onCreate: ({ editor }) => {
+				// Doc: Remove all spell check and auto complete attributes
+				// Ref: https://github.com/ueberdosis/tiptap/issues/76#issuecomment-1937047141
+				editor.view.dom.setAttribute('spellcheck', 'false');
+				editor.view.dom.setAttribute('autocomplete', 'off');
+				editor.view.dom.setAttribute('autocapitalize', 'off');
 			},
 			parseOptions: {
 				preserveWhitespace: 'full'
@@ -103,7 +109,6 @@
 			>
 				{@html Icons.paragraph}
 			</button>
-
 			<button
 				type="button"
 				on:click={() => editor.chain().focus().toggleUnderline().run()}
@@ -113,7 +118,6 @@
 			>
 				{@html Icons.underline}
 			</button>
-
 			<details
 				use:clickOutside
 				bind:open={isHeaderOpen}
@@ -207,7 +211,6 @@
 					</button>
 				</ul>
 			</details>
-
 			<details
 				use:clickOutside
 				bind:open={isFormatOpen}
@@ -360,7 +363,7 @@
 		--crp-tiptap-box-shadow: #ffffff09 0px 0px 0px 0px, #eceef009 0px 0px 0px 0.075px,
 			#0000000d 0px 1.11119px 2.14825px -0.0370623px, #00000001 0px 0.075px 0.148249px -0.075px;
 		--crp-tiptap-width: 100%;
-		--crp-tiptap-background-color: #ffffff;
+		--crp-tiptap-background-color: #f4f6f8;
 		--crp-tiptap-min-height: 200px;
 		--crp-tiptap-padding: 12px;
 
@@ -375,7 +378,7 @@
 		@include box(var(--crp-tiptap-width), auto);
 		min-height: var(--crp-tiptap-min-height);
 
-		@include make-flex();
+		@include make-flex($just: flex-start);
 		gap: 20px;
 
 		&__toolbar {
@@ -384,9 +387,16 @@
 			@include make-flex($dir: row, $just: flex-start);
 			flex-wrap: wrap;
 			gap: 10px;
+			position: sticky;
+			top: -24px;
+			background-color: #f4f6f8;
+			z-index: 1;
+			padding: 12px 0;
+			margin: -12px 0;
 
 			.CrispMenu {
 				& > summary {
+					--crp-menu-background-color: #f4f6f8;
 					@include make-flex($dir: row, $just: space-between, $align: center);
 					padding-left: 10px;
 					padding-right: 25px;
@@ -402,6 +412,7 @@
 
 			.CrispButton {
 				&:not([data-type='ghost']) {
+					--crp-button-background-color: #f4f6f8;
 					--crp-button-padding-left: 7px;
 					--crp-button-padding-right: 7px;
 					--crp-button-padding-top: 7px;
@@ -459,6 +470,7 @@
 			min-height: var(--crp-tiptap-min-height);
 			min-width: 100%;
 			outline: none;
+			cursor: text;
 
 			.is-editor-empty:first-child::before {
 				color: #adb5bd;
