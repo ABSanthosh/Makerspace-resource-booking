@@ -207,9 +207,9 @@
 </Pane>
 
 <style lang="scss">
-	hr {
-		width: 100%;
-		border: none;
-		border-bottom: 1px solid var(--border);
-	}
+	// hr {
+	// 	width: 100%;
+	// 	border: none;
+	// 	border-bottom: 1px solid var(--border);
+	// }
 </style>

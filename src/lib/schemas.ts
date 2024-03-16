@@ -52,13 +52,29 @@ export const UserProfileZodSchema = z
 
 export type UserProfileSchema = z.infer<typeof UserProfileZodSchema>;
 
+export enum WeekDaysEnum {
+	M = 'MO',
+	T = 'TU',
+	W = 'WE',
+	Th = 'TH',
+	F = 'FR',
+	Sa = 'SA',
+	Su = 'SU'
+}
+
 export const EItemZodSchema = z.object({
 	id: z.string().optional().or(z.literal('')),
 	name: z.string().min(2),
+	equipmentId: z.string(),
 	description: z.string().optional().or(z.literal('')),
-	status: z.nativeEnum(EStatus),
+	status: z.nativeEnum(EStatus).default(EStatus.available).optional(),
 	cost: z.string().min(1).default('0'),
-	isDeleted: z.boolean().optional().or(z.literal(false))
+	isDeleted: z.boolean().optional().or(z.literal(false)),
+	availability: z.object({
+		starts: z.string(),
+		ends: z.string(),
+		repeat: z.array(z.nativeEnum(WeekDaysEnum))
+	})
 });
 
 export type EItemSchema = z.infer<typeof EItemZodSchema>;
@@ -76,7 +92,6 @@ export const EZodSchema = z.object({
 		.refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
 		.or(z.string()),
 	description: z.string().optional().default(''),
-	instances: z.array(EItemZodSchema),
 	eCategoriesId: z.string().min(7, { message: 'Category is required' }),
 	isDeleted: z.boolean().optional().or(z.literal(false))
 });

@@ -4,7 +4,7 @@ import { db } from '$lib/prisma';
 import type { ECategoriesSchema, EItemSchema } from '$lib/schemas';
 import type { ECategories, Equipment, Manual, Video } from '@prisma/client';
 
-export async function addEquipment(equipment: Equipment & { instances: EItemSchema[] }) {
+export async function addEquipment(equipment: Equipment) {
 	return await db.equipment.create({
 		data: {
 			name: equipment.name,
@@ -12,14 +12,6 @@ export async function addEquipment(equipment: Equipment & { instances: EItemSche
 			image: equipment.image as string,
 			description: equipment.description,
 			eCategoriesId: equipment.eCategoriesId,
-			instances: {
-				create: equipment.instances.map((item) => ({
-					name: item.name,
-					description: item.description!,
-					status: item.status,
-					cost: item.cost
-				}))
-			}
 		}
 	});
 }
@@ -148,6 +140,25 @@ export async function toggleEquipment(id: string, state: boolean) {
 			}
 		})
 	]);
+}
+
+export async function upsertInstance(instance: EItemSchema) {
+	return await db.eInstance.upsert({
+		where: {
+			id: instance.id || "0"
+		},
+		update: {
+			...instance
+		},
+		create: {
+			name: instance.name,
+			cost: instance.cost,
+			description: instance.description || "",
+			availability: instance.availability,
+			equipmentId: instance.equipmentId,
+			status: instance.status,
+		}
+	})
 }
 
 export async function getECategories() {

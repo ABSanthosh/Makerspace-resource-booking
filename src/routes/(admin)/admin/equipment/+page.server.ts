@@ -1,10 +1,9 @@
 import nanoid from '$lib/nanoid';
 import {
 	ECategoryCRUDZSchema,
+	EItemZodSchema,
 	EManualCRUDZSchema,
-	EManualZSchema,
 	EVideoCRUDZSchema,
-	EVideoZSchema,
 	EZodSchema
 } from '$lib/schemas';
 import { SupabaseEnum } from '$lib/Enums';
@@ -24,7 +23,8 @@ import {
 	deleteManuals,
 	addMultipleVideos,
 	deleteVideos,
-	deleteEquipment
+	deleteEquipment,
+	upsertInstance
 } from '$db/Equipment.db';
 
 // @ts-ignore
@@ -39,7 +39,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 		eCategories: await getECategories(),
 		categoryForm: await superValidate(zod(ECategoryCRUDZSchema)),
 		manualForm: await superValidate(zod(EManualCRUDZSchema)),
-		videoForm: await superValidate(zod(EVideoCRUDZSchema))
+		videoForm: await superValidate(zod(EVideoCRUDZSchema)),
+		upsertInstanceForm: await superValidate(zod(EItemZodSchema)),
 	};
 };
 
@@ -130,6 +131,17 @@ export const actions: Actions = {
 
 		return {
 			response: await toggleEquipment(id, false)
+		};
+	},
+	upsertInstance: async ({ request }) => {
+		const upsertInstanceForm = await superValidate(request, zod(EItemZodSchema));
+		if (!upsertInstanceForm.valid) {
+			return fail(400, { upsertInstanceForm });
+		}
+
+		return {
+			form: upsertInstanceForm,
+			response: await upsertInstance(upsertInstanceForm.data)
 		};
 	},
 	categoryCRUD: async ({ request }) => {

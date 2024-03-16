@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import type { ESchema } from '$lib/schemas';
+	import type { EItemSchema, ESchema } from '$lib/schemas';
 	import { type Writable } from 'svelte/store';
 	import EquipmentPane from './FormPanes/EquipmentPane.svelte';
 	import CategoryPane from './FormPanes/CategoryPane.svelte';
@@ -9,6 +9,7 @@
 	import ManualPane from './FormPanes/ManualPane.svelte';
 	import type { Manual, Video } from '@prisma/client';
 	import VideoPane from './FormPanes/VideoPane.svelte';
+	import InstancePane from './FormPanes/InstancePane.svelte';
 
 	export let data: PageData;
 
@@ -19,12 +20,15 @@
 		eCategories,
 		categoryForm,
 		manualForm,
-		videoForm
+		videoForm,
+		upsertInstanceForm
 	} = data);
 	$: equipmentModal = false;
 	$: manualModal = false;
 	$: videoModal = false;
+	$: instanceModal = false;
 	$: editItem = {} as (ESchema & { manuals: Manual[]; videos: Video[] }) | null;
+	$: editInstance = {} as EItemSchema;
 
 	$: eCategoriesModal = false;
 	$: editMenuId = '';
@@ -34,7 +38,6 @@
 			name: '',
 			model: '',
 			image: '',
-			instances: [],
 			description: '',
 			eCategoriesId: ''
 		});
@@ -47,6 +50,15 @@
 </script>
 
 {#if equipmentModal}
+	<!-- Doc: need to be put in a if condition because Tiptap editor inside the pane
+will initially have empty content on first load because there's a render considering
+the pane is for new equipment but later, when content is updated inside the "$:" block,
+the tiptap editor will not be re-rendered so the content will not be updated in the editor 
+if its for editing an existing equipment.
+
+Putting it in the if block will only render the pane when the modal is open and the content	
+is properly set.
+-->
 	<EquipmentPane
 		{resetForm}
 		bind:editItem
@@ -57,9 +69,12 @@
 	/>
 {/if}
 
+{#if instanceModal}
+	<InstancePane bind:modal={instanceModal} bind:formStore={upsertInstanceForm} />
+{/if}
+
 <ManualPane bind:modal={manualModal} bind:formStore={manualForm} bind:currentEquipment={editItem} />
 <VideoPane bind:modal={videoModal} bind:formStore={videoForm} bind:currentEquipment={editItem} />
-
 <CategoryPane bind:formStore={categoryForm} bind:eCategories bind:modal={eCategoriesModal} />
 
 <main class="AdminEquipment">
@@ -245,25 +260,40 @@
 											<th> Cost </th>
 											<th> Status </th>
 											<th>
-												<button
-													type="button"
-													class="CrispButton"
-													style="--crp-button-height: 24px; 
-																--crp-button-width: auto; 
-																--crp-button-padding-left: 6px; 
-																--crp-button-padding-right: 6px;"
-													on:click={() => {
-														// Todo: add functionality to add instance
-													}}
-												>
-													Add Instance
-												</button>
+												<div class="Row--j-end w-100 h-100">
+													<button
+														type="button"
+														class="CrispButton"
+														style="--crp-button-height: 24px; 
+													--crp-button-width: auto; 
+													--crp-button-padding-left: 6px; 
+													--crp-button-padding-right: 6px;"
+														on:click={() => {
+															instanceModal = true;
+															if (upsertInstanceForm) {
+																upsertInstanceForm.data = {
+																	name: `${item.name} - ${item.instances.length + 1}`,
+																	cost: '0',
+																	description: '',
+																	availability: {
+																		ends: "",
+																		starts: "",
+																		repeat: []
+																	},
+																	equipmentId: item.id
+																};
+															}
+														}}
+													>
+														Add Instance
+													</button>
+												</div>
 											</th>
 										</tr>
 									</thead>
 
 									<tbody>
-										{#if !item.isDeleted}
+										{#if !item.isDeleted && item.instances.length > 0}
 											{#each item.instances as instance}
 												<tr>
 													<td> {instance.name} </td>
@@ -272,25 +302,32 @@
 													<td> {instance.cost} </td>
 													<td> {instance.status} </td>
 													<td>
-														<!-- data-icon={String.fromCharCode(58313)} -->
-														<button
-															class="CrispButton"
-															style="--crp-button-height: 24px; 
+														<div class="Row--j-end w-100 h-100">
+															<button
+																class="CrispButton"
+																style="--crp-button-height: 24px; 
 																--crp-button-width: auto; 
 																--crp-button-padding-left: 6px; 
 																--crp-button-padding-right: 6px;"
-															on:click={() => {
-																// Todo: add functionality to edit instance
-															}}
-														>
-															Edit
-														</button>
+																on:click={() => {
+																	instanceModal = true;
+																	// editInstance = instance;
+																	if (upsertInstanceForm) {
+																		upsertInstanceForm.data = instance;
+																	}
+																}}
+															>
+																Edit
+															</button>
+														</div>
 													</td>
 												</tr>
 											{/each}
 										{:else}
 											<tr>
-												<td colspan="5"> No instances found </td>
+												<td colspan="6">
+													<i class="CrispMessage" data-type="error"> No instances found </i>
+												</td>
 											</tr>
 										{/if}
 									</tbody>
@@ -300,7 +337,9 @@
 					{/each}
 				{:else}
 					<tr class="empty">
-						<td colspan="5"> No results found </td>
+						<td colspan="5">
+							<i class="CrispMessage" data-type="error"> No results found </i>
+						</td>
 					</tr>
 				{/if}
 			</tbody>
@@ -378,7 +417,7 @@
 						&:last-child {
 							width: 20px;
 							border-right: 0;
-							text-align: end;
+							text-align: center;
 						}
 					}
 				}

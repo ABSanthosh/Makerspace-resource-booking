@@ -73,19 +73,19 @@ model Video {
 }
 
 model EInstance {
-  id          String     @id @unique @default(nanoid(7))
-  name        String
-  description String     @db.VarChar(2500)
-  status      EStatus?   @default(available)
-  cost        String
-  equipmentId String
+  id           String     @id @unique @default(nanoid(7))
+  name         String
+  description  String     @db.VarChar(2500)
+  status       EStatus?   @default(available)
+  cost         String
+  equipmentId  String
   // manuals
   // TODO: new model to hold availability of each instance
   // TODO: custom time for each instance
-  equipment   Equipment  @relation(fields: [equipmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  CartItem    CartItem[]
-
-  isDeleted Boolean @default(false) @map("is_deleted")
+  equipment    Equipment  @relation(fields: [equipmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  CartItem     CartItem[]
+  availability Json       @default("{}") @db.Json
+  isDeleted    Boolean    @default(false) @map("is_deleted")
 }
 
 model Cart {
