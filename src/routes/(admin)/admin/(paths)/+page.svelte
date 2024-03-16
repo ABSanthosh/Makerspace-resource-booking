@@ -26,11 +26,13 @@
 	<main class="Admin__contentWrapper">
 		<div class="Admin__content">
 			<h1>Page: {currentContent.name}</h1>
-			<HomeCMS
-				bind:id={currentContent.id}
-				bind:content={currentContent.data}
-				bind:contentForm={data.contentForm}
-			/>
+			{#if data.pathParam === currentContent.id || data.pathParam === null}
+				<HomeCMS
+					bind:id={currentContent.id}
+					bind:content={currentContent.data}
+					bind:contentForm={data.contentForm}
+				/>
+			{/if}
 		</div>
 	</main>
 </div>
