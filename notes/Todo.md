@@ -1,17 +1,14 @@
 ## Short run ToDo
 - [ ] Add trigger to delete manual from bucket when deleted from database
-- [ ] Move instances from pane to table inside the equipment table
-  - [ ] refactor add/edit action to single upsert action in +page.server.ts
-  - [ ]
+- [ ] remove already booked slots from the times list
+- [ ] Add modal for booking details
 
 ## Long run ToDo
 - [ ] Convert isDeleted to SecondaryStatus enum with values: deleted, disabled, enabled with default value enabled so that we can delete the ones with no dependents
-- [ ] gmail like editor for equipment description
-- [ ] Fix: When closing panes like equipment or categories, sometimes the new row just stays in the table 
-- [ ] remove already booked slots from the times list
-- [ ] Adding and deleting equipment is not working. Need to do it individually. Eg. If new instances are added, need to create it instead of upserting it and if deleted, need to delete. If it is edited, need to update it instead of upserting it.
 
 ## Completed Short run ToDo
+- [x] Move instances from pane to table inside the equipment table
+  - [x] refactor add/edit action to single upsert action in +page.server.ts
 - [x] fix admin CMS button submission
 - [x] Add manuals to equipment page
 - [x] Add videos to equipment page
@@ -31,6 +28,9 @@
 - [x] Add user profile page to fill before changing is_new to false and give access to other pages
 
 ## Completed Long run ToDo / Technical debt
+- [x] gmail like editor for equipment description(just put the same tiptap editor)
+- [x] Fix: When closing panes like equipment or categories, sometimes the new row just stays in the table 
+- [x] Adding and deleting equipment is not working. Need to do it individually. Eg. If new instances are added, need to create it instead of upserting it and if deleted, need to delete. If it is edited, need to update it instead of upserting it.
 - [x] Change equipment schema
 - [x] Add equipment category
 - [x] Add multiple types
