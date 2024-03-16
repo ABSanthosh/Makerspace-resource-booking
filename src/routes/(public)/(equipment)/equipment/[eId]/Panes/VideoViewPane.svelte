@@ -9,7 +9,7 @@
 		currentEquipment: (ESchema & { videos: Video[] }) | null;
 	};
 
-	$: eManuals = currentEquipment?.videos!;
+	$: eVideos = currentEquipment?.videos!;
 </script>
 
 <Pane bind:open={modal} style="--paneWidth: 450px;" on:close={() => (modal = false)}>
@@ -22,14 +22,14 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#if eManuals.length === 0}
+				{#if eVideos.length === 0}
 					<tr>
 						<td colspan="2">
-							<i> No Manuals found </i>
+							<i> No Videos found </i>
 						</td>
 					</tr>
 				{/if}
-				{#each eManuals as item}
+				{#each eVideos as item}
 					<tr>
 						<td colspan="2">
 							<YtEmbed url={item.video} />
@@ -40,7 +40,7 @@
 			<tfoot>
 				<tr>
 					<td colspan="3">
-						Showing {eManuals?.length ?? 0} result(s)
+						Showing {eVideos?.length ?? 0} result(s)
 					</td>
 				</tr>
 			</tfoot>

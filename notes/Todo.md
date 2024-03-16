@@ -1,5 +1,8 @@
 ## Short run ToDo
 - [ ] Add trigger to delete manual from bucket when deleted from database
+- [ ] Move instances from pane to table inside the equipment table
+  - [ ] refactor add/edit action to single upsert action in +page.server.ts
+  - [ ]
 
 ## Long run ToDo
 - [ ] Convert isDeleted to SecondaryStatus enum with values: deleted, disabled, enabled with default value enabled so that we can delete the ones with no dependents

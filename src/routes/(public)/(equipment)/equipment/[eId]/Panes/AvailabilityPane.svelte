@@ -66,67 +66,61 @@
 
 <Pane className="CartItemPane" bind:open={modal} style="--paneWidth: 450px;">
 	<p slot="header">Availability</p>
-	<form
-		slot="free"
-		use:enhance
-		method="POST"
-		id="cartItemForm"
-		class="CartItemPane__main"
-		action="/equipment/[eId]?/add"
-	>
-		<!-- <SuperDebug data={$form} /> -->
-
+	<div class="CartItemPane__main" slot="free">
 		<Calendar bind:value={dateSelector} />
 		<hr />
-		<label class="CrispLabel" for="dateSelector">
-			<span data-mandatory style="color: inherit;"> Date </span>
-			<input
-				disabled
-				type="text"
-				id="dateSelector"
-				class="CrispInput"
-				value={dateSelector.toLocaleDateString('en-GB', {
-					day: '2-digit',
-					month: '2-digit',
-					year: 'numeric'
-				})}
-			/>
-		</label>
+		<form use:enhance method="POST" id="cartItemForm" action="/equipment/[eId]?/add">
+			<!-- <SuperDebug data={$form} /> -->
+			<label class="CrispLabel" for="dateSelector">
+				<span data-mandatory style="color: inherit;"> Date </span>
+				<input
+					disabled
+					type="text"
+					id="dateSelector"
+					class="CrispInput"
+					value={dateSelector.toLocaleDateString('en-GB', {
+						day: '2-digit',
+						month: '2-digit',
+						year: 'numeric'
+					})}
+				/>
+			</label>
 
-		<label class="CrispLabel" for="startTime">
-			<span data-mandatory style="color: inherit;"> Start Time </span>
-			<select class="CrispSelect" style="--crp-select-width: 100%;" bind:value={startTime}>
-				<option value="" disabled selected> Select a start time </option>
-				{#each times.filter((item) => (endTime !== '' ? item < endTime : true)) as item}
-					<option value={item}>{item}</option>
-				{/each}
-			</select>
-			{#if $errors.start}
-				<ul class="CrispMessageList" data-type="error">
-					{#each $errors.start as error}
-						<li class="CrispMessageList__item">{error}</li>
+			<label class="CrispLabel" for="startTime">
+				<span data-mandatory style="color: inherit;"> Start Time </span>
+				<select class="CrispSelect" style="--crp-select-width: 100%;" bind:value={startTime}>
+					<option value="" disabled selected> Select a start time </option>
+					{#each times.filter((item) => (endTime !== '' ? item < endTime : true)) as item}
+						<option value={item}>{item}</option>
 					{/each}
-				</ul>
-			{/if}
-		</label>
+				</select>
+				{#if $errors.start}
+					<ul class="CrispMessageList" data-type="error">
+						{#each $errors.start as error}
+							<li class="CrispMessageList__item">{error}</li>
+						{/each}
+					</ul>
+				{/if}
+			</label>
 
-		<label class="CrispLabel" for="endTime">
-			<span data-mandatory style="color: inherit;"> End Time </span>
-			<select class="CrispSelect" style="--crp-select-width: 100%;" bind:value={endTime}>
-				<option value="" disabled selected> Select an end time </option>
-				{#each times.filter((item) => item > startTime) as item}
-					<option value={item}>{item}</option>
-				{/each}
-			</select>
-			{#if $errors.end}
-				<ul class="CrispMessageList" data-type="error">
-					{#each $errors.end as error}
-						<li class="CrispMessageList__item">{error}</li>
+			<label class="CrispLabel" for="endTime">
+				<span data-mandatory style="color: inherit;"> End Time </span>
+				<select class="CrispSelect" style="--crp-select-width: 100%;" bind:value={endTime}>
+					<option value="" disabled selected> Select an end time </option>
+					{#each times.filter((item) => item > startTime) as item}
+						<option value={item}>{item}</option>
 					{/each}
-				</ul>
-			{/if}
-		</label>
-	</form>
+				</select>
+				{#if $errors.end}
+					<ul class="CrispMessageList" data-type="error">
+						{#each $errors.end as error}
+							<li class="CrispMessageList__item">{error}</li>
+						{/each}
+					</ul>
+				{/if}
+			</label>
+		</form>
+	</div>
 	<div class="Row--j-end gap-10" slot="footer">
 		<button class="FancyButton" data-type="black-outline" on:click={() => (modal = false)}>
 			Close
@@ -144,6 +138,12 @@
 			overflow-y: auto;
 			@include box(100%, auto);
 			@include make-flex($just: flex-start);
+
+			& > form {
+				gap: 15px;
+				@include box(100%, auto);
+				@include make-flex($just: flex-start);
+			}
 
 			& > hr {
 				width: 90%;
