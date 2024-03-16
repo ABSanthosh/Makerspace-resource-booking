@@ -61,9 +61,9 @@
 			<slot name="free" />
 		{/if}
 		{#if $$slots.footer}
-		<footer>
-			<slot name="footer" />
-		</footer>
+			<footer>
+				<slot name="footer" />
+			</footer>
 		{/if}
 	</div>
 </dialog>
@@ -87,6 +87,11 @@
 		max-width: none;
 		max-height: none;
 		overflow: hidden;
+
+		@include respondAt(600px) {
+			--paneWidth: auto !important;
+		}
+
 		& > div {
 			z-index: 1;
 			background-color: #fbfcfd;
