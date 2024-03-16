@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { EStatus } from '@prisma/client';
 	import Pane from '$components/Pane.svelte';
 	import type { Writable } from 'svelte/store';
 	import type { ECategories } from '@prisma/client';
@@ -11,82 +10,34 @@
 	import TipTap from '$components/TipTap.svelte';
 	import { addToast } from '$store/ToastStore';
 
-	export let { modal, formStore, editFormStore, resetForm, eCategories, editItem } = $$props as {
+	export let { modal, formStore, resetForm, eCategories } = $$props as {
 		modal: boolean;
-		editItem: ESchema | null;
 		eCategories: ECategories[];
 		resetForm: (form: Writable<ESchema>) => void;
 		formStore: SuperValidated<ESchema>;
-		editFormStore: SuperValidated<ESchema>;
 	};
 
-	const {
-		form: newForm,
-		errors: newErrors,
-		enhance: newEnhance,
-		tainted: newTainted,
-		constraints: newConstraints,
-		formId: newFormId
-	} = superForm(formStore, {
-		id: 'newEquipmentForm',
+	const { form, errors, enhance, tainted, constraints, formId } = superForm(formStore, {
+		id: 'equipmentForm',
 		dataType: 'json',
 		onResult(event) {
 			if (event.result.status === 200) {
 				modal = false;
 				addToast({
-					message: 'Equipment added successfully'
+					message:
+						$form?.id !== undefined
+							? 'Equipment updated successfully'
+							: 'Equipment added successfully'
 				});
-				resetForm(newForm);
+				resetForm(form);
 			}
 		},
 		taintedMessage: null
 	});
 
-	const {
-		form: editForm,
-		errors: editErrors,
-		enhance: editEnhance,
-		tainted: editTainted,
-		constraints: editConstraints,
-		formId: editFormId
-	} = superForm(editFormStore, {
-		id: 'editEquipmentForm',
-		dataType: 'json',
-		onResult(event) {
-			if (event.result.status === 200) {
-				modal = false;
-				addToast({
-					message: 'Equipment updated successfully'
-				});
-				resetForm(editForm);
-			}
-		}
-	});
-
-	$: form = newForm;
-	$: errors = newErrors;
-	$: actionType = 'add';
-	$: tainted = newTainted;
-	$: constraints = newConstraints;
-	$: enhance = newEnhance;
-	$: formId = newFormId;
 	$: paneTitle = 'Add Equipment';
-
-	$: if (editItem?.id !== undefined) {
-		console.log(editItem);
-		editForm.set(editItem);
-		editTainted.set(undefined);
-
-		if (actionType === 'add' && formId === newFormId) {
-			form = editForm;
-			errors = editErrors;
-			actionType = 'edit';
-			formId = editFormId;
-			enhance = editEnhance;
-			tainted = editTainted;
-			paneTitle = 'Edit Equipment';
-			constraints = editConstraints;
-		}
+	$: if ($form?.id) {
+		paneTitle = 'Edit Equipment';
 	}
 </script>
 
@@ -95,7 +46,6 @@
 	style="--paneWidth: 485px;"
 	on:close={() => {
 		resetForm(form);
-		editItem = null;
 	}}
 >
 	<p slot="header">
@@ -108,7 +58,7 @@
 			method="POST"
 			enctype="multipart/form-data"
 			class="Col--center gap-10 w-100"
-			action="/admin/equipment?/{actionType}"
+			action="/admin/equipment?/upsertEquipment"
 		>
 			<!-- <SuperDebug data={$form} /> -->
 			<label class="CrispLabel" for="eCategoriesId">
@@ -189,7 +139,6 @@
 			on:click={() => {
 				modal = false;
 				resetForm(form);
-				editItem = null;
 			}}
 		>
 			Cancel
@@ -199,9 +148,9 @@
 			class="CrispButton"
 			data-type="dark"
 			type="submit"
-			disabled={editItem?.id !== undefined && $tainted === undefined}
+			disabled={$form?.id !== undefined && $tainted === undefined}
 		>
-			{editItem?.id !== undefined ? 'Update' : 'Submit'}
+			{$form?.id !== undefined ? 'Update' : 'Submit'}
 		</button>
 	</div>
 </Pane>

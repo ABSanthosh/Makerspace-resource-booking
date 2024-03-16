@@ -4,18 +4,6 @@ import { db } from '$lib/prisma';
 import type { ECategoriesSchema, EItemSchema } from '$lib/schemas';
 import type { ECategories, Equipment, Manual, Video } from '@prisma/client';
 
-export async function addEquipment(equipment: Equipment) {
-	return await db.equipment.create({
-		data: {
-			name: equipment.name,
-			model: equipment.model,
-			image: equipment.image as string,
-			description: equipment.description,
-			eCategoriesId: equipment.eCategoriesId,
-		}
-	});
-}
-
 export async function getAllEquipmentPreview(): Promise<
 	{
 		id: string;
@@ -97,12 +85,19 @@ export async function getEquipmentById(id: string): Promise<
 		});
 }
 
-export async function editEquipment(equipment: Equipment) {
-	return await db.equipment.update({
+export async function upsertEquipment(equipment: Equipment) {
+	return await db.equipment.upsert({
 		where: {
 			id: equipment.id
 		},
-		data: {
+		update: {
+			name: equipment.name,
+			model: equipment.model,
+			image: equipment.image,
+			description: equipment.description,
+			eCategoriesId: equipment.eCategoriesId
+		},
+		create: {
 			name: equipment.name,
 			model: equipment.model,
 			image: equipment.image,

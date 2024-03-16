@@ -14,8 +14,7 @@
 	export let data: PageData;
 
 	$: ({
-		newEquipmentForm,
-		editEquipmentForm,
+		upsertEquipmentForm,
 		allEquipment,
 		eCategories,
 		categoryForm,
@@ -28,7 +27,6 @@
 	$: videoModal = false;
 	$: instanceModal = false;
 	$: editItem = {} as (ESchema & { manuals: Manual[]; videos: Video[] }) | null;
-	$: editInstance = {} as EItemSchema;
 
 	$: eCategoriesModal = false;
 	$: editMenuId = '';
@@ -61,11 +59,9 @@ is properly set.
 -->
 	<EquipmentPane
 		{resetForm}
-		bind:editItem
 		bind:eCategories
 		bind:modal={equipmentModal}
-		bind:formStore={newEquipmentForm}
-		bind:editFormStore={editEquipmentForm}
+		bind:formStore={upsertEquipmentForm}
 	/>
 {/if}
 
@@ -95,7 +91,15 @@ is properly set.
 				data-type="dark-blue"
 				on:click={() => {
 					equipmentModal = !equipmentModal;
-					editItem = null;
+					if (upsertEquipmentForm) {
+						upsertEquipmentForm.data = {
+							name: '',
+							model: '',
+							image: '',
+							description: '',
+							eCategoriesId: ''
+						};
+					}
 				}}
 			>
 				Add equipment
@@ -154,12 +158,14 @@ is properly set.
 											data-border="false"
 											class:active={editMenuId === item.id}
 											on:click={() => {
-												editItem = {
-													...item,
-													// Doc: We have to remove the ?cache from the image URL so it won't be cycled
-													// the name of the image file when we update the image
-													image: item.image.split('?')[0]
-												};
+												if (upsertEquipmentForm) {
+													upsertEquipmentForm.data = {
+														...item,
+														// Doc: We have to remove the ?cache from the image URL so it won't be cycled
+														// the name of the image file when we update the image
+														image: item.image.split('?')[0]
+													};
+												}
 												equipmentModal = true;
 												editMenuId = '';
 											}}
@@ -276,8 +282,8 @@ is properly set.
 																	cost: '0',
 																	description: '',
 																	availability: {
-																		ends: "",
-																		starts: "",
+																		ends: '',
+																		starts: '',
 																		repeat: []
 																	},
 																	equipmentId: item.id
@@ -311,7 +317,6 @@ is properly set.
 																--crp-button-padding-right: 6px;"
 																on:click={() => {
 																	instanceModal = true;
-																	// editInstance = instance;
 																	if (upsertInstanceForm) {
 																		upsertInstanceForm.data = instance;
 																	}

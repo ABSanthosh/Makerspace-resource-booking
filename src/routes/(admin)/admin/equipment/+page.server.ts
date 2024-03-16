@@ -12,10 +12,8 @@ import { fail, type Actions } from '@sveltejs/kit';
 import { superValidate, withFiles } from 'sveltekit-superforms/server';
 import { zod } from 'sveltekit-superforms/adapters';
 import {
-	addEquipment,
 	deleteECategories,
 	toggleEquipment,
-	editEquipment,
 	getAllEquipment,
 	getECategories,
 	upsertECategories,
@@ -24,17 +22,17 @@ import {
 	addMultipleVideos,
 	deleteVideos,
 	deleteEquipment,
-	upsertInstance
+	upsertInstance,
+	upsertEquipment
 } from '$db/Equipment.db';
 
 // @ts-ignore
 export const load: PageServerLoad = async ({ locals }) => {
-	const newEquipmentForm = await superValidate(zod(EZodSchema));
-	if (Object.keys(locals).length === 0) return { newEquipmentForm };
+	const upsertEquipmentForm = await superValidate(zod(EZodSchema));
+	if (Object.keys(locals).length === 0) return { upsertEquipmentForm };
 
 	return {
-		newEquipmentForm,
-		editEquipmentForm: await superValidate(zod(EZodSchema)),
+		upsertEquipmentForm,
 		allEquipment: await getAllEquipment(),
 		eCategories: await getECategories(),
 		categoryForm: await superValidate(zod(ECategoryCRUDZSchema)),
@@ -45,64 +43,51 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	add: async ({ request, locals: { supabase } }) => {
-		const newEquipmentForm = await superValidate(request, zod(EZodSchema));
-		const imageFile = newEquipmentForm.data.image as File;
+	upsertEquipment: async ({ request, locals: { supabase } }) => {
+		const upsertEquipmentForm = await superValidate(request, zod(EZodSchema));
+		const imageFile = upsertEquipmentForm.data.image as File;
 
-		if (!newEquipmentForm.valid) {
+		if (!upsertEquipmentForm.valid) {
 			// Doc: https://superforms.rocks/concepts/files#form-action-caveat---withfiles
-			return fail(400, withFiles({ newEquipmentForm }));
-		}
-		const { data, error } = await supabase.storage
-			.from(SupabaseEnum.EQUIPMENT)
-			.upload(`${nanoid()}.${imageFile.name.split('.').pop()}`, imageFile);
-
-		if (error) {
-			return fail(400, withFiles({ newEquipmentForm, error }));
+			return fail(400, withFiles({ upsertEquipmentForm }));
 		}
 
-		return withFiles({
-			newEquipmentForm,
-			response: await addEquipment({
-				// Doc: Id will be filled in by the database
-				...newEquipmentForm.data,
-				id: '',
-				image: data.path,
-				isDeleted: false
-			}),
-			allEquipment: await getAllEquipment()
-		});
-	},
-	edit: async ({ request, locals: { supabase } }) => {
-		const editEquipmentForm = await superValidate(request, zod(EZodSchema));
-		const imageFile = editEquipmentForm.data.image as File;
+		// Doc: we don't want to update the image if it's a string, because it's already in the database.
+		// Only update the image if it's a file.
+		if (typeof imageFile !== "string") {
+			if (upsertEquipmentForm.data.id) {
+				const { data, error } = await supabase.storage
+					.from(SupabaseEnum.EQUIPMENT)
+					.update(imageFile.name, imageFile, {
+						upsert: true,
+						cacheControl: '0'
+					});
+				if (error) {
+					console.log('error', error);
+					return fail(400, withFiles({ upsertEquipmentForm, error }));
+				}
 
-		if ((imageFile.name || imageFile != undefined) && typeof imageFile !== 'string') {
-			const { data, error } = await supabase.storage
-				.from(SupabaseEnum.EQUIPMENT)
-				.update(imageFile.name, editEquipmentForm.data.image, {
-					upsert: true,
-					cacheControl: '0'
-				});
-			if (error) {
-				return fail(400, withFiles({ editEquipmentForm, error }));
+				// Doc: When the image is updated, the cache is invalidated so the new image is shown.
+				upsertEquipmentForm.data.image = data.path + '?cache=' + new Date().getTime();
+			} else {
+				const { data, error } = await supabase.storage
+					.from(SupabaseEnum.EQUIPMENT)
+					.upload(`${nanoid()}.${imageFile.name.split('.').pop()}`, imageFile);
+				if (error) {
+					return fail(400, withFiles({ upsertEquipmentForm, error }));
+				}
+
+				upsertEquipmentForm.data.image = data.path;
 			}
-
-			// Doc: When the image is updated, the cache is invalidated so the new image is shown.
-			editEquipmentForm.data.image = data.path + '?cache=' + new Date().getTime();
-		}
-
-		if (!editEquipmentForm.valid) {
-			return fail(400, withFiles({ editEquipmentForm }));
 		}
 
 		return withFiles({
-			editEquipmentForm,
-			response: await editEquipment({
-				...editEquipmentForm.data,
-				id: editEquipmentForm.data.id!,
-				image: imageFile.name,
-				isDeleted: editEquipmentForm.data.isDeleted!
+			upsertEquipmentForm,
+			response: await upsertEquipment({
+				...upsertEquipmentForm.data,
+				id: upsertEquipmentForm.data.id || '',
+				image: upsertEquipmentForm.data.image as string,
+				isDeleted: upsertEquipmentForm.data.isDeleted || false
 			}),
 			allEquipment: await getAllEquipment()
 		});
