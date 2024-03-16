@@ -46,14 +46,16 @@
 	);
 </script>
 
-<EquipmentPane
-	{resetForm}
-	bind:editItem
-	bind:eCategories
-	bind:modal={equipmentModal}
-	bind:formStore={newEquipmentForm}
-	bind:editFormStore={editEquipmentForm}
-/>
+{#if equipmentModal}
+	<EquipmentPane
+		{resetForm}
+		bind:editItem
+		bind:eCategories
+		bind:modal={equipmentModal}
+		bind:formStore={newEquipmentForm}
+		bind:editFormStore={editEquipmentForm}
+	/>
+{/if}
 
 <ManualPane bind:modal={manualModal} bind:formStore={manualForm} bind:currentEquipment={editItem} />
 <VideoPane bind:modal={videoModal} bind:formStore={videoForm} bind:currentEquipment={editItem} />
@@ -76,7 +78,10 @@
 			<button
 				class="CrispButton"
 				data-type="dark-blue"
-				on:click={() => (equipmentModal = !equipmentModal)}
+				on:click={() => {
+					equipmentModal = !equipmentModal;
+					editItem = null;
+				}}
 			>
 				Add equipment
 			</button>
@@ -209,23 +214,87 @@
 											method="POST"
 											action="/admin/equipment?/delete"
 											on:submit={() => {
-												return confirm('Are you sure you want to delete this equipment permanently?');
+												return confirm(
+													'Are you sure you want to delete this equipment permanently?'
+												);
 											}}
 										>
 											<input type="hidden" name="id" value={item.id} />
 											<input type="hidden" name="imageId" value={item.image} />
 											<button
 												class="CrispButton"
-												data-type='danger'
+												data-type="danger"
 												data-border="false"
 												class:active={editMenuId === item.id}
 											>
 												Delete
 											</button>
 										</form>
-
 									</ul>
 								</details>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="5" class="AdminEquipment__subTableBox">
+								<table class="FancyTable">
+									<thead>
+										<tr>
+											<th> Instance Name </th>
+											<th> Model </th>
+											<th> Category </th>
+											<th> Cost </th>
+											<th> Status </th>
+											<th>
+												<button
+													type="button"
+													class="CrispButton"
+													style="--crp-button-height: 24px; 
+																--crp-button-width: auto; 
+																--crp-button-padding-left: 6px; 
+																--crp-button-padding-right: 6px;"
+													on:click={() => {
+														// Todo: add functionality to add instance
+													}}
+												>
+													Add Instance
+												</button>
+											</th>
+										</tr>
+									</thead>
+
+									<tbody>
+										{#if !item.isDeleted}
+											{#each item.instances as instance}
+												<tr>
+													<td> {instance.name} </td>
+													<td> {item.model} </td>
+													<td> {item.category.name} </td>
+													<td> {instance.cost} </td>
+													<td> {instance.status} </td>
+													<td>
+														<!-- data-icon={String.fromCharCode(58313)} -->
+														<button
+															class="CrispButton"
+															style="--crp-button-height: 24px; 
+																--crp-button-width: auto; 
+																--crp-button-padding-left: 6px; 
+																--crp-button-padding-right: 6px;"
+															on:click={() => {
+																// Todo: add functionality to edit instance
+															}}
+														>
+															Edit
+														</button>
+													</td>
+												</tr>
+											{/each}
+										{:else}
+											<tr>
+												<td colspan="5"> No instances found </td>
+											</tr>
+										{/if}
+									</tbody>
+								</table>
 							</td>
 						</tr>
 					{/each}
@@ -267,6 +336,51 @@
 
 				@include respondAt(645px) {
 					--crp-input-width: 100%;
+				}
+			}
+		}
+
+		&__subTableBox {
+			padding: 0 0 0 24px;
+			position: relative;
+			&::before {
+				content: '';
+				left: 12px;
+				display: block;
+				@include box(10px, 20px);
+				border-radius: 0 0 0 6px;
+				position: absolute;
+				border-top: 0px solid transparent;
+				border-left: 2px dashed #c1c3c6;
+				border-right: 0px solid transparent;
+				border-bottom: 2px dashed #c1c3c6;
+			}
+
+			.FancyTable {
+				tr {
+					& > th {
+						border-top: 0;
+						// background-color: rgb(243, 243, 243);
+						padding: 9px 12px 9px 14px;
+						&:first-child {
+							border-top-left-radius: 0;
+							border-top-right-radius: 0;
+						}
+
+						&:last-child {
+							border-top-right-radius: 0;
+							border-right: 0;
+						}
+					}
+
+					& > td {
+						padding: 9px 14px;
+						&:last-child {
+							width: 20px;
+							border-right: 0;
+							text-align: end;
+						}
+					}
 				}
 			}
 		}
