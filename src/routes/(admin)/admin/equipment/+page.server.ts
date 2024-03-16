@@ -47,7 +47,6 @@ export const actions: Actions = {
 	add: async ({ request, locals: { supabase } }) => {
 		const newEquipmentForm = await superValidate(request, zod(EZodSchema));
 		const imageFile = newEquipmentForm.data.image as File;
-		console.log(newEquipmentForm.data.image);
 
 		if (!newEquipmentForm.valid) {
 			// Doc: https://superforms.rocks/concepts/files#form-action-caveat---withfiles
@@ -58,7 +57,6 @@ export const actions: Actions = {
 			.upload(`${nanoid()}.${imageFile.name.split('.').pop()}`, imageFile);
 
 		if (error) {
-			console.log(error);
 			return fail(400, withFiles({ newEquipmentForm, error }));
 		}
 
@@ -77,7 +75,6 @@ export const actions: Actions = {
 	edit: async ({ request, locals: { supabase } }) => {
 		const editEquipmentForm = await superValidate(request, zod(EZodSchema));
 		const imageFile = editEquipmentForm.data.image as File;
-		console.log(editEquipmentForm.data);
 
 		if ((imageFile.name || imageFile != undefined) && typeof imageFile !== 'string') {
 			const { data, error } = await supabase.storage
@@ -87,7 +84,7 @@ export const actions: Actions = {
 					cacheControl: '0'
 				});
 			if (error) {
-				return fail(400, { editEquipmentForm, error });
+				return fail(400, withFiles({ editEquipmentForm, error }));
 			}
 
 			// Doc: When the image is updated, the cache is invalidated so the new image is shown.
@@ -95,19 +92,19 @@ export const actions: Actions = {
 		}
 
 		if (!editEquipmentForm.valid) {
-			return fail(400, { editEquipmentForm });
+			return fail(400, withFiles({ editEquipmentForm }));
 		}
 
-		return {
+		return withFiles({
 			editEquipmentForm,
 			response: await editEquipment({
 				...editEquipmentForm.data,
-				id: '',
+				id: editEquipmentForm.data.id!,
 				image: imageFile.name,
 				isDeleted: editEquipmentForm.data.isDeleted!
 			}),
 			allEquipment: await getAllEquipment()
-		};
+		});
 	},
 	disable: async ({ request }) => {
 		const formData = await request.formData();
