@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import DynamicContentForm from './DynamicContentForm.svelte';
+	import HomeCMS from './FormPanes/HomeCMS.svelte';
 
 	export let data: PageData;
 
@@ -11,9 +11,12 @@
 	<aside>
 		<h3>Path Content</h3>
 		<ul>
-			{#each data.content as item}
+			{#each data.content as item, index}
 				<li>
-					<a href="?path={item.id}" class:active={item.id === data.pathParam}>
+					<a
+						href="?path={item.id}"
+						class:active={item.id === data.pathParam || (data.pathParam === null && index === 0)}
+					>
 						{item.name}
 					</a>
 				</li>
@@ -22,12 +25,14 @@
 	</aside>
 	<main class="Admin__contentWrapper">
 		<div class="Admin__content">
-			<h1>Path: {currentContent.name}</h1>
-			<DynamicContentForm
-				bind:id={currentContent.id}
-				bind:content={currentContent.data}
-				bind:contentForm={data.contentForm}
-			/>
+			<h1>Page: {currentContent.name}</h1>
+			{#if data.pathParam === currentContent.id || data.pathParam === null}
+				<HomeCMS
+					bind:id={currentContent.id}
+					bind:content={currentContent.data}
+					bind:contentForm={data.contentForm}
+				/>
+			{/if}
 		</div>
 	</main>
 </div>

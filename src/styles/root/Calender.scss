@@ -1,0 +1,25 @@
+.calendar-view {
+  .calendar-view-header-text > button {
+    cursor: pointer;
+  }
+  .calendar-view-pagination-controls > button {
+    cursor: pointer;
+  }
+  .calendar-view-item {
+    cursor: pointer;
+  }
+
+  // Out of range
+  --fds-text-secondary: #7f7f81;
+  --fds-control-corner-radius: 7px;
+  --fds-accent-default: #0078d4;
+  --fds-accent-secondary: #106ebe;
+  --fds-text-on-accent-primary: #ffffff;
+  --fds-subtle-fill-secondary: #e0e0e0;
+  // --fds-subtle-fill-transparent: #e30000;
+
+  @include box(100% !important, $height: auto);
+  .calendar-view-table-wrapper {
+    @include box(100% !important, $height: auto);
+  }
+}

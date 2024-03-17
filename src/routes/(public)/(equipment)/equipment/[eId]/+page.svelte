@@ -227,6 +227,14 @@
 			p {
 				font-size: 18px;
 				font-weight: 400;
+				white-space: pre-line;
+				:global(ul) {
+					padding: 0 1rem;
+
+					& :global(li) {
+						line-height: 1.5;
+					}
+				}
 			}
 		}
 

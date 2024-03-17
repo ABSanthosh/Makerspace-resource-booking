@@ -1,16 +1,18 @@
 ## Short run ToDo
-- [ ] Add manuals to equipment page
-- [ ] Add videos to equipment page
-- [ ] add video upload to admin page
 - [ ] Add trigger to delete manual from bucket when deleted from database
-- [ ] fix admin CMS button submission
+- [ ] remove already booked slots from the times list
+- [ ] Add modal for booking details
 
 ## Long run ToDo
 - [ ] Convert isDeleted to SecondaryStatus enum with values: deleted, disabled, enabled with default value enabled so that we can delete the ones with no dependents
-- [ ] gmail like editor for equipment description
-- [ ] Fix: When closing panes like equipment or categories, sometimes the new row just stays in the table 
 
 ## Completed Short run ToDo
+- [x] Move instances from pane to table inside the equipment table
+  - [x] refactor add/edit action to single upsert action in +page.server.ts
+- [x] fix admin CMS button submission
+- [x] Add manuals to equipment page
+- [x] Add videos to equipment page
+- [x] add video upload to admin page
 - [x] footer in pane is still showing when the slot for footer is empty
 - [x] Test deleting single manual
 - [x] Add dropdown in admin equipment page to edit or delete equipment
@@ -26,7 +28,9 @@
 - [x] Add user profile page to fill before changing is_new to false and give access to other pages
 
 ## Completed Long run ToDo / Technical debt
-
+- [x] gmail like editor for equipment description(just put the same tiptap editor)
+- [x] Fix: When closing panes like equipment or categories, sometimes the new row just stays in the table 
+- [x] Adding and deleting equipment is not working. Need to do it individually. Eg. If new instances are added, need to create it instead of upserting it and if deleted, need to delete. If it is edited, need to update it instead of upserting it.
 - [x] Change equipment schema
 - [x] Add equipment category
 - [x] Add multiple types
@@ -37,12 +41,10 @@
 - [x] make time sheet
 - [x] return to equipment page if manually opened a wrong equipment id
 - [x] image upload in equipment
-- [ ] Adding and deleting equipment is not working. Need to do it individually. Eg. If new instances are added, need to create it instead of upserting it and if deleted, need to delete. If it is edited, need to update it instead of upserting it.
 - [x] add error handling for equipment image upload9
 - [x] clear form on closing pane(new and edit equipment)
 - [x] seed data for inserting equipment data
 - [x] (urgent) replace admin type from profile to custom claim
-- [ ] remove already booked slots from the times list
 - [x] disabled buttons on panes if the forms are not filled properly. Maybe look into tainted property from superforms
 - [x] protected route redirect in client side
 - [x] Input

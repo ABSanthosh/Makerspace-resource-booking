@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import type { ESchema } from '$lib/schemas';
+	import type { EItemSchema, ESchema } from '$lib/schemas';
 	import { type Writable } from 'svelte/store';
 	import EquipmentPane from './FormPanes/EquipmentPane.svelte';
 	import CategoryPane from './FormPanes/CategoryPane.svelte';
@@ -9,21 +9,23 @@
 	import ManualPane from './FormPanes/ManualPane.svelte';
 	import type { Manual, Video } from '@prisma/client';
 	import VideoPane from './FormPanes/VideoPane.svelte';
+	import InstancePane from './FormPanes/InstancePane.svelte';
 
 	export let data: PageData;
 
 	$: ({
-		newEquipmentForm,
-		editEquipmentForm,
+		upsertEquipmentForm,
 		allEquipment,
 		eCategories,
 		categoryForm,
 		manualForm,
-		videoForm
+		videoForm,
+		upsertInstanceForm
 	} = data);
 	$: equipmentModal = false;
 	$: manualModal = false;
 	$: videoModal = false;
+	$: instanceModal = false;
 	$: editItem = {} as (ESchema & { manuals: Manual[]; videos: Video[] }) | null;
 
 	$: eCategoriesModal = false;
@@ -34,7 +36,6 @@
 			name: '',
 			model: '',
 			image: '',
-			instances: [],
 			description: '',
 			eCategoriesId: ''
 		});
@@ -46,18 +47,30 @@
 	);
 </script>
 
-<EquipmentPane
-	{resetForm}
-	bind:editItem
-	bind:eCategories
-	bind:modal={equipmentModal}
-	bind:formStore={newEquipmentForm}
-	bind:editFormStore={editEquipmentForm}
-/>
+{#if equipmentModal}
+	<!-- Doc: need to be put in a if condition because Tiptap editor inside the pane
+will initially have empty content on first load because there's a render considering
+the pane is for new equipment but later, when content is updated inside the "$:" block,
+the tiptap editor will not be re-rendered so the content will not be updated in the editor 
+if its for editing an existing equipment.
+
+Putting it in the if block will only render the pane when the modal is open and the content	
+is properly set.
+-->
+	<EquipmentPane
+		{resetForm}
+		bind:eCategories
+		bind:modal={equipmentModal}
+		bind:formStore={upsertEquipmentForm}
+	/>
+{/if}
+
+{#if instanceModal}
+	<InstancePane bind:modal={instanceModal} bind:formStore={upsertInstanceForm} />
+{/if}
 
 <ManualPane bind:modal={manualModal} bind:formStore={manualForm} bind:currentEquipment={editItem} />
 <VideoPane bind:modal={videoModal} bind:formStore={videoForm} bind:currentEquipment={editItem} />
-
 <CategoryPane bind:formStore={categoryForm} bind:eCategories bind:modal={eCategoriesModal} />
 
 <main class="AdminEquipment">
@@ -76,7 +89,18 @@
 			<button
 				class="CrispButton"
 				data-type="dark-blue"
-				on:click={() => (equipmentModal = !equipmentModal)}
+				on:click={() => {
+					equipmentModal = !equipmentModal;
+					if (upsertEquipmentForm) {
+						upsertEquipmentForm.data = {
+							name: '',
+							model: '',
+							image: '',
+							description: '',
+							eCategoriesId: ''
+						};
+					}
+				}}
 			>
 				Add equipment
 			</button>
@@ -134,12 +158,14 @@
 											data-border="false"
 											class:active={editMenuId === item.id}
 											on:click={() => {
-												editItem = {
-													...item,
-													// Doc: We have to remove the ?cache from the image URL so it won't be cycled
-													// the name of the image file when we update the image
-													image: item.image.split('?')[0]
-												};
+												if (upsertEquipmentForm) {
+													upsertEquipmentForm.data = {
+														...item,
+														// Doc: We have to remove the ?cache from the image URL so it won't be cycled
+														// the name of the image file when we update the image
+														image: item.image.split('?')[0]
+													};
+												}
 												equipmentModal = true;
 												editMenuId = '';
 											}}
@@ -184,7 +210,7 @@
 											use:enhance
 											class="w-100"
 											method="POST"
-											action="/admin/equipment?/{item.isDeleted ? 'enable' : 'delete'}"
+											action="/admin/equipment?/{item.isDeleted ? 'enable' : 'disable'}"
 											on:submit={() => {
 												return confirm(
 													`Are you sure you want to ${
@@ -200,17 +226,125 @@
 												data-border="false"
 												class:active={editMenuId === item.id}
 											>
-												{item.isDeleted ? 'Enable' : 'Delete'}
+												{item.isDeleted ? 'Enable' : 'Disable'}
+											</button>
+										</form>
+										<form
+											use:enhance
+											class="w-100"
+											method="POST"
+											action="/admin/equipment?/delete"
+											on:submit={() => {
+												return confirm(
+													'Are you sure you want to delete this equipment permanently?'
+												);
+											}}
+										>
+											<input type="hidden" name="id" value={item.id} />
+											<input type="hidden" name="imageId" value={item.image} />
+											<button
+												class="CrispButton"
+												data-type="danger"
+												data-border="false"
+												class:active={editMenuId === item.id}
+											>
+												Delete
 											</button>
 										</form>
 									</ul>
 								</details>
 							</td>
 						</tr>
+						<tr>
+							<td colspan="5" class="AdminEquipment__subTableBox">
+								<table class="FancyTable">
+									<thead>
+										<tr>
+											<th> Instance Name </th>
+											<th> Model </th>
+											<th> Category </th>
+											<th> Cost </th>
+											<th> Status </th>
+											<th>
+												<div class="Row--j-end w-100 h-100">
+													<button
+														type="button"
+														class="CrispButton"
+														style="--crp-button-height: 24px; 
+													--crp-button-width: auto; 
+													--crp-button-padding-left: 6px; 
+													--crp-button-padding-right: 6px;"
+														on:click={() => {
+															instanceModal = true;
+															if (upsertInstanceForm) {
+																upsertInstanceForm.data = {
+																	name: `${item.name} - ${item.instances.length + 1}`,
+																	cost: '0',
+																	description: '',
+																	availability: {
+																		ends: '',
+																		starts: '',
+																		repeat: []
+																	},
+																	equipmentId: item.id
+																};
+															}
+														}}
+													>
+														Add Instance
+													</button>
+												</div>
+											</th>
+										</tr>
+									</thead>
+
+									<tbody>
+										{#if !item.isDeleted && item.instances.length > 0}
+											{#each item.instances as instance}
+												<tr>
+													<td> {instance.name} </td>
+													<td> {item.model} </td>
+													<td> {item.category.name} </td>
+													<td> {instance.cost} </td>
+													<td> {instance.status} </td>
+													<td>
+														<div class="Row--j-end w-100 h-100">
+															<button
+																class="CrispButton"
+																style="--crp-button-height: 24px; 
+																--crp-button-width: auto; 
+																--crp-button-padding-left: 6px; 
+																--crp-button-padding-right: 6px;"
+																on:click={() => {
+																	instanceModal = true;
+																	if (upsertInstanceForm) {
+																		upsertInstanceForm.data = instance;
+																	}
+																}}
+															>
+																Edit
+															</button>
+														</div>
+													</td>
+												</tr>
+											{/each}
+										{:else}
+											<tr>
+												<td colspan="6">
+													<i class="CrispMessage" data-type="error"> No instances found </i>
+												</td>
+											</tr>
+										{/if}
+									</tbody>
+								</table>
+							</td>
+						</tr>
 					{/each}
 				{:else}
 					<tr class="empty">
-						<td colspan="5"> No results found </td>
+						<td colspan="5">
+							<i class="CrispMessage" data-type="error"> No results found </i>
+						</td>
 					</tr>
 				{/if}
 			</tbody>
@@ -246,6 +380,51 @@
 
 				@include respondAt(645px) {
 					--crp-input-width: 100%;
+				}
+			}
+		}
+
+		&__subTableBox {
+			padding: 0 0 0 24px;
+			position: relative;
+			&::before {
+				content: '';
+				left: 12px;
+				display: block;
+				@include box(10px, 20px);
+				border-radius: 0 0 0 6px;
+				position: absolute;
+				border-top: 0px solid transparent;
+				border-left: 2px dashed #c1c3c6;
+				border-right: 0px solid transparent;
+				border-bottom: 2px dashed #c1c3c6;
+			}
+
+			.FancyTable {
+				tr {
+					& > th {
+						border-top: 0;
+						// background-color: rgb(243, 243, 243);
+						padding: 9px 12px 9px 14px;
+						&:first-child {
+							border-top-left-radius: 0;
+							border-top-right-radius: 0;
+						}
+
+						&:last-child {
+							border-top-right-radius: 0;
+							border-right: 0;
+						}
+					}
+
+					& > td {
+						padding: 9px 14px;
+						&:last-child {
+							width: 20px;
+							border-right: 0;
+							text-align: center;
+						}
+					}
 				}
 			}
 		}

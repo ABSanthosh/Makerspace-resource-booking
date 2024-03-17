@@ -15,7 +15,8 @@ export const actions: Actions = {
 	update: async ({ request }) => {
 		const contentForm = await superValidate(request, zod(CMSZSchema));
 		return {
-			response: await updateContentById(contentForm.id, JSON.parse(contentForm.data.data))
+			form: contentForm,
+			response: await updateContentById(contentForm.data.id, JSON.parse(contentForm.data.data))
 		};
 	}
 };
