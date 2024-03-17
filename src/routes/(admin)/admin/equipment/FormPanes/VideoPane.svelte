@@ -101,7 +101,7 @@
 						{#if eVideos.length === 0}
 							<tr>
 								<td colspan="2">
-									<i> No videos found </i>
+									<i class="CrispMessage" data-type="info" data-format="box"> No videos found </i>
 								</td>
 							</tr>
 						{/if}

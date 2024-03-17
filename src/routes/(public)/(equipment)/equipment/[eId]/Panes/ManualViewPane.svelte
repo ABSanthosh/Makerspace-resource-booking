@@ -26,7 +26,7 @@
 				{#if eManuals.length === 0}
 					<tr>
 						<td colspan="2">
-							<i> No Manuals found </i>
+							<i class="CrispMessage" data-type="info" data-format="box"> No Manuals found </i>
 						</td>
 					</tr>
 				{/if}
