@@ -12,7 +12,11 @@
 		eCategories: ECategoriesSchema[];
 	};
 
-	const { form: categoryForm, enhance: categoryEnhance } = superForm(formStore, {
+	const {
+		form: categoryForm,
+		constraints: categoryConstraints,
+		enhance: categoryEnhance
+	} = superForm(formStore, {
 		id: 'categoryForm',
 		dataType: 'json',
 		onSubmit() {
@@ -105,7 +109,9 @@
 						{#if eCategories.length === 0}
 							<tr>
 								<td colspan="2">
-									<i> No categories found </i>
+									<i class="CrispMessage" data-type="info" data-format="box">
+										No categories found
+									</i>
 								</td>
 							</tr>
 						{/if}
@@ -200,6 +206,7 @@
 										on:change={() => {
 											operations.add = [...operations.add.filter((i) => i.id !== item.id), item];
 										}}
+										{...$categoryConstraints.add?.name}
 									/>
 								</td>
 								<td
@@ -275,9 +282,10 @@
 			form="categoryForm"
 			style="--height: 30px"
 			data-type="black-outline"
-			disabled={operations.add.length === 0 &&
+			disabled={(operations.add.length === 0 &&
 				operations.edit.length === 0 &&
-				operations.delete.length === 0}
+				operations.delete.length === 0) ||
+				!operations.add.every((i) => i.name.trim() !== '')}
 		>
 			Update
 		</button>
