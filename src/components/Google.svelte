@@ -63,43 +63,27 @@
 		</summary>
 		<ul class="Google__profile--box CrispMenu__content" data-align="right">
 			{#if getCustomClaim($SessionStore).role === Role.admin}
-				<a href="/admin" class="CrispMenu__item Google__profile--item">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="18"
-						height="20"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="lucide lucide-shield"
-					>
-						<path width="16" height="20" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
-					</svg>
+				<a
+					href="/admin"
+					class="CrispMenu__item Google__profile--item"
+					data-icon={String.fromCharCode(61245)}
+				>
 					Admin Panel
 				</a>
 			{:else}
-				<a href="/dash" class="CrispMenu__item Google__profile--item">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="16"
-						height="16"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="lucide lucide-layout-dashboard"
-					>
-						<rect width="7" height="9" x="3" y="3" rx="1" />
-						<rect width="7" height="5" x="14" y="3" rx="1" />
-						<rect width="7" height="9" x="14" y="12" rx="1" />
-						<rect width="7" height="5" x="3" y="16" rx="1" />
-					</svg>
+				<a
+					href="/dash"
+					class="CrispMenu__item Google__profile--item"
+					data-icon={String.fromCharCode(59505)}
+				>
 					Dashboard
+				</a>
+				<a 
+					href="/dash/cart"
+					class="CrispMenu__item Google__profile--item"
+					data-icon={String.fromCharCode(59596)}
+				>
+					Cart
 				</a>
 			{/if}
 			<form action="/auth?/logout" method="POST" class="w-100">
