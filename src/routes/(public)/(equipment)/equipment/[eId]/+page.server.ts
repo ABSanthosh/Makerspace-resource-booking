@@ -15,7 +15,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	return {
 		equipment,
 		cartItemForm: await superValidate(zod(CartItemZSchema)),
-		isDeleted: equipment.isDeleted ? params.eId : undefined
+		isDeleted: equipment.isDeleted ? true : undefined
 	};
 };
 

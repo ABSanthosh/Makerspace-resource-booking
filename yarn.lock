@@ -52,10 +52,17 @@
   resolved "https://registry.npmjs.org/@eslint/js/-/js-8.56.0.tgz"
   integrity sha512-gMsVel9D7f2HLkBma9VbtzZRehRogVRfbr++f06nL2vnCGCNlzOD+/MUov/F4p8myyAHspEhVobgjpX64q5m6A==
 
+<<<<<<< HEAD
 "@gcornut/valibot-json-schema@^0.0.22":
   version "0.0.22"
   resolved "https://registry.npmjs.org/@gcornut/valibot-json-schema/-/valibot-json-schema-0.0.22.tgz"
   integrity sha512-aUrIDndl7KJF1LruNMpGFMIQRNwB4pV5YhiTvgmIKkjet+OhEmX5ZfaET8MQQ+Br0Dd6fQgVtNbxhmyLPDB1+A==
+=======
+"@gcornut/valibot-json-schema@^0.0.25":
+  version "0.0.25"
+  resolved "https://registry.yarnpkg.com/@gcornut/valibot-json-schema/-/valibot-json-schema-0.0.25.tgz#b03c7b52e0cc20eeccd7d968382c44c938cd7429"
+  integrity sha512-JlOmghA8OMM8B+3lLSWrZqce4FM5SrCO/bmYGZQz3ZYPja/mXhLYa2qEOFUsBaz24prv04un3zXIUpJzgglAkw==
+>>>>>>> 5f8be28862fc4bee02050069d2b8d28d91b4a364
 
 "@hapi/hoek@^9.0.0", "@hapi/hoek@^9.3.0":
   version "9.3.0"
@@ -216,10 +223,17 @@
   resolved "https://registry.npmjs.org/@sideway/pinpoint/-/pinpoint-2.0.0.tgz"
   integrity sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==
 
+<<<<<<< HEAD
 "@sinclair/typebox@^0.32.14":
   version "0.32.14"
   resolved "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.32.14.tgz"
   integrity sha512-EC77Mw8huT2z9YlYbWfpIQgN6shZE1tH4NP4/Trig8UBel9FZNMZRJ42ubJI8PLor2uIU+waLml1dce5ReCOPg==
+=======
+"@sinclair/typebox@^0.32.15":
+  version "0.32.15"
+  resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.32.15.tgz#92dcdc12907f7c0f6d954ba3700b5bb888d2eb34"
+  integrity sha512-5Lrwo7VOiWEBJBhHmqNmf3TPB9ll8gcEshvYJyAIJyCZ2PF48MFOtiDHJNj8+FsNcqImaQYmxVkKBCBlyAa/wg==
+>>>>>>> 5f8be28862fc4bee02050069d2b8d28d91b4a364
 
 "@sodaru/yup-to-json-schema@^2.0.1":
   version "2.0.1"
@@ -1478,10 +1492,17 @@ isobject@^3.0.1:
   resolved "https://registry.npmjs.org/isobject/-/isobject-3.0.1.tgz"
   integrity sha512-WhB9zCku7EGTj/HQQRz5aUQEUeoQZH2bWcltRErOpymJ4boYE6wL9Tbr23krRPSZ+C5zqNSrSw+Cc7sZZ4b7vg==
 
+<<<<<<< HEAD
 joi@^17.12.1:
   version "17.12.1"
   resolved "https://registry.npmjs.org/joi/-/joi-17.12.1.tgz"
   integrity sha512-vtxmq+Lsc5SlfqotnfVjlViWfOL9nt/avKNbKYizwf6gsCfq9NYY/ceYRMFD8XDdrjJ9abJyScWmhmIiy+XRtQ==
+=======
+joi@^17.12.2:
+  version "17.12.2"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-17.12.2.tgz#283a664dabb80c7e52943c557aab82faea09f521"
+  integrity sha512-RonXAIzCiHLc8ss3Ibuz45u28GOsWE1UpfDXLbN/9NKbL4tCJf8TWYVKsoYuuh+sAUt7fsSNpA+r2+TBA6Wjmw==
+>>>>>>> 5f8be28862fc4bee02050069d2b8d28d91b4a364
   dependencies:
     "@hapi/hoek" "^9.3.0"
     "@hapi/topo" "^5.1.0"
@@ -2353,24 +2374,31 @@ svelte@^4.2.7:
     magic-string "^0.30.4"
     periscopic "^3.1.0"
 
+<<<<<<< HEAD
 sveltekit-superforms@^2.4.0:
   version "2.4.0"
   resolved "https://registry.npmjs.org/sveltekit-superforms/-/sveltekit-superforms-2.4.0.tgz"
   integrity sha512-hVX6nDN4LdGDf8asygI9c7W/M4o0hSv0HwsCMYlBIVwb/LnWUDa7Nt+fc0Ro7iKtOu52u71yGsDXv8kbjYpJbg==
+=======
+sveltekit-superforms@^2.8.0:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/sveltekit-superforms/-/sveltekit-superforms-2.8.0.tgz#3439f7883aac0d5bd74eda3da32001e7252c2053"
+  integrity sha512-Ac3GlnVOjZ6q4m6+1xcPEznJsoet4tNn3FqbgZ83UJP5O/io4fWXioGFDztuZXmIDPeaBoAx22A0TMmS61pCxA==
+>>>>>>> 5f8be28862fc4bee02050069d2b8d28d91b4a364
   dependencies:
     devalue "^4.3.2"
     just-clone "^6.2.0"
     memoize-weak "^1.0.2"
     ts-deepmerge "^7.0.0"
   optionalDependencies:
-    "@gcornut/valibot-json-schema" "^0.0.22"
-    "@sinclair/typebox" "^0.32.14"
+    "@gcornut/valibot-json-schema" "^0.0.25"
+    "@sinclair/typebox" "^0.32.15"
     "@sodaru/yup-to-json-schema" "^2.0.1"
     "@vinejs/vine" "^1.7.1"
     arktype "1.0.29-alpha"
-    joi "^17.12.1"
+    joi "^17.12.2"
     superstruct "^1.0.3"
-    valibot "^0.28.1"
+    valibot "^0.29.0"
     yup "^1.3.3"
     zod "^3.22.4"
     zod-to-json-schema "^3.22.4"
@@ -2504,10 +2532,17 @@ util-deprecate@^1.0.2:
   resolved "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
 
+<<<<<<< HEAD
 valibot@^0.28.1:
   version "0.28.1"
   resolved "https://registry.npmjs.org/valibot/-/valibot-0.28.1.tgz"
   integrity sha512-zQnjwNJuXk6362Leu0+4eFa/SMwRom3/hEvH6s1EGf3oXIPbo2WFKDra9ymnbVh3clLRvd8hw4sKF5ruI2Lyvw==
+=======
+valibot@^0.29.0:
+  version "0.29.0"
+  resolved "https://registry.yarnpkg.com/valibot/-/valibot-0.29.0.tgz#16c8e1924e522c5feace728aac2d9ab0da626000"
+  integrity sha512-JhZn08lwZPhAamOCfBwBkv/btQt4KeQhekULPH8crH053zUCLSOGEF2zKExu3bFf245tsj6J1dY0ysd/jUiMIQ==
+>>>>>>> 5f8be28862fc4bee02050069d2b8d28d91b4a364
 
 validator@^13.11.0:
   version "13.11.0"

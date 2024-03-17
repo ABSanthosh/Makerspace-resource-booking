@@ -15,6 +15,6 @@ export function getCustomClaim(session: Session | null): {
 	);
 }
 
-export function getStorageUrl(name: string) {
-	return `${PUBLIC_SUPABASE_URL}/storage/v1/object/public/${SupabaseEnum.BUCKET}/${name}`;
+export function getStorageUrl(bucket: SupabaseEnum ,name: string) {
+	return `${PUBLIC_SUPABASE_URL}/storage/v1/object/public/${bucket}/${name}`;
 }

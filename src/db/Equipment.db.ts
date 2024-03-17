@@ -1,7 +1,8 @@
+import { SupabaseEnum } from '$lib/Enums';
 import { getStorageUrl } from '$lib/SupabaseUtils';
 import { db } from '$lib/prisma';
 import type { ECategoriesSchema, EItemSchema } from '$lib/schemas';
-import type { ECategories, Equipment } from '@prisma/client';
+import type { ECategories, Equipment, Manual, Video } from '@prisma/client';
 
 export async function addEquipment(equipment: Equipment & { instances: EItemSchema[] }) {
 	return await db.equipment.create({
@@ -48,26 +49,38 @@ export async function getAllEquipmentPreview(): Promise<
 		.then((res) => {
 			return res.map((item) => ({
 				...item,
-				image: getStorageUrl(item.image)
+				image: getStorageUrl(SupabaseEnum.EQUIPMENT, item.image)
 			}));
 		});
 }
 
 export async function getAllEquipment(): Promise<
-	(Equipment & { category: ECategories; instances: EItemSchema[] })[]
+	(Equipment & {
+		manuals: Manual[];
+		videos: Video[];
+		category: ECategories;
+		instances: EItemSchema[];
+	})[]
 > {
 	// @ts-ignore
 	return await db.equipment.findMany({
 		include: {
 			instances: true,
-			category: true
+			category: true,
+			manuals: true,
+			videos: true
 		}
 	});
 }
 
-export async function getEquipmentById(
-	id: string
-): Promise<Equipment & { category: ECategories; instances: EItemSchema[] }> {
+export async function getEquipmentById(id: string): Promise<
+	Equipment & {
+		category: ECategories;
+		instances: EItemSchema[];
+		manuals: Manual[];
+		videos: Video[];
+	}
+> {
 	// @ts-ignore
 	return await db.equipment
 		.findUnique({
@@ -76,13 +89,15 @@ export async function getEquipmentById(
 			},
 			include: {
 				instances: true,
-				category: true
+				category: true,
+				manuals: true,
+				videos: true
 			}
 		})
 		.then((res) => {
 			return {
 				...res,
-				image: getStorageUrl(res!.image)
+				image: getStorageUrl(SupabaseEnum.EQUIPMENT, res!.image)
 			};
 		})
 		.catch((err) => {
@@ -151,6 +166,45 @@ export async function upsertECategories(categories: ECategoriesSchema[]) {
 
 export async function deleteECategories(ids: string[]) {
 	return await db.eCategories.deleteMany({
+		where: {
+			id: {
+				in: ids
+			}
+		}
+	});
+}
+
+export async function addMultipleManuals(manuals: Manual[]) {
+	// Doc: Since we are using Manual type from Prisma, we have to pass "id" but
+	// we don't have to pass it to db since it's auto-generated. This means
+	// a little bandwidth is saved.
+	return await db.manual.createMany({
+		data: manuals.map((manual) => ({
+			name: manual.name,
+			equipmentId: manual.equipmentId,
+			pdf: manual.pdf
+		}))
+	});
+}
+
+export async function deleteManuals(ids: string[]) {
+	return await db.manual.deleteMany({
+		where: {
+			id: {
+				in: ids
+			}
+		}
+	});
+}
+
+export async function addMultipleVideos(videos: Video[]) {
+	return await db.video.createMany({
+		data: videos
+	});
+}
+
+export async function deleteVideos(ids: string[]) {
+	return await db.video.deleteMany({
 		where: {
 			id: {
 				in: ids

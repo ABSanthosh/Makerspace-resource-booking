@@ -6,12 +6,25 @@
 	import CategoryPane from './FormPanes/CategoryPane.svelte';
 	import clickOutside from '$directive/clickOutside';
 	import { enhance } from '$app/forms';
+	import ManualPane from './FormPanes/ManualPane.svelte';
+	import type { Manual, Video } from '@prisma/client';
+	import VideoPane from './FormPanes/VideoPane.svelte';
 
 	export let data: PageData;
 
-	$: ({ newEquipmentForm, editEquipmentForm, allEquipment, eCategories, categoryForm } = data);
+	$: ({
+		newEquipmentForm,
+		editEquipmentForm,
+		allEquipment,
+		eCategories,
+		categoryForm,
+		manualForm,
+		videoForm
+	} = data);
 	$: equipmentModal = false;
-	$: editItem = {} as ESchema | null;
+	$: manualModal = false;
+	$: videoModal = false;
+	$: editItem = {} as (ESchema & { manuals: Manual[]; videos: Video[] }) | null;
 
 	$: eCategoriesModal = false;
 	$: editMenuId = '';
@@ -41,6 +54,9 @@
 	bind:formStore={newEquipmentForm}
 	bind:editFormStore={editEquipmentForm}
 />
+
+<ManualPane bind:modal={manualModal} bind:formStore={manualForm} bind:currentEquipment={editItem} />
+<VideoPane bind:modal={videoModal} bind:formStore={videoForm} bind:currentEquipment={editItem} />
 
 <CategoryPane bind:formStore={categoryForm} bind:eCategories bind:modal={eCategoriesModal} />
 
@@ -120,7 +136,7 @@
 											on:click={() => {
 												editItem = {
 													...item,
-													// DOC: We have to remove the ?cache from the image URL so it won't be cycled
+													// Doc: We have to remove the ?cache from the image URL so it won't be cycled
 													// the name of the image file when we update the image
 													image: item.image.split('?')[0]
 												};
@@ -129,6 +145,40 @@
 											}}
 										>
 											Edit
+										</button>
+										<button
+											class="CrispButton"
+											data-border="false"
+											class:active={editMenuId === item.id}
+											on:click={() => {
+												editItem = {
+													...item,
+													image: item.image.split('?')[0],
+													manuals: item.manuals,
+													videos: item.videos
+												};
+												videoModal = true;
+												editMenuId = '';
+											}}
+										>
+											Videos
+										</button>
+										<button
+											class="CrispButton"
+											data-border="false"
+											class:active={editMenuId === item.id}
+											on:click={() => {
+												editItem = {
+													...item,
+													image: item.image.split('?')[0],
+													manuals: item.manuals,
+													videos: item.videos
+												};
+												manualModal = true;
+												editMenuId = '';
+											}}
+										>
+											Manuals
 										</button>
 										<form
 											use:enhance

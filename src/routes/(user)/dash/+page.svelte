@@ -6,7 +6,6 @@
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
 	export let data: PageData;
-	// $: ({ profileData } = data);
 	$: user = $SessionStore!.user;
 
 	const {
@@ -107,7 +106,7 @@
 						type="tel"
 						name="mobile"
 						class="CrispInput"
-						placeholder="+91 9999999999"
+						placeholder="9999999999"
 						bind:value={$profileForm.mobile}
 						{...$constraints.mobile}
 					/>
@@ -139,30 +138,8 @@
 					{/if}
 				</div>
 			</label>
-		</form>
-		<footer class="Dashboard__section--footer">
-			<button
-				class="CrispButton"
-				data-type="success"
-				style="--crp-button-height: 25px;"
-				form="userProfileForm"
-			>
-				Save
-			</button>
-		</footer>
-	</section>
-	<section class="Dashboard__section">
-		<header class="Dashboard__section--header">
-			<h5>User specific Information</h5>
-		</header>
-		<form
-			use:enhance
-			method="POST"
-			action="/dash?/update"
-			id="updateTypeDataForm"
-			class="Dashboard__section--content"
-		>
-			{#if $profileForm.type === ProfileType.STUDENT && $profileForm.typeData.yearOfStudy}
+			<hr />
+			{#if $profileForm.type === ProfileType.STUDENT}
 				<label
 					for="yearOfStudy"
 					class="CrispLabel"
@@ -178,12 +155,12 @@
 							class="CrispInput"
 							bind:value={$profileForm.typeData.yearOfStudy}
 						/>
-						<!-- {...$constraints.typeData.yearOfStudy} -->
-						<!-- {#if $errors.yearOfStudy}
+						<!-- {...$constraints.typeData} -->
+						{#if $errors.typeData?.yearOfStudy}
 							<p class="CrispMessage w-100" data-type="error">
-								{$errors.yearOfStudy}
+								{$errors.typeData?.yearOfStudy}
 							</p>
-						{/if} -->
+						{/if}
 					</div>
 				</label>
 				<label
@@ -200,11 +177,11 @@
 							name="branch"
 							class="CrispInput"
 							bind:value={$profileForm.typeData.branch}
-							{...$constraints.branch}
 						/>
-						{#if $errors.branch}
+						<!-- {...$constraints.typeData?.branch} -->
+						{#if $errors.typeData?.branch}
 							<p class="CrispMessage w-100" data-type="error">
-								{$errors.branch}
+								{$errors.typeData?.branch}
 							</p>
 						{/if}
 					</div>
@@ -224,12 +201,12 @@
 							class="CrispInput"
 							bind:value={$profileForm.typeData.department}
 						/>
-						<!-- {...$constraints.department}
-						{#if $errors.department}
+						<!-- {...$constraints.typeData?.department} -->
+						{#if $errors.typeData?.department}
 							<p class="CrispMessage w-100" data-type="error">
-								{$errors.department}
+								{$errors.typeData?.department}
 							</p>
-						{/if} -->
+						{/if}
 					</div>
 				</label>
 				<label
@@ -247,12 +224,11 @@
 							class="CrispInput"
 							bind:value={$profileForm.typeData.studentId}
 						/>
-						<!-- {...$constraints.studentId}
-						{#if $errors.studentId}
+						{#if $errors.typeData?.studentId}
 							<p class="CrispMessage w-100" data-type="error">
-								{$errors.studentId}
+								{$errors.typeData?.studentId}
 							</p>
-						{/if} -->
+						{/if}
 					</div>
 				</label>
 				<label
@@ -270,12 +246,12 @@
 							class="CrispInput"
 							bind:value={$profileForm.typeData.clubs}
 						/>
-						<!-- {...$constraints.clubs}
-						{#if $errors.clubs}
+						<!-- {...$constraints.typeData?.clubs} -->
+						{#if $errors.typeData?.clubs}
 							<p class="CrispMessage w-100" data-type="error">
-								{$errors.clubs}
+								{$errors.typeData?.clubs}
 							</p>
-						{/if} -->
+						{/if}
 					</div>
 				</label>
 			{:else if $profileForm.type === ProfileType.FACULTY}
@@ -294,12 +270,12 @@
 							class="CrispInput"
 							bind:value={$profileForm.typeData.department}
 						/>
-						<!-- {...$constraints.department}
-						{#if $errors.department}
+						<!-- {...$constraints.typeData?.department} -->
+						{#if $errors.typeData?.department}
 							<p class="CrispMessage w-100" data-type="error">
-								{$errors.department}
+								{$errors.typeData?.department}
 							</p>
-						{/if} -->
+						{/if}
 					</div>
 				</label>
 				<label
@@ -317,12 +293,12 @@
 							class="CrispInput"
 							bind:value={$profileForm.typeData.branch}
 						/>
-						<!-- {...$constraints.branch}
-						{#if $errors.branch}
+						<!-- {...$constraints.typeData?.branch} -->
+						{#if $errors.typeData?.branch}
 							<p class="CrispMessage w-100" data-type="error">
-								{$errors.branch}
+								{$errors.typeData?.branch}
 							</p>
-						{/if} -->
+						{/if}
 					</div>
 				</label>
 				<label
@@ -340,12 +316,12 @@
 							class="CrispInput"
 							bind:value={$profileForm.typeData.designation}
 						/>
-						<!-- {...$constraints.designation}
-						{#if $errors.designation}
+						<!-- {...$constraints.typeData?.designation} -->
+						{#if $errors.typeData?.designation}
 							<p class="CrispMessage w-100" data-type="error">
-								{$errors.designation}
+								{$errors.typeData?.designation}
 							</p>
-						{/if} -->
+						{/if}
 					</div>
 				</label>
 				<label
@@ -363,12 +339,12 @@
 							class="CrispInput"
 							bind:value={$profileForm.typeData.facultyId}
 						/>
-						<!-- {...$constraints.facultyId}
-						{#if $errors.facultyId}
+						<!-- {...$constraints.typeData?.facultyId} -->
+						{#if $errors.typeData?.facultyId}
 							<p class="CrispMessage w-100" data-type="error">
-								{$errors.facultyId}
+								{$errors.typeData?.facultyId}
 							</p>
-						{/if} -->
+						{/if}
 					</div>
 				</label>
 			{:else if $profileForm.type === ProfileType.STAFF}
@@ -387,12 +363,12 @@
 							class="CrispInput"
 							bind:value={$profileForm.typeData.department}
 						/>
-						<!-- {...$constraints.department}
-						{#if $errors.department}
+						<!-- {...$constraints.typeData?.department} -->
+						{#if $errors.typeData?.department}
 							<p class="CrispMessage w-100" data-type="error">
-								{$errors.department}
+								{$errors.typeData?.department}
 							</p>
-						{/if} -->
+						{/if}
 					</div>
 				</label>
 				<label
@@ -410,12 +386,12 @@
 							class="CrispInput"
 							bind:value={$profileForm.typeData.branch}
 						/>
-						<!-- {...$constraints.branch}
-						{#if $errors.branch}
+						<!-- {...$constraints.typeData?.branch} -->
+						{#if $errors.typeData?.branch}
 							<p class="CrispMessage w-100" data-type="error">
-								{$errors.branch}
+								{$errors.typeData?.branch}
 							</p>
-						{/if} -->
+						{/if}
 					</div>
 				</label>
 				<label
@@ -433,12 +409,12 @@
 							class="CrispInput"
 							bind:value={$profileForm.typeData.designation}
 						/>
-						<!-- {...$constraints.designation}
-						{#if $errors.designation}
+						<!-- {...$constraints.typeData?.designation} -->
+						{#if $errors.typeData?.designation}
 							<p class="CrispMessage w-100" data-type="error">
-								{$errors.designation}
+								{$errors.typeData?.designation}
 							</p>
-						{/if} -->
+						{/if}
 					</div>
 				</label>
 				<label
@@ -456,17 +432,41 @@
 							class="CrispInput"
 							bind:value={$profileForm.typeData.staffId}
 						/>
-						<!-- {...$constraints.staffId}
-						{#if $errors.staffId}
+						<!-- {...$constraints.typeData?.staffId} -->
+						{#if $errors.typeData?.staffId}
 							<p class="CrispMessage w-100" data-type="error">
-								{$errors.staffId}
+								{$errors.typeData?.staffId}
 							</p>
-						{/if} -->
+						{/if}
 					</div>
 				</label>
 			{:else}
 				<p>Choose a category to update the form.</p>
 			{/if}
+		</form>
+		<footer class="Dashboard__section--footer">
+			<button
+				class="CrispButton"
+				data-type="success"
+				style="--crp-button-height: 25px;"
+				form="userProfileForm"
+			>
+				Save
+			</button>
+		</footer>
+	</section>
+	<!-- <section class="Dashboard__section">
+		<header class="Dashboard__section--header">
+			<h5>User specific Information</h5>
+		</header>
+		<form
+			use:enhance
+			method="POST"
+			action="/dash?/update"
+			id="updateTypeDataForm"
+			class="Dashboard__section--content"
+		>
+		
 		</form>
 
 		<footer class="Dashboard__section--footer">
@@ -479,7 +479,7 @@
 				Save
 			</button>
 		</footer>
-	</section>
+	</section> -->
 </main>
 
 <style lang="scss">
@@ -532,6 +532,12 @@
 			&--header,
 			&--footer {
 				@include box($height: auto);
+			}
+
+			hr {
+				border: 0;
+				border-top: 1px solid #e6e8eb;
+				width: 100%;
 			}
 
 			&--header {

@@ -2,6 +2,7 @@
 	import Pane from '$components/Pane.svelte';
 	import nanoid from '$lib/nanoid';
 	import type { ECategoriesSchema, ECategoryCRUDSchema } from '$lib/schemas';
+	import { addToast } from '$store/ToastStore';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms/client';
 
@@ -11,10 +12,7 @@
 		eCategories: ECategoriesSchema[];
 	};
 
-	const {
-		form: categoryForm,
-		enhance: categoryEnhance,
-	} = superForm(formStore, {
+	const { form: categoryForm, enhance: categoryEnhance } = superForm(formStore, {
 		id: 'categoryForm',
 		dataType: 'json',
 		onSubmit() {
@@ -26,6 +24,7 @@
 		},
 		onResult(event) {
 			if (event.result.status === 200) {
+				addToast({ message: 'Categories updated' });
 				modal = false;
 				addModeItem = null;
 				editModeItem = null;
@@ -103,6 +102,13 @@
 						</tr>
 					</thead>
 					<tbody>
+						{#if eCategories.length === 0}
+							<tr>
+								<td colspan="2">
+									<i> No categories found </i>
+								</td>
+							</tr>
+						{/if}
 						{#each eCategories as item}
 							<tr
 								class:edit={operations.edit.map((i) => i.id).includes(item.id)}

@@ -1,15 +1,22 @@
 ## Short run ToDo
-- [ ] Change general profile to type specific profile fields
-- [x] Add dropdown in admin equipment page to edit or delete equipment
-- [ ] search and do "// TODO: change to use v2 of superForms", https://superforms.rocks/get-started#populate-form-from-database
-- [ ] make readme
+- [ ] Add manuals to equipment page
+- [ ] Add videos to equipment page
+- [ ] add video upload to admin page
+- [ ] Add trigger to delete manual from bucket when deleted from database
 - [ ] fix admin CMS button submission
 
 ## Long run ToDo
 - [ ] Convert isDeleted to SecondaryStatus enum with values: deleted, disabled, enabled with default value enabled so that we can delete the ones with no dependents
+- [ ] gmail like editor for equipment description
+- [ ] Fix: When closing panes like equipment or categories, sometimes the new row just stays in the table 
 
 ## Completed Short run ToDo
-
+- [x] footer in pane is still showing when the slot for footer is empty
+- [x] Test deleting single manual
+- [x] Add dropdown in admin equipment page to edit or delete equipment
+- [x] search and do "// TODO: change to use v2 of superForms", https://superforms.rocks/get-started#populate-form-from-database
+- [x] make readme
+- [x] Change general profile to type specific profile fields
 - [ ] Add cart contents to cart page(responsive)
   - [x] UI
   - [ ] Functionality

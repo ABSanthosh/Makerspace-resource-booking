@@ -2,10 +2,12 @@
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import { BreadCrumbStore, isEquipmentDeletedStore } from '$store/BreadCrumbStore';
-	import AvailabilityPane from './CartItemPane.svelte';
+	import AvailabilityPane from './Panes/AvailabilityPane.svelte';
 	import type { EItemSchema } from '$lib/schemas';
 	import { EStatus } from '@prisma/client';
 	import { SessionStore } from '$store/SupaStore';
+	import ManualViewPane from './Panes/ManualViewPane.svelte';
+	import VideoViewPane from './Panes/VideoViewPane.svelte';
 
 	export let data: PageData;
 	$: ({ equipment } = data);
@@ -31,6 +33,8 @@
 
 	$: user = $SessionStore?.user ?? null;
 	$: availabilityPane = false;
+	$: manualPane = false;
+	$: videoPane = false;
 	$: selectedInstance = null as EItemSchema | null;
 </script>
 
@@ -43,6 +47,9 @@
 		bind:instanceId={selectedInstance['id']}
 	/>
 {/if}
+
+<ManualViewPane bind:modal={manualPane} bind:currentEquipment={data.equipment} />
+<VideoViewPane bind:modal={videoPane} bind:currentEquipment={data.equipment} />
 
 <main class="Equipment">
 	<header class="Equipment__header w-100 gap-10">
@@ -64,8 +71,24 @@
 				<hr />
 			</h3>
 			<div class="Row--start w-100 gap-15">
-				<a href={'#'} target="_blank" class="FancyButton" data-type="black-outline">Videos</a>
-				<a href={'#'} target="_blank" class="FancyButton" data-type="black-outline">Manual</a>
+				<button
+					class="CrispButton"
+					data-type="black-outline"
+					on:click={() => {
+						videoPane = true;
+					}}
+				>
+					Videos
+				</button>
+				<button
+					class="CrispButton"
+					data-type="black-outline"
+					on:click={() => {
+						manualPane = true;
+					}}
+				>
+					Manual
+				</button>
 			</div>
 		</div>
 	</section>

@@ -30,7 +30,7 @@ const createSupabaseClient: Handle = async ({ event, resolve }) => {
 		return session;
 	};
 
-	// This is the session data that gets trickled down to all parts of the app
+	// Doc: This is the session data that gets trickled down to all parts of the app
 	event.locals.session = await event.locals.getSession();
 	if (
 		event.locals.session?.user.app_metadata.provider !== undefined &&

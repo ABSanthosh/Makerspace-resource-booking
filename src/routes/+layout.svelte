@@ -4,6 +4,8 @@
 	import { SupaStore, SessionStore, CMSStore } from '$store/SupaStore';
 	import { navigating } from '$app/stores';
 	import BlurredSpinner from '$components/BlurredSpinner.svelte';
+	import { ToastStore } from "$store/ToastStore";
+	import Toast from '$components/Toast.svelte';
 	export let data;
 
 	// Supabase
@@ -32,6 +34,11 @@
 	<BlurredSpinner />
 {/if}
 <slot />
+{#if $ToastStore}
+  {#each $ToastStore as toast (toast.id)}
+    <Toast message={toast.message} />
+  {/each}
+{/if}
 
 <style lang="scss" global>
 	@import '../styles/root/global.scss';

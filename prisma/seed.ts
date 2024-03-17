@@ -108,22 +108,22 @@ async function makeNewBucket(name: string) {
 	// https://github.com/orgs/supabase/discussions/5786#discussioncomment-2291214
 	const policies = {
 		select: `
-			CREATE POLICY "select_equipment_image"
+			CREATE POLICY "select_${name}"
 			ON storage.objects FOR SELECT
 			TO authenticated
 			USING ( bucket_id = '${name}');`,
 		insert: `
-			CREATE POLICY "insert_equipment_image"
+			CREATE POLICY "insert_${name}"
 			ON storage.objects FOR INSERT
 			TO authenticated
 			WITH CHECK (bucket_id = '${name}');`,
 		update: `
-			CREATE POLICY "update_equipment_image"
+			CREATE POLICY "update_${name}"
 			ON storage.objects FOR UPDATE
 			TO authenticated
 			USING (bucket_id = '${name}');`,
 		delete: `
-			CREATE POLICY "delete_equipment_image"
+			CREATE POLICY "delete_${name}"
 			ON storage.objects FOR DELETE
 			TO authenticated
 			USING (bucket_id = '${name}');`,
@@ -132,7 +132,7 @@ async function makeNewBucket(name: string) {
 			process.env.NODE_ENV === 'production'
 				? ''
 				: `
-			CREATE POLICY "seed_equipment_image"
+			CREATE POLICY "seed_${name}"
 			ON storage.objects FOR INSERT
 			TO anon
 			WITH CHECK (bucket_id = '${name}');`
@@ -144,13 +144,15 @@ async function makeNewBucket(name: string) {
 		await prisma.$executeRawUnsafe(`
 		INSERT INTO storage.buckets (id, name, public)
 		VALUES ('${name}', '${name}', true);`);
-	} catch (e) {}
+	} catch (e) { }
 
 	try {
 		await prisma.$transaction([
 			...Object.values(policies).map((policy) => prisma.$executeRawUnsafe(policy))
 		]);
-	} catch (e) {}
+	} catch (e) {
+		console.error(e);
+	 }
 }
 
 async function seedEquipments() {
@@ -210,11 +212,11 @@ async function seedEquipments() {
 	];
 
 	await supabase.storage
-		.from(SupabaseEnum.BUCKET)
+		.from(SupabaseEnum.EQUIPMENT)
 		.upload('e6G_5Bt.png', fs.readFileSync('prisma/seed/e6G_5Bt.png'));
 
 	await supabase.storage
-		.from(SupabaseEnum.BUCKET)
+		.from(SupabaseEnum.EQUIPMENT)
 		.upload('lYXj4np.jpg', fs.readFileSync('prisma/seed/lYXj4np.jpg'));
 
 	await prisma.$transaction([
@@ -308,8 +310,11 @@ async function main() {
 	await onDeleteUser()
 		.then(() => console.log('✅ onDeleteUser trigger created'))
 		.catch((e) => console.error(`🚨 ${e}`));
-	await makeNewBucket(SupabaseEnum.BUCKET)
-		.then(() => console.log('✅ Bucket created'))
+	await makeNewBucket(SupabaseEnum.EQUIPMENT)
+		.then(() => console.log('✅ Equipments Bucket created'))
+		.catch((e) => console.error(`🚨 ${e}`));
+	await makeNewBucket(SupabaseEnum.MANUAL)
+		.then(() => console.log('✅ Manuals Bucket created'))
 		.catch((e) => console.error(`🚨 ${e}`));
 	await seedEquipments()
 		.then(() => console.log('✅ Equipments seeded'))
