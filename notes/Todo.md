@@ -2,9 +2,11 @@
 - [ ] Add trigger to delete manual from bucket when deleted from database
 - [ ] remove already booked slots from the times list
 - [ ] Add modal for booking details
+- [ ] Rework booking system to handle cart and booking properly
 
 ## Long run ToDo
 - [ ] Convert isDeleted to SecondaryStatus enum with values: deleted, disabled, enabled with default value enabled so that we can delete the ones with no dependents
+- [ ] Add types to seed.ts
 
 ## Completed Short run ToDo
 - [x] Move instances from pane to table inside the equipment table

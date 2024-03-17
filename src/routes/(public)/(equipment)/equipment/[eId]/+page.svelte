@@ -42,8 +42,8 @@
 	<AvailabilityPane
 		bind:userId={user.id}
 		bind:modal={availabilityPane}
-		bind:equipmentId={data.equipment.id}
 		bind:formStore={data.cartItemForm}
+		bind:currentEquipment={data.equipment}
 		bind:instanceId={selectedInstance['id']}
 	/>
 {/if}
@@ -65,7 +65,9 @@
 				Description
 				<hr />
 			</h3>
-			<p class="w-100">{@html data.equipment.description}</p>
+			<p class="w-100">
+				{@html data.equipment.description}
+			</p>
 			<h3 class="w-100">
 				Resources
 				<hr />
@@ -140,7 +142,9 @@
 					{:else}
 						<tr>
 							<td colspan="6">
-								<i class="w-100 Row--center"> This equipment has been deleted </i>
+								<i data-type="info" class="CrispMessage w-100 Row--center" data-format="box">
+									This equipment has been deleted
+								</i>
 							</td>
 						</tr>
 					{/if}

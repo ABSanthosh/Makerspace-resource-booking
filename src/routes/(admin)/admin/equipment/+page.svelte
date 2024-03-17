@@ -113,7 +113,6 @@ is properly set.
 					<th> Equipment Name </th>
 					<th> Model </th>
 					<th> Category </th>
-					<th> No. of Instances </th>
 					<th> </th>
 				</tr>
 			</thead>
@@ -124,7 +123,6 @@ is properly set.
 							<td> {item.name} </td>
 							<td> {item.model} </td>
 							<td> {item.category.name} </td>
-							<td> {item.instances.length} </td>
 							<td>
 								<details
 									data-no-marker
@@ -256,7 +254,7 @@ is properly set.
 							</td>
 						</tr>
 						<tr>
-							<td colspan="5" class="AdminEquipment__subTableBox">
+							<td colspan="4" class="AdminEquipment__subTableBox">
 								<table class="FancyTable">
 									<thead>
 										<tr>
@@ -284,7 +282,8 @@ is properly set.
 																	availability: {
 																		ends: '',
 																		starts: '',
-																		repeat: []
+																		repeat: [],
+																		maxOffset: 1
 																	},
 																	equipmentId: item.id
 																};
@@ -331,7 +330,9 @@ is properly set.
 										{:else}
 											<tr>
 												<td colspan="6">
-													<i class="CrispMessage" data-type="error"> No instances found </i>
+													<i class="CrispMessage" data-format="box" data-type="error">
+														No instances found
+													</i>
 												</td>
 											</tr>
 										{/if}
@@ -342,8 +343,8 @@ is properly set.
 					{/each}
 				{:else}
 					<tr class="empty">
-						<td colspan="5">
-							<i class="CrispMessage" data-type="error"> No results found </i>
+						<td colspan="4">
+							<i class="CrispMessage" data-type="error" data-format="box"> No results found </i>
 						</td>
 					</tr>
 				{/if}
@@ -400,6 +401,11 @@ is properly set.
 				border-bottom: 2px dashed #c1c3c6;
 			}
 
+			&:hover {
+				background-color: #ffa;
+				transition: background-color 0.3s ease-in-out;
+			}
+
 			.FancyTable {
 				tr {
 					& > th {
@@ -438,6 +444,15 @@ is properly set.
 
 			&::-webkit-scrollbar {
 				width: 6px;
+			}
+
+			.FancyTable {
+				tr {
+					&:hover + tr .AdminEquipment__subTableBox {
+						background-color: #ffa;
+						transition: background-color 0.3s ease-in-out;
+					}
+				}
 			}
 
 			.disabled {
