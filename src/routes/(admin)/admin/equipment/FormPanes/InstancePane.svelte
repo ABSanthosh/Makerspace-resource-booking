@@ -41,13 +41,19 @@
 			class="Col--center gap-10 w-100"
 			action="/admin/equipment?/upsertInstance"
 		>
-			<label class="CrispLabel" for="name">
+			<label
+				class="CrispLabel"
+				for="name"
+				data-direction="row"
+				style="justify-content: space-between;"
+			>
 				<span data-mandatory style="color: inherit;"> Name </span>
 				<input
 					id="name"
 					type="text"
 					name="name"
 					class="CrispInput"
+					style="--crp-input-width: 50%"
 					bind:value={$instanceForm.name}
 					aria-invalid={$instanceForm.name ? 'true' : undefined}
 				/>
@@ -57,13 +63,19 @@
 					{$instanceErrors.name}
 				</p>
 			{/if}
-			<label class="CrispLabel" for="cost">
+			<label
+				class="CrispLabel"
+				for="cost"
+				data-direction="row"
+				style="justify-content: space-between;"
+			>
 				<span data-mandatory style="color: inherit;"> Cost </span>
 				<input
 					id="cost"
 					type="number"
 					name="cost"
 					class="CrispInput"
+					style="--crp-input-width: 50%"
 					bind:value={$instanceForm.cost}
 					aria-invalid={$instanceForm.cost ? 'true' : undefined}
 				/>
@@ -73,12 +85,17 @@
 					{$instanceErrors.cost}
 				</p>
 			{/if}
-			<label class="CrispLabel" for="status">
+			<label
+				class="CrispLabel"
+				for="status"
+				data-direction="row"
+				style="justify-content: space-between;"
+			>
 				<span data-mandatory style="color: inherit;"> Status </span>
 				<select
 					id="status"
 					class="CrispSelect"
-					style="--crp-select-width: 100%;"
+					style="--crp-select-width: 50%;"
 					bind:value={$instanceForm.status}
 					aria-invalid={$instanceForm.status ? 'true' : undefined}
 				>
@@ -104,7 +121,7 @@
 					type="time"
 					name="start"
 					class="CrispInput"
-					style="--crp-input-width: 40%"
+					style="--crp-input-width: 50%"
 					bind:value={$instanceForm.availability.starts}
 					aria-invalid={$instanceForm.availability.starts ? 'true' : undefined}
 				/>
@@ -127,7 +144,7 @@
 					type="time"
 					name="end"
 					class="CrispInput"
-					style="--crp-input-width: 40%"
+					style="--crp-input-width: 50%"
 					bind:value={$instanceForm.availability.ends}
 					aria-invalid={$instanceForm.availability.ends ? 'true' : undefined}
 				/>
@@ -153,13 +170,40 @@
 				</p>
 			{/if}
 
-			{#if $instanceForm.availability.starts && $instanceForm.availability.ends && $instanceForm.availability.repeat}
-				<i>
+			<!-- {#if $instanceForm.availability.starts && $instanceForm.availability.ends && $instanceForm.availability.repeat}
+				<i class="CrispMessage" data-type="info" data-format="box">
 					Every week from {$instanceForm.availability.starts} to {$instanceForm.availability.ends}
 					on {$instanceForm.availability.repeat.join(', ')}, the instance will be available for
 					booking.
 				</i>
-			{/if}
+			{/if} -->
+
+			<label
+				class="CrispLabel"
+				for="maxOffset"
+				data-direction="row"
+				style="justify-content: space-between;"
+			>
+				<span
+					data-mandatory
+					style="color: inherit;"
+					title="The maximum number of months from today that the instance can be booked in advance."
+				>
+					Max Month Offset
+				</span>
+				<input
+					id="maxOffset"
+					type="number"
+					name="maxOffset"
+					class="CrispInput"
+					style="--crp-input-width: 50%"
+					bind:value={$instanceForm.availability.maxOffset}
+					aria-invalid={$instanceForm.availability.maxOffset ? 'true' : undefined}
+				/>
+			</label>
+			<!-- <span class="CrispMessage" data-type="info" data-format="box">
+				The maximum number of months from today that the instance can be booked in advance.
+			</span> -->
 
 			<label class="CrispLabel" for="description">
 				<span style="color: inherit;"> Description </span>
