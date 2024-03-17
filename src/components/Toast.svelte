@@ -1,12 +1,17 @@
 <script lang="ts">
-	import { elasticInOut } from 'svelte/easing';
+	import { backInOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 	export let { message } = $$props as {
 		message: string;
 	};
 </script>
 
-<span class="Toast" transition:fly={{ y: 20, duration: 350, easing: elasticInOut }}>
+<span
+	class="Toast"
+	transition:fly={{ y: 50, duration: 500, easing: backInOut }}
+	on:introstart
+	on:outroend
+>
 	{message}
 </span>
 
@@ -19,10 +24,10 @@
 		padding: 10px 20px;
 		border-radius: 50px;
 		white-space: nowrap;
-		color: #1f2328;
+		color: #fefefe;
 		transform: translateX(50%);
-		box-shadow: 0px 3px 35px 4px rgba(0, 0, 0, 0.25);
-		border: 1px solid #d0d7de;
-		background-color: #f6f8fa;
+		box-shadow: 0px 2px 30px 3px rgba(0, 0, 0, 0.25);
+		// border: 1px solid #d0d7de;
+		background-color: #272727;
 	}
 </style>
