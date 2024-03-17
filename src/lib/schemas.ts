@@ -53,13 +53,13 @@ export const UserProfileZodSchema = z
 export type UserProfileSchema = z.infer<typeof UserProfileZodSchema>;
 
 export enum WeekDaysEnum {
+	Su = 'SU',
 	M = 'MO',
 	T = 'TU',
 	W = 'WE',
 	Th = 'TH',
 	F = 'FR',
 	Sa = 'SA',
-	Su = 'SU'
 }
 
 export const EItemZodSchema = z.object({
@@ -73,7 +73,9 @@ export const EItemZodSchema = z.object({
 	availability: z.object({
 		starts: z.string(),
 		ends: z.string(),
-		repeat: z.array(z.nativeEnum(WeekDaysEnum))
+		repeat: z.array(z.nativeEnum(WeekDaysEnum)).describe('The days of the week the instance is available.'),
+		maxOffset: z.number().optional().default(1).describe('The maximum number of months from today that the instance can be booked in advance.'),
+		// interval: z.number().optional().default(30).describe('The step in minutes for the time picker.'),
 	})
 });
 
