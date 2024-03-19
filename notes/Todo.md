@@ -7,8 +7,11 @@
 ## Long run ToDo
 - [ ] Convert isDeleted to SecondaryStatus enum with values: deleted, disabled, enabled with default value enabled so that we can delete the ones with no dependents
 - [ ] Add types to seed.ts
+- [ ] refactor FancyTable to CrispTable
 
 ## Completed Short run ToDo
+- [x] new model to hold availability of each instance
+- [x] custom time for each instance
 - [x] Move instances from pane to table inside the equipment table
   - [x] refactor add/edit action to single upsert action in +page.server.ts
 - [x] fix admin CMS button submission
