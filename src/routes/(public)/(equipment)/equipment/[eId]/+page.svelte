@@ -65,9 +65,9 @@
 				Description
 				<hr />
 			</h3>
-			<p class="w-100">
+			<div class="w-100">
 				{@html data.equipment.description}
-			</p>
+			</div>
 			<h3 class="w-100">
 				Resources
 				<hr />
@@ -228,7 +228,7 @@
 				@include box(100%, auto);
 			}
 
-			p {
+			& > div {
 				font-size: 18px;
 				font-weight: 400;
 				white-space: pre-line;
