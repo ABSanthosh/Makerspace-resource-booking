@@ -58,7 +58,7 @@ const authorization: Handle = async ({ event, resolve }) => {
 	}
 
 	const isUserAdmin = getCustomClaim(session).role === 'admin';
-	const isUserNew = getCustomClaim(session).isNew;
+	const isUserNew = getCustomClaim(session).isnew;
 
 	// GET requests
 	if (event.request.method === 'GET') {

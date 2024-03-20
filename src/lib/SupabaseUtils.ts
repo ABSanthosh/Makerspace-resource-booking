@@ -5,12 +5,12 @@ import { Role } from '@prisma/client';
 
 export function getCustomClaim(session: Session | null): {
 	role: Role;
-	isNew: boolean;
+	isnew: boolean;
 } {
 	return (
 		(session && session.user.app_metadata.custom_claims) || {
 			role: Role.user,
-			isNew: false
+			isnew: false
 		}
 	);
 }
