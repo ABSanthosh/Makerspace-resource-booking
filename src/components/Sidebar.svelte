@@ -29,7 +29,7 @@
 				<a
 					class="Sidebar__menuList--item"
 					href={route.route}
-					data-active={route.route === $page.url.pathname}
+					class:active={route.route === $page.url.pathname}
 					data-icon={String.fromCharCode(route.icon)}
 					title={route.name}
 				>
@@ -47,7 +47,7 @@
 					<summary
 						data-icon={String.fromCharCode(route.icon)}
 						data-icon-after={String.fromCharCode(58831)}
-						data-active={route.children.some((child) => child.route === $page.url.pathname) ||
+						class:active={route.children.some((child) => child.route === $page.url.pathname) ||
 							$page.url.pathname === route.route}
 						on:click={(e) => {
 							e.preventDefault();
@@ -62,7 +62,7 @@
 							<a
 								href={child.route}
 								class="Sidebar__menuList--item"
-								data-active={$page.url.pathname === child.route}
+								class:active={$page.url.pathname === child.route}
 							>
 								{child.name}
 							</a>
@@ -182,7 +182,7 @@
 				overflow: hidden;
 				border: 1px solid transparent;
 
-				&[data-active='true'] {
+				&.active {
 					background-color: #e6e8eb;
 					color: #11181c;
 					&::before {
@@ -190,7 +190,7 @@
 					}
 				}
 
-				&:not(&[data-active='true']) {
+				&:not(&.active) {
 					&:hover,
 					&:focus {
 						outline: none;
