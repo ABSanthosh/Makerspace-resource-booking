@@ -32,6 +32,13 @@ export async function updateUserProfile(profile: UserProfileSchema & { id: strin
 }
 
 export async function addToCart(cardItem: CartItemSchema & { userId: string }) {
+	/**
+	 * Doc: Start and end are converted from string of date object
+	 * to date object in the schema because for some reason, the
+	 * select tag isn't properly binding the value when its a date
+	 * object. So, we convert it to string and then back to date
+	 * object when we need to save it to the database.
+	 */
 	await db.cart.upsert({
 		where: {
 			userId: cardItem.userId
@@ -40,10 +47,9 @@ export async function addToCart(cardItem: CartItemSchema & { userId: string }) {
 			items: {
 				create: [
 					{
-						equipmentId: cardItem.equipmentId,
 						instanceId: cardItem.instanceId,
-						start: cardItem.start,
-						end: cardItem.end
+						start: new Date(cardItem.start),
+						end: new Date(cardItem.end)
 					}
 				]
 			}
@@ -53,10 +59,9 @@ export async function addToCart(cardItem: CartItemSchema & { userId: string }) {
 			items: {
 				create: [
 					{
-						equipmentId: cardItem.equipmentId,
 						instanceId: cardItem.instanceId,
-						start: cardItem.start,
-						end: cardItem.end
+						start: new Date(cardItem.start),
+						end: new Date(cardItem.end)
 					}
 				]
 			}

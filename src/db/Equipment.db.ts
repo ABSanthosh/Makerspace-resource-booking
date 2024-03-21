@@ -2,7 +2,7 @@ import { SupabaseEnum } from '$lib/Enums';
 import { getStorageUrl } from '$lib/SupabaseUtils';
 import { db } from '$lib/prisma';
 import type { ECategoriesSchema, EItemSchema } from '$lib/schemas';
-import type { ECategories, Equipment, Manual, Video } from '@prisma/client';
+import type { BookingItem, CartItem, ECategories, Equipment, Manual, Video } from '@prisma/client';
 
 export async function getAllEquipmentPreview(): Promise<
 	{
@@ -54,12 +54,15 @@ export async function getAllEquipment(): Promise<
 }
 
 export async function getEquipmentById(id: string): Promise<
-	Equipment & {
+	(Equipment & {
 		category: ECategories;
-		instances: EItemSchema[];
 		manuals: Manual[];
 		videos: Video[];
-	}
+		instances: (EItemSchema & {
+			BookingItem: BookingItem[];
+			CartItem: CartItem[];
+		})[];
+	})
 > {
 	// @ts-ignore
 	return await db.equipment
@@ -68,7 +71,12 @@ export async function getEquipmentById(id: string): Promise<
 				id
 			},
 			include: {
-				instances: true,
+				instances: {
+					include: {
+						CartItem: true,
+						BookingItem: true
+					}
+				},
 				category: true,
 				manuals: true,
 				videos: true
@@ -80,9 +88,9 @@ export async function getEquipmentById(id: string): Promise<
 				image: getStorageUrl(SupabaseEnum.EQUIPMENT, res!.image)
 			};
 		})
-		.catch((err) => {
-			error: err;
-		});
+		.catch((err) => ({
+			error: err
+		}));
 }
 
 export async function upsertEquipment(equipment: Equipment) {

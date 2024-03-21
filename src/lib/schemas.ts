@@ -151,8 +151,8 @@ export const ECategoryCRUDZSchema = z.object({
 export type ECategoryCRUDSchema = z.infer<typeof ECategoryCRUDZSchema>;
 
 export const CartItemZSchema = z.object({
-	end: z.date(),
-	start: z.date(),
+	end: z.string(), // will be string of date object
+	start: z.string(), // will be string of date object
 	instanceId: z.string(),
 	equipmentId: z.string(),
 	id: z.string().optional().or(z.literal('')),

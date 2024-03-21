@@ -2,6 +2,7 @@ import { EStatus, Prisma, PrismaClient } from '@prisma/client';
 import { createBrowserClient } from '@supabase/ssr';
 import { SupabaseEnum } from '../src/lib/Enums';
 import fs from 'fs';
+import nanoid from "../src/lib/nanoid"
 
 const prisma = new PrismaClient();
 const supabase = createBrowserClient(
@@ -56,6 +57,10 @@ const queries = {
 			AS $$
 			BEGIN
 				DELETE FROM public.profile WHERE id = old.id;
+
+				-- Delete Cart
+				DELETE FROM public."Cart" WHERE user_id = old.id;
+
 				RETURN old;
 			END;
 			$$;
@@ -87,6 +92,9 @@ async function onNewUser(columns: { [name: string]: string }) {
 			mobile = COALESCE(new.phone, ''),
 			email = COALESCE(new.email, '')
 			WHERE id = new.id;
+
+		-- Make a new cart
+		INSERT INTO public."Cart" (id, user_id) VALUES ('${nanoid()}', new.id);
 			
 		RETURN NEW;
 		END;

@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({ params }) => {
 };
 
 export const actions: Actions = {
-	add: async ({ request, locals: { supabase } }) => {
+	add: async ({ request }) => {
 		const cartItemForm = await superValidate(request, zod(CartItemZSchema));
 
 		if (!cartItemForm.valid) {
