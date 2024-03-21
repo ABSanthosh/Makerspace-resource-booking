@@ -15,6 +15,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 			email: dbUserProfile?.email,
 			mobile: dbUserProfile?.mobile || '',
 			isNew: dbUserProfile?.isNew,
+			role: dbUserProfile?.role,
 			type: dbUserProfile?.type as UserProfileSchema['type'],
 			typeData: dbUserProfile?.typeData! as UserProfileSchema['typeData']
 		} as UserProfileSchema,
@@ -30,8 +31,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
 	update: async ({ request, locals: { session, supabase, getSession } }) => {
-		const userProfileForm = await superValidate(request, zod(UserProfileZodSchema));
-
+		let userProfileForm = await superValidate(request, zod(UserProfileZodSchema));
 		if (!userProfileForm.valid) {
 			return { userProfileForm };
 		}
@@ -42,12 +42,25 @@ export const actions: Actions = {
 			id: session?.user.id!
 		});
 
-		// When the user updates their profile, we need to refresh the session
-		// so that the custom claims are updated
+		/**
+		 * Doc: When the user updates their profile, we need to refresh the session 
+		 * so that the custom claims are updated
+		 */
 		if (userProfileForm.data.isNew !== newProfileData.isNew) {
 			supabase.auth.refreshSession();
 			session = await getSession();
 		}
+
+		userProfileForm = await superValidate({
+			name: newProfileData.name,
+			email: newProfileData.email,
+			mobile: newProfileData.mobile || '',
+			isNew: newProfileData.isNew,
+			role: newProfileData.role,
+			type: newProfileData.type,
+			typeData: newProfileData.typeData
+		} as UserProfileSchema, zod(UserProfileZodSchema), { errors: false });
+
 		return {
 			userProfileForm,
 			profileData: newProfileData
