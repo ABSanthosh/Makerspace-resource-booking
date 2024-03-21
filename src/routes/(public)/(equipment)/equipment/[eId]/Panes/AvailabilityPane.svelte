@@ -1,19 +1,27 @@
 <script lang="ts">
 	import Pane from '$components/Pane.svelte';
+	import { addToast } from '$store/ToastStore';
 	import Calendar from '$components/Calendar.svelte';
-	import type { CartItemSchema, ECategoriesSchema, EItemSchema, ESchema } from '$lib/schemas';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { SuperValidated } from 'sveltekit-superforms';
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+	import type { CartItemSchema, EItemSchema } from '$lib/schemas';
+	import type { BookingItem, CartItem, Equipment } from '@prisma/client';
+	import { getSelectionSlots, getSlots } from '$utils/AvailabilityRules';
 	import { getWeekdayDates, inverseWeekDaysEnum } from '$utils/WeekDayDates';
-	import { addToast } from '$store/ToastStore';
 
 	export let { modal, formStore, currentEquipment, instanceId, userId } = $$props as {
 		modal: boolean;
 		userId: string;
 		instanceId: string;
 		formStore: SuperValidated<CartItemSchema>;
-		currentEquipment: (ESchema & { instances: EItemSchema[]; category: ECategoriesSchema }) | null;
+		currentEquipment:
+			| (Equipment & {
+					instances: (EItemSchema & {
+						BookingItem: BookingItem[];
+						CartItem: CartItem[];
+					})[];
+			  })
+			| null;
 	};
 
 	$: equipmentId = currentEquipment?.id!;
@@ -23,36 +31,13 @@
 		taintedMessage: null,
 		dataType: 'json',
 		onSubmit() {
-			if (dateSelector) {
-				form.set({
-					...$form,
-					userId,
-					instanceId,
-					equipmentId,
-					// @ts-ignore
-					start:
-						startTime !== ''
-							? new Date(
-									dateSelector.getFullYear(),
-									dateSelector.getMonth(),
-									dateSelector.getDate(),
-									parseInt(startTime.split(':')[0]),
-									parseInt(startTime.split(':')[1])
-								)
-							: null,
-					// @ts-ignore
-					end:
-						endTime !== ''
-							? new Date(
-									dateSelector.getFullYear(),
-									dateSelector.getMonth(),
-									dateSelector.getDate(),
-									parseInt(endTime.split(':')[0]),
-									parseInt(endTime.split(':')[1])
-								)
-							: null
-				});
-			}
+			$form = {
+				end: $form.end,
+				start: $form.start,
+				equipmentId,
+				instanceId,
+				userId
+			};
 		},
 		onResult(event) {
 			if (event.result.status === 200) {
@@ -61,31 +46,43 @@
 				});
 				modal = false;
 			}
-		}
+			$form = {
+				end: '',
+				start: '',
+				equipmentId: '',
+				instanceId: '',
+				userId: ''
+			};
+			dateSelector = null;
+		},
+		resetForm: true
 	});
 
 	$: dateSelector = null as Date | null;
-	$: startTime = '';
-	$: endTime = '';
 
 	$: currentInstance = currentEquipment?.instances.find((item) => item.id === instanceId);
 	$: maxOffset = currentInstance?.availability.maxOffset || 1;
 	$: disableWeekDays = inverseWeekDaysEnum(currentInstance?.availability.repeat || []);
 	$: blackout = getWeekdayDates(disableWeekDays, maxOffset);
 
-	const defaultTimes = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'))
-		.map((item) => [`${item}:00`, `${item}:30`])
-		.flat();
+	$: slots = getSlots({
+		booked: currentInstance?.BookingItem!,
+		carted: currentInstance?.CartItem!,
+		currentDay: dateSelector,
+		instance: {
+			start: currentInstance?.availability.starts || '00:00',
+			end: currentInstance?.availability.ends || '24:00'
+		},
+		slotSize: 30
+	});
 
-	$: times = defaultTimes.filter(
-		(item) =>
-			(item >= currentInstance?.availability.starts! &&
-				item <= currentInstance?.availability.ends!) ||
-			(item >= currentInstance?.availability.starts! &&
-				currentInstance?.availability.ends === '00:00') ||
-			(item <= currentInstance?.availability.ends! &&
-				currentInstance?.availability.starts === '00:00')
-	);
+	$: selectedSlots = getSelectionSlots({
+		slots: slots,
+		selectedEndTime: `${$form.end}`,
+		selectedStartTime: `${$form.start}`
+	});
+
+	$: console.log($form);
 </script>
 
 <Pane className="CartItemPane" bind:open={modal} style="--paneWidth: 375px;">
@@ -107,7 +104,6 @@
 		</i>
 		<hr />
 		<form use:enhance method="POST" id="cartItemForm" action="/equipment/[eId]?/add">
-			<!-- <SuperDebug data={$form} /> -->
 			<label class="CrispLabel" for="dateSelector">
 				<span data-mandatory style="color: inherit;"> Date </span>
 				<input
@@ -118,51 +114,48 @@
 					value={dateSelector?.toLocaleDateString('en-GB', {
 						day: '2-digit',
 						month: '2-digit',
-						year: 'numeric'
-					})}
+						year: 'numeric',
+						hour12: false
+					}) || 'Select a date'}
 				/>
 			</label>
 
 			<label class="CrispLabel" for="startTime">
 				<span data-mandatory style="color: inherit;"> Start Time </span>
-				<select class="CrispSelect" style="--crp-select-width: 100%;" bind:value={startTime}>
+				<select class="CrispSelect w-100" bind:value={$form.start}>
 					<option value="" disabled selected> Select a start time </option>
-					{#each times.filter((item) => (endTime !== '' ? item < endTime : true)) as item}
-						<option value={item}>{item}</option>
+					{#each Object.keys(selectedSlots.startRange) as item}
+						<option value={`${slots[item]}`}>{item}</option>
 					{/each}
 				</select>
 				{#if $errors.start}
-					<ul class="CrispMessageList" data-type="error">
-						{#each $errors.start as error}
-							<li class="CrispMessageList__item">{error}</li>
-						{/each}
-					</ul>
+					<p class="CrispMessage" data-type="error">{$errors.start}</p>
 				{/if}
 			</label>
 
 			<label class="CrispLabel" for="endTime">
 				<span data-mandatory style="color: inherit;"> End Time </span>
-				<select class="CrispSelect" style="--crp-select-width: 100%;" bind:value={endTime}>
+				<select class="CrispSelect w-100" bind:value={$form.end}>
 					<option value="" disabled selected> Select an end time </option>
-					{#each times.filter((item) => item > startTime) as item}
-						<option value={item}>{item}</option>
+					{#each Object.keys(selectedSlots.endRange) as item}
+						<option value={`${slots[item]}`}>{item}</option>
 					{/each}
 				</select>
 				{#if $errors.end}
-					<ul class="CrispMessageList" data-type="error">
-						{#each $errors.end as error}
-							<li class="CrispMessageList__item">{error}</li>
-						{/each}
-					</ul>
+					<p class="CrispMessage" data-type="error">{$errors.end}</p>
 				{/if}
 			</label>
 		</form>
 	</div>
 	<div class="Row--j-end gap-10" slot="footer">
-		<button class="FancyButton" data-type="black-outline" on:click={() => (modal = false)}>
-			Close
+		<button
+			class="CrispButton"
+			data-type="dark"
+			form="cartItemForm"
+			disabled={!dateSelector || !$form.start || !$form.end}
+		>
+			Add to cart
 		</button>
-		<button class="FancyButton" data-type="black-fill" form="cartItemForm"> Add to cart </button>
 	</div>
 </Pane>
 
