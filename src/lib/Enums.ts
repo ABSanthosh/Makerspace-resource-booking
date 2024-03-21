@@ -1,4 +1,4 @@
 export const enum SupabaseEnum {
-	EQUIPMENT = 'equipments',
-	MANUAL = 'manuals',
+  EQUIPMENT = 'equipments',
+  MANUAL = 'manuals'
 }

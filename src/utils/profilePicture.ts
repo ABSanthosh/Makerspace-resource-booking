@@ -1,8 +1,4 @@
-function stringToHslColor(
-  str: string,
-  saturation: number,
-  lightness: number
-): string {
+function stringToHslColor(str: string, saturation: number, lightness: number): string {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -26,10 +22,10 @@ export function getUsernameColor(username: string): {
   const brightness = (r * 299 + g * 587 + b * 114) / 1000;
 
   // Set text color to white for dark background, black otherwise
-  const textColor = brightness > 125 ? "#000000" : "#FFFFFF";
+  const textColor = brightness > 125 ? '#000000' : '#FFFFFF';
   return {
     backgroundColor,
-    textColor,
+    textColor
   };
 }
 
@@ -38,10 +34,10 @@ export function getInitials(name: string): string | undefined {
     return undefined; // Return undefined for empty or whitespace-only names
   }
 
-  const nameSplit = name.split(" ");
+  const nameSplit = name.split(' ');
   const initials = nameSplit
     .map((part) => part.charAt(0))
-    .join("")
+    .join('')
     .toUpperCase();
 
   return initials;

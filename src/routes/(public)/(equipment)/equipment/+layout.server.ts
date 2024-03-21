@@ -3,8 +3,8 @@ import type { LayoutServerLoad } from './$types';
 
 // @ts-ignore
 export const load: LayoutServerLoad = async () => {
-	return {
-		categories: await getECategories(),
-		allEquipment: await getAllEquipmentPreview()
-	};
+  return {
+    categories: await getECategories(),
+    allEquipment: await getAllEquipmentPreview()
+  };
 };

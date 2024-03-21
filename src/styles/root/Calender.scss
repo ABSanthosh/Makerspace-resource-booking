@@ -1,5 +1,5 @@
 .calendar-view {
-  .calendar-view-header-text>button {
+  .calendar-view-header-text > button {
     cursor: pointer;
   }
 
@@ -26,14 +26,14 @@
     }
   }
 
-  .calendar-view-pagination-controls>button {
+  .calendar-view-pagination-controls > button {
     cursor: pointer;
 
     &:disabled {
       background-color: #e8e8e8 !important;
       cursor: not-allowed !important;
 
-      &>svg path {
+      & > svg path {
         fill: #b8b8b8;
       }
     }
@@ -50,12 +50,22 @@
 
       &:hover {
         color: white !important;
-        background: #961105 linear-gradient(135deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent) !important;
+        background: #961105
+          linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.2) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.2) 50%,
+            rgba(255, 255, 255, 0.2) 75%,
+            transparent 75%,
+            transparent
+          ) !important;
         // border-color: #961105 !important;
       }
     }
 
-    &.selected{
+    &.selected {
       background-color: #f59f16 !important;
       color: white !important;
       border: #f59f16 !important;

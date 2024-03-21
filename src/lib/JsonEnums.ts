@@ -5,7 +5,7 @@ enum DType {
   WEIGHT = 'weight',
   AREA = 'area',
   VOLUME = 'volume',
-  DENSITY = 'density',
+  DENSITY = 'density'
 }
 
 enum DUnit {
@@ -19,6 +19,5 @@ enum DUnit {
   KG = 'kg',
   LB = 'lb',
   G = 'g',
-  OZ = 'oz',
+  OZ = 'oz'
 }
-

@@ -1,38 +1,38 @@
 .FancySelect {
-	outline: none;
-	cursor: pointer;
-	font-size: 15px;
-	appearance: none;
-	border-radius: 5px;
-	padding: 0 35px 0 10px;
-	color: var(--foreground);
-	background-repeat: no-repeat;
-	border: 1px solid var(--border);
-	box-shadow: var(--buttonShadow);
-	background-image: var(--downArrow);
-	background-color: #F4F6F8;//, var(--background);
-	background-position: right 5px top 50%;
-	@include box(var(--width, auto), var(--height, 35px));
-	transition: box-shadow 0.15s linear;
+  outline: none;
+  cursor: pointer;
+  font-size: 15px;
+  appearance: none;
+  border-radius: 5px;
+  padding: 0 35px 0 10px;
+  color: var(--foreground);
+  background-repeat: no-repeat;
+  border: 1px solid var(--border);
+  box-shadow: var(--buttonShadow);
+  background-image: var(--downArrow);
+  background-color: #f4f6f8; //, var(--background);
+  background-position: right 5px top 50%;
+  @include box(var(--width, auto), var(--height, 35px));
+  transition: box-shadow 0.15s linear;
 
-	box-shadow:
-		rgba(255, 255, 255, 0.035) 0px 0px 0px 0px,
-		rgba(236, 238, 240, 0.035) 0px 0px 0px 0.0741246px,
-		rgba(0, 0, 0, 0.05) 0px 1.11119px 2.14825px -0.0370623px,
-		rgba(0, 0, 0, 0.004) 0px 0.0741246px 0.148249px -0.0741246px;
+  box-shadow:
+    rgba(255, 255, 255, 0.035) 0px 0px 0px 0px,
+    rgba(236, 238, 240, 0.035) 0px 0px 0px 0.0741246px,
+    rgba(0, 0, 0, 0.05) 0px 1.11119px 2.14825px -0.0370623px,
+    rgba(0, 0, 0, 0.004) 0px 0.0741246px 0.148249px -0.0741246px;
 
-	&:focus,
-	&:active {
-		border: 1px solid #889096;
-		box-shadow:
-			rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-			rgb(236, 238, 240) 0px 0px 0px 2px,
-			rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
-			rgba(0, 0, 0, 0.1) 0px 2px 4px -2px;
-	}
+  &:focus,
+  &:active {
+    border: 1px solid #889096;
+    box-shadow:
+      rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+      rgb(236, 238, 240) 0px 0px 0px 2px,
+      rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
+      rgba(0, 0, 0, 0.1) 0px 2px 4px -2px;
+  }
 
-	// &:focus {
-	//   outline-offset: 2px;
-	//   outline: 0.125rem solid #0054f0;
-	// }
+  // &:focus {
+  //   outline-offset: 2px;
+  //   outline: 0.125rem solid #0054f0;
+  // }
 }

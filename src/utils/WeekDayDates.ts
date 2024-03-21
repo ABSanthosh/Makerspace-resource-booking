@@ -1,7 +1,7 @@
 import { WeekDaysEnum } from '$lib/schemas';
 
 /**
- * Weekdays are stores as the days the instance is available so to get the days that we need to 
+ * Weekdays are stores as the days the instance is available so to get the days that we need to
  * block, we need to inverse the days.
  */
 export function inverseWeekDaysEnum(weekDays: WeekDaysEnum[]): WeekDaysEnum[] {
@@ -16,10 +16,7 @@ export function dayNumToEnum(dayNum: number): WeekDaysEnum {
 // Function to get weekday dates based on given weekdays and maximum offset
 // weekdays: array of weekdays (e.g., ['Monday', 'Wednesday', 'Friday'])
 // maxOffset: maximum number of months to calculate dates for (default is 1)
-export function getWeekdayDates(
-  weekdays: string[],
-  maxOffset = 1
-): Date[] {
+export function getWeekdayDates(weekdays: string[], maxOffset = 1): Date[] {
   const result: Date[] = [];
   const currentDate = new Date();
 
@@ -42,7 +39,7 @@ export function getWeekdayDates(
       // current date is not the last day of the month. In this case, we set the 'limit'
       // to 31, which is the maximum number of days in a month.
 
-      const limit = offset === maxOffset ? currentDate.getDate() : 31
+      const limit = offset === maxOffset ? currentDate.getDate() : 31;
 
       // Loop through each day of the month
       for (let day = 1; day <= limit; day++) {

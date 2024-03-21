@@ -1,51 +1,51 @@
 .CrispMessage {
-	&[data-type='error'] {
-		--crp-message-list-color: #ff605c;
-		--crp-message-list-icon: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZjYwNWMiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS10cmlhbmdsZS1hbGVydCI+PHBhdGggZD0ibTIxLjczIDE4LTgtMTRhMiAyIDAgMCAwLTMuNDggMGwtOCAxNEEyIDIgMCAwIDAgNCAyMWgxNmEyIDIgMCAwIDAgMS43My0zIi8+PHBhdGggZD0iTTEyIDl2NCIvPjxwYXRoIGQ9Ik0xMiAxN2guMDEiLz48L3N2Zz4=");
-		--crp-message-border-color: #ff605c;
-		--crp-message-background-color: #ffe6e6;
-	}
+  &[data-type='error'] {
+    --crp-message-list-color: #ff605c;
+    --crp-message-list-icon: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZjYwNWMiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS10cmlhbmdsZS1hbGVydCI+PHBhdGggZD0ibTIxLjczIDE4LTgtMTRhMiAyIDAgMCAwLTMuNDggMGwtOCAxNEEyIDIgMCAwIDAgNCAyMWgxNmEyIDIgMCAwIDAgMS43My0zIi8+PHBhdGggZD0iTTEyIDl2NCIvPjxwYXRoIGQ9Ik0xMiAxN2guMDEiLz48L3N2Zz4=');
+    --crp-message-border-color: #ff605c;
+    --crp-message-background-color: #ffe6e6;
+  }
 
-	&[data-type='info'] {
-		--crp-message-list-color: #005197;
-		--crp-message-list-icon: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDUxOTciIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaXJjbGUtYWxlcnQiPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjEwIi8+PGxpbmUgeDE9IjEyIiB4Mj0iMTIiIHkxPSI4IiB5Mj0iMTIiLz48bGluZSB4MT0iMTIiIHgyPSIxMi4wMSIgeTE9IjE2IiB5Mj0iMTYiLz48L3N2Zz4=");
-		--crp-message-border-color: #005197;
-		--crp-message-background-color: #e3f0ff;
-	}
-	
-	&[data-format='box']{
-		--crp-message-border-radius: 4px;
-		--crp-message-padding: 8px 16px;
-	
-		border-radius: var(--crp-message-border-radius);
-		border: 1px solid var(--crp-message-border-color);
-		background-color: var(--crp-message-background-color);
-		padding: var(--crp-message-padding);
-	}
+  &[data-type='info'] {
+    --crp-message-list-color: #005197;
+    --crp-message-list-icon: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDUxOTciIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaXJjbGUtYWxlcnQiPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjEwIi8+PGxpbmUgeDE9IjEyIiB4Mj0iMTIiIHkxPSI4IiB5Mj0iMTIiLz48bGluZSB4MT0iMTIiIHgyPSIxMi4wMSIgeTE9IjE2IiB5Mj0iMTYiLz48L3N2Zz4=');
+    --crp-message-border-color: #005197;
+    --crp-message-background-color: #e3f0ff;
+  }
 
-	gap: 8px;
-	@include box($height: auto);
-	color: var(--crp-message-list-color);
-	@include make-flex($dir: row, $just: flex-start, $align: flex-start);
-	line-height: 20px;
+  &[data-format='box'] {
+    --crp-message-border-radius: 4px;
+    --crp-message-padding: 8px 16px;
 
-	&::before {
-		content: '';
-		width: 16px;
-		height: 20px;
-		flex-shrink: 0;
-		background-size: contain;
-		background-position: center;
-		background-repeat: no-repeat;
-		background-image: var(--crp-message-list-icon);
-	}
+    border-radius: var(--crp-message-border-radius);
+    border: 1px solid var(--crp-message-border-color);
+    background-color: var(--crp-message-background-color);
+    padding: var(--crp-message-padding);
+  }
+
+  gap: 8px;
+  @include box($height: auto);
+  color: var(--crp-message-list-color);
+  @include make-flex($dir: row, $just: flex-start, $align: flex-start);
+  line-height: 20px;
+
+  &::before {
+    content: '';
+    width: 16px;
+    height: 20px;
+    flex-shrink: 0;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: var(--crp-message-list-icon);
+  }
 }
 
 .CrispMessageList {
-	--crp-message-list-gap: 8px;
+  --crp-message-list-gap: 8px;
 
-	list-style-type: none;
-	@include box($height: auto);
-	gap: var(--crp-message-list-gap);
-	@include make-flex($align: flex-start, $just: flex-start);
+  list-style-type: none;
+  @include box($height: auto);
+  gap: var(--crp-message-list-gap);
+  @include make-flex($align: flex-start, $just: flex-start);
 }

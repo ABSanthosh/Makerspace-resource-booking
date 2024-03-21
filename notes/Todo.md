@@ -1,16 +1,19 @@
 ## Short run ToDo
+
 - [ ] Add trigger to delete manual from bucket when deleted from database
 - [ ] remove already booked slots from the times list
 - [ ] Add modal for booking details
 - [ ] Rework booking system to handle cart and booking properly
 
 ## Long run ToDo
+
 - [ ] Convert isDeleted to SecondaryStatus enum with values: deleted, disabled, enabled with default value enabled so that we can delete the ones with no dependents
 - [ ] Add types to seed.ts
 - [ ] replace fluent library with [custom component](https://svelte.dev/repl/f391b3186f804fb0bb0931e73388553a?version=3.46.4)
 - [ ] refactor FancyTable to CrispTable
 
 ## Completed Short run ToDo
+
 - [x] new model to hold availability of each instance
 - [x] custom time for each instance
 - [x] Move instances from pane to table inside the equipment table
@@ -34,8 +37,9 @@
 - [x] Add user profile page to fill before changing is_new to false and give access to other pages
 
 ## Completed Long run ToDo / Technical debt
+
 - [x] gmail like editor for equipment description(just put the same tiptap editor)
-- [x] Fix: When closing panes like equipment or categories, sometimes the new row just stays in the table 
+- [x] Fix: When closing panes like equipment or categories, sometimes the new row just stays in the table
 - [x] Adding and deleting equipment is not working. Need to do it individually. Eg. If new instances are added, need to create it instead of upserting it and if deleted, need to delete. If it is edited, need to update it instead of upserting it.
 - [x] Change equipment schema
 - [x] Add equipment category

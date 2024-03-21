@@ -7,9 +7,11 @@ export let SupaStore = writable<SupabaseClient>();
 // These are exclusively for component. This is to avoid prop drilling.
 export let SessionStore = writable<Session | null>();
 
-export let CMSStore = writable<{
-	id: string;
-	pathname: string;
-	data: any;
-	updatedAt: Date;
-}[]>();
+export let CMSStore = writable<
+  {
+    id: string;
+    pathname: string;
+    data: any;
+    updatedAt: Date;
+  }[]
+>();

@@ -1,135 +1,135 @@
 .FancyMenu {
-	@include box(auto);
-	min-width: 150px;
-	position: relative;
+  @include box(auto);
+  min-width: 150px;
+  position: relative;
 
-	$responsiveWidth: 600px;
+  $responsiveWidth: 600px;
 
-	@include respondAt($responsiveWidth) {
-		min-width: auto;
-	}
+  @include respondAt($responsiveWidth) {
+    min-width: auto;
+  }
 
-	summary {
-		@include box();
-		cursor: pointer;
-		user-select: none;
-		position: relative;
-		border-radius: 6px;
-		padding: 0 24px 0 10px;
-		color: var(--foreground);
-		box-shadow: var(--buttonShadow);
-		border: 1px solid var(--border);
-		background-color: var(--background);
-		@include make-flex($dir: row, $just: flex-start);
+  summary {
+    @include box();
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    border-radius: 6px;
+    padding: 0 24px 0 10px;
+    color: var(--foreground);
+    box-shadow: var(--buttonShadow);
+    border: 1px solid var(--border);
+    background-color: var(--background);
+    @include make-flex($dir: row, $just: flex-start);
 
-		@include respondAt($responsiveWidth) {
-			padding-left: 10px;
-		}
+    @include respondAt($responsiveWidth) {
+      padding-left: 10px;
+    }
 
-		&::-webkit-details-marker {
-			display: none;
-		}
+    &::-webkit-details-marker {
+      display: none;
+    }
 
-		&:hover:not(:disabled) {
-			border: 1px solid var(--buttonHoverBorder);
-			background-color: var(--buttonHoverBG) !important;
-		}
+    &:hover:not(:disabled) {
+      border: 1px solid var(--buttonHoverBorder);
+      background-color: var(--buttonHoverBG) !important;
+    }
 
-		&:not([data-no-marker]) {
-			&::after {
-				top: calc(50% - 3px);
-				content: '\e5c7';
-			}
+    &:not([data-no-marker]) {
+      &::after {
+        top: calc(50% - 3px);
+        content: '\e5c7';
+      }
 
-			&::before {
-				bottom: calc(50% - 3px);
-				content: '\e5c5';
-			}
-		}
+      &::before {
+        bottom: calc(50% - 3px);
+        content: '\e5c5';
+      }
+    }
 
-		&::after,
-		&::before {
-			right: 2px;
-			line-height: 0;
-			font-size: 19px;
-			position: absolute;
-			font-family: 'Icons';
-			color: var(--iconColor);
-		}
-	}
+    &::after,
+    &::before {
+      right: 2px;
+      line-height: 0;
+      font-size: 19px;
+      position: absolute;
+      font-family: 'Icons';
+      color: var(--iconColor);
+    }
+  }
 
-	&__content {
-		gap: 5px;
-		z-index: 3;
-		padding: 8px;
-		list-style: none;
-		user-select: none;
-		position: absolute;
-		border-radius: 10px;
-		@include make-flex();
-		top: calc(100% + 8px);
-		@include box(auto, auto);
-		border: 1px solid var(--border);
-		background-color: var(--popoverBG);
-		box-shadow: var(--elevatedShadow);
+  &__content {
+    gap: 5px;
+    z-index: 3;
+    padding: 8px;
+    list-style: none;
+    user-select: none;
+    position: absolute;
+    border-radius: 10px;
+    @include make-flex();
+    top: calc(100% + 8px);
+    @include box(auto, auto);
+    border: 1px solid var(--border);
+    background-color: var(--popoverBG);
+    box-shadow: var(--elevatedShadow);
 
-		--__right: 17px;
-		--__width: 14px;
-		--__height: 7px;
+    --__right: 17px;
+    --__width: 14px;
+    --__height: 7px;
 
-		&[data-align='right'] {
-			right: 0;
-			&::after {
-				right: var(--__right);
-			}
+    &[data-align='right'] {
+      right: 0;
+      &::after {
+        right: var(--__right);
+      }
 
-			&::before {
-				right: calc(var(--__right) + 0.5px);
-			}
-		}
+      &::before {
+        right: calc(var(--__right) + 0.5px);
+      }
+    }
 
-		&[data-align='left'] {
-			left: 0;
-			&::after {
-				left: var(--__right);
-			}
+    &[data-align='left'] {
+      left: 0;
+      &::after {
+        left: var(--__right);
+      }
 
-			&::before {
-				left: calc(var(--__right) + 0.5px);
-			}
-		}
+      &::before {
+        left: calc(var(--__right) + 0.5px);
+      }
+    }
 
-		&[data-align='center'] {
-			left: 50%;
-			transform: translateX(-50%);
-			&::after {
-				left: calc(50% - var(--__right));
-			}
+    &[data-align='center'] {
+      left: 50%;
+      transform: translateX(-50%);
+      &::after {
+        left: calc(50% - var(--__right));
+      }
 
-			&::before {
-				left: calc(50% - var(--__right) + 0.5px);
-			}
-		}
+      &::before {
+        left: calc(50% - var(--__right) + 0.5px);
+      }
+    }
 
-		&::after,
-		&::before {
-			content: ' ';
-			position: absolute;
-			clip-path: polygon(50% 0, 100% 100%, 0 100%);
-			height: var(--__height);
-		}
+    &::after,
+    &::before {
+      content: ' ';
+      position: absolute;
+      clip-path: polygon(50% 0, 100% 100%, 0 100%);
+      height: var(--__height);
+    }
 
-		&::after {
-			width: var(--__width);
-			background-color: var(--border);
-			top: -7.4px;
-		}
+    &::after {
+      width: var(--__width);
+      background-color: var(--border);
+      top: -7.4px;
+    }
 
-		&::before {
-			z-index: 1;
-			top: -6.3px;
-			width: calc(var(--__width) - 1px);
-			background-color: var(--popoverBG);
-		}
-	}
+    &::before {
+      z-index: 1;
+      top: -6.3px;
+      width: calc(var(--__width) - 1px);
+      background-color: var(--popoverBG);
+    }
+  }
 }
