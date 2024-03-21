@@ -19,10 +19,6 @@
 			<h5>Booking Information</h5>
 		</header>
 		<div class="Cart__section--content">
-			<!-- mentor - text -->
-			<!-- description - text (course, our, research, etc) -->
-			<!-- deadline for the project -->
-
 			<label
 				for="mentor"
 				class="CrispLabel"
@@ -120,7 +116,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#if data.cart}
+			{#if data.cart && data.cart.items.length > 0}
 				{#each data.cart.items as item}
 					<tr>
 						<td>
@@ -145,7 +141,9 @@
 				{/each}
 			{:else}
 				<tr>
-					<td colspan="5">No items in cart</td>
+					<td colspan="6">
+						<i class="CrispMessage" data-type="info" data-format="box"> No items in cart </i>
+					</td>
 				</tr>
 			{/if}
 		</tbody>

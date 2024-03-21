@@ -53,7 +53,7 @@
 				<img src={item.image} alt={item.name} />
 				<h2 class="w-100">{item.name}</h2>
 				<p class="w-100">{item.model}</p>
-				<a href="/equipment/{item.id}" class="FancyButton w-100">Learn more</a>
+				<a href="/equipment/{item.id}" class="CrispButton w-100">Learn more</a>
 			</div>
 		{/each}
 	</div>

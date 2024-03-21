@@ -4,7 +4,7 @@
 	import { BreadCrumbStore, isEquipmentDeletedStore } from '$store/BreadCrumbStore';
 	import AvailabilityPane from './Panes/AvailabilityPane.svelte';
 	import type { EItemSchema } from '$lib/schemas';
-	import { EStatus } from '@prisma/client';
+	import { EStatus, type CartItem, type BookingItem } from '@prisma/client';
 	import { SessionStore } from '$store/SupaStore';
 	import ManualViewPane from './Panes/ManualViewPane.svelte';
 	import VideoViewPane from './Panes/VideoViewPane.svelte';
@@ -35,7 +35,12 @@
 	$: availabilityPane = false;
 	$: manualPane = false;
 	$: videoPane = false;
-	$: selectedInstance = null as EItemSchema | null;
+	$: selectedInstance = null as
+		| (EItemSchema & {
+				CartItem: CartItem[];
+				BookingItem: BookingItem[];
+		  })
+		| null;
 </script>
 
 {#if selectedInstance && user}
@@ -112,18 +117,18 @@
 					</tr>
 				</thead>
 				<tbody>
-					{#if !equipment.isDeleted}
+					{#if !equipment.isDeleted && equipment.instances}
 						{#each equipment.instances as item}
 							<tr>
 								<td>{item.name}</td>
 								<td>{equipment.model}</td>
-								<td>{equipment.category.name}</td>
+								<td>{equipment?.category?.name}</td>
 								<td>{item.cost}</td>
 								<td>{item.status}</td>
 								<td>
 									{#if user}
 										<button
-											class="FancyButton"
+											class="CrispButton"
 											disabled={item.status !== EStatus.available}
 											data-type="black-outline"
 											on:click={() => {

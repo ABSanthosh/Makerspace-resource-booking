@@ -20,7 +20,7 @@
 					</li>
 				{/each}
 			</ul>
-			<button class="FancyButton" data-type="dark-blue" style="--width: 100%">Book a slot</button>
+			<a href="/equipment" class="CrispButton w-100" data-type="dark-blue">Book a slot</a>
 		</div>
 	</section>
 	<LocationCard />

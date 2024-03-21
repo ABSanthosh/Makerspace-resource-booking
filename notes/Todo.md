@@ -7,6 +7,7 @@
 ## Long run ToDo
 - [ ] Convert isDeleted to SecondaryStatus enum with values: deleted, disabled, enabled with default value enabled so that we can delete the ones with no dependents
 - [ ] Add types to seed.ts
+- [ ] replace fluent library with [custom component](https://svelte.dev/repl/f391b3186f804fb0bb0931e73388553a?version=3.46.4)
 - [ ] refactor FancyTable to CrispTable
 
 ## Completed Short run ToDo
