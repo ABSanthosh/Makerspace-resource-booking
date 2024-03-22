@@ -2,7 +2,7 @@ import { SupabaseEnum } from '$lib/Enums';
 import { getStorageUrl } from '$lib/SupabaseUtils';
 import { db } from '$lib/prisma';
 import type { BookingSchema, ECategoriesSchema, EItemSchema } from '$lib/schemas';
-import { ESecondaryStatus, type BookingItem, type CartItem, type ECategories, type Equipment, type Manual, type Video } from '@prisma/client';
+import { ESecondaryStatus, type BookingItem, type CartItem, type ECategories, type Equipment, type Manual, type Video, Prisma, type Booking } from '@prisma/client';
 
 export async function getAllEquipmentPreview(): Promise<
   {
@@ -236,13 +236,57 @@ export async function deleteVideos(ids: string[]) {
   });
 }
 
-export async function makeBooking(data: BookingSchema) {
+export async function makeBooking(data: BookingSchema): Promise<{
+  booking: Booking;
+  cart: Prisma.BatchPayload;
+} | {
+  error: string;
+}> {
   const cartItems = await db.cartItem.findMany({
     where: {
-      id: data.cartId
+      cartId: data.cartId,
+      id: {
+        in: data.instances
+      }
     },
-    include: {
-      instance: true
+    select: {
+      id: true,
+      end: true,
+      instanceId: true,
+      start: true
     }
   })
+
+  try {
+    return await db.booking.create({
+      data: {
+        mentor: data.mentor,
+        description: data.description,
+        deadline: data.deadline,
+        userId: data.userId,
+        items: {
+          create: cartItems.map((item) => ({
+            end: item.end,
+            start: item.start,
+            instanceId: item.instanceId
+          }))
+        }
+      }
+    }).then(async (res) => {
+      return {
+        booking: res,
+        cart: await db.cartItem.deleteMany({
+          where: {
+            id: {
+              in: data.instances
+            }
+          }
+        })
+      }
+    })
+  } catch (err) {
+    return {
+      error: "Booking failed. Please try again."
+    }
+  }
 }

@@ -127,7 +127,6 @@ model Booking {
 
 model BookingItem {
   id          String    @id @unique @default(nanoid(12))
-  equipmentId String
   instanceId  String
   start       DateTime
   end         DateTime

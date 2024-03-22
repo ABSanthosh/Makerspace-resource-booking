@@ -179,6 +179,7 @@ export const CartZSchema = z.object({
 export type CartSchema = z.infer<typeof CartZSchema>;
 
 export const BookingZSchema = z.object({
+  userId: z.string(),
   mentor: z.string().min(2),
   description: z.string().min(2),
   deadline: z.date(),
