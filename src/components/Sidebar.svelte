@@ -83,6 +83,7 @@
       </div>
       <form action="/auth?/logout" method="POST">
         <button
+          tabindex="-1"
           type="submit"
           title="Logout"
           data-type="danger"

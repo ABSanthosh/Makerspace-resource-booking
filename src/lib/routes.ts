@@ -28,9 +28,9 @@ export const USER_ROUTES: Route[] = [
     children: [] as Route[]
   },
   {
-    name: 'Cart',
-    route: '/dash/cart',
-    icon: 59596,
+    name: 'Orders',
+    route: '/dash/orders',
+    icon: 60180,
     children: [] as Route[]
   }
 ];

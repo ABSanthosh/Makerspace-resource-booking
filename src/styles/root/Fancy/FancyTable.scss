@@ -7,6 +7,7 @@
     position: sticky;
     top: 0;
   }
+
   tr {
     background-color: #fbfcfd;
 
@@ -60,6 +61,7 @@
       border-bottom: 0;
     }
   }
+
   & > tfoot {
     & > tr > td {
       border-radius: 0 0 6px 6px;
@@ -70,6 +72,10 @@
       background-color: #fbfcfd;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border) !important;
+    }
+
+    & > tr > td span {
+      color: #7e868c;
     }
   }
 }

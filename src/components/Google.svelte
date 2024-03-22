@@ -79,7 +79,7 @@
           Dashboard
         </a>
         <a
-          href="/dash/cart"
+          href="/dash/orders/cart"
           class="CrispMenu__item Google__profile--item"
           data-icon={String.fromCharCode(59596)}
         >
