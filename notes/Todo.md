@@ -1,19 +1,27 @@
 ## Short run ToDo
-
-- [ ] Add trigger to delete manual from bucket when deleted from database
+- [ ] delete cart items in cart page
 - [ ] remove already booked slots from the times list
-- [ ] Add modal for booking details
-- [ ] Rework booking system to handle cart and booking properly
+  - [ ] In availability rules, add a condition to check the booking status. if approved or pending, remove from the list
+- [ ] Admin Booking flow
+  - [ ] Add a table to see all bookings
+  - [ ] each booking can open a pane to see the details. Add a button to approve or reject the booking 
+  - [ ] add a field to booking in schema `admin_notes` to add notes for the admin to give reasons for rejection
+- [ ] Add payment flow to booking
+- [ ] Cost calculation for booking
 
 ## Long run ToDo
 
-- [ ] Convert isDeleted to SecondaryStatus enum with values: deleted, disabled, enabled with default value enabled so that we can delete the ones with no dependents
+- [ ] Add trigger to delete manual from bucket when deleted from database
 - [ ] Add types to seed.ts
 - [ ] replace fluent library with [custom component](https://svelte.dev/repl/f391b3186f804fb0bb0931e73388553a?version=3.46.4)
 - [ ] refactor FancyTable to CrispTable
+- [ ] Trailing slash in http://localhost:5173/dash/orders/ is not the same as http://localhost:5173/dash/orders (missing slash). Need to fix this.
 
 ## Completed Short run ToDo
 
+- [x] Add modal for booking details
+- [x] Rework booking system to handle cart and booking properly
+- [x] Convert isDeleted to SecondaryStatus enum with values: deleted, disabled, enabled with default value enabled so that we can delete the ones with no dependents
 - [x] new model to hold availability of each instance
 - [x] custom time for each instance
 - [x] Move instances from pane to table inside the equipment table
