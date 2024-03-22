@@ -22,7 +22,7 @@
     dataType: 'json',
     onResult(event) {
       if (event.result.status === 200) {
-        addToast({ message: 'Instance Upserted' });
+        addToast({ message: 'Instance Upserted', type: 'success'  });
         modal = false;
       }
     }

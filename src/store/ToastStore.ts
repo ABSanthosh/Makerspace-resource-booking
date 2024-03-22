@@ -1,10 +1,11 @@
 import nanoid from '$lib/nanoid';
 import { writable } from 'svelte/store';
 
-interface IToast {
+export interface IToast {
   id?: string;
   message: string;
   timeout?: number;
+  type?: 'info' | 'success' | 'warning' | 'danger' | 'default';
 }
 
 export const ToastStore = writable<IToast[]>([]);

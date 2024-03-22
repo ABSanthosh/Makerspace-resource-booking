@@ -42,7 +42,8 @@
     onResult(event) {
       if (event.result.status === 200) {
         addToast({
-          message: 'Item added to cart successfully'
+          message: 'Item added to cart successfully',
+          type: 'success'
         });
         modal = false;
       }
@@ -81,8 +82,6 @@
     selectedEndTime: `${$form.end}`,
     selectedStartTime: `${$form.start}`
   });
-
-  $: console.log($form);
 </script>
 
 <Pane className="CartItemPane" bind:open={modal} style="--paneWidth: 375px;">

@@ -27,7 +27,8 @@
           message:
             $form?.id !== undefined
               ? 'Equipment updated successfully'
-              : 'Equipment added successfully'
+              : 'Equipment added successfully',
+          type: 'success'
         });
         resetForm(form);
       }

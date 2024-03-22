@@ -40,12 +40,14 @@
         data: JSON.stringify(JsonContent)
       });
     },
-    onResult() {
-      addToast({ message: 'Content updated' });
-      operations = {
-        add: [],
-        delete: []
-      };
+    onResult(event) {
+      if (event.result.status === 200) {
+        addToast({ message: 'Content updated', type: 'success' });
+        operations = {
+          add: [],
+          delete: []
+        };
+      }
     }
   });
 

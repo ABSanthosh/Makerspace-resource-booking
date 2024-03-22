@@ -25,7 +25,7 @@
     },
     onResult(event) {
       if (event.result.status === 200) {
-        addToast({ message: 'Videos updated' });
+        addToast({ message: 'Videos updated', type: 'success'  });
         modal = false;
         addModeItem = null;
         operations = {
@@ -180,7 +180,6 @@
     <button
       class="CrispButton"
       form="videoForm"
-      style="--height: 30px"
       data-type="black-outline"
       disabled={operations.add.length === 0 && operations.delete.length === 0}
     >

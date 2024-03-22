@@ -28,7 +28,7 @@
     },
     onResult(event) {
       if (event.result.status === 200) {
-        addToast({ message: 'Manuals updated' });
+        addToast({ message: 'Manuals updated', type: 'success'  });
         modal = false;
         addModeItem = null;
         editModeItem = null;

@@ -35,9 +35,11 @@
 {/if}
 <slot />
 {#if $ToastStore}
-  {#each $ToastStore as toast (toast.id)}
-    <Toast message={toast.message} />
-  {/each}
+  <ul class="ToastList">
+    {#each $ToastStore as toast (toast.id)}
+    <Toast {...toast} />
+    {/each}
+  </ul>
 {/if}
 
 <style lang="scss" global>
