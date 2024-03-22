@@ -19,8 +19,11 @@
   --crp-menu-content-border-radius: 12px;
   --crp-menu-content-border: 0.2px solid rgba(201, 201, 201, 0.4);
   --crp-menu-content-padding: 5px;
-
   --crp-menu-content-item-border-radius: 7px;
+  --crp-menu-content-width: auto;
+  --crp-menu-content-height: auto;
+
+  --crp-menu-summary-padding: 0 20px 0 10px;
 
   position: relative;
   min-width: var(--crp-menu-min-width);
@@ -62,7 +65,7 @@
     user-select: none;
     position: relative;
     border-radius: 6px;
-    padding: 0 20px 0 10px;
+    padding: var(--crp-menu-summary-padding);
     @include make-flex($dir: row, $just: flex-start);
 
     // Colors
@@ -102,7 +105,7 @@
     user-select: none;
     position: absolute;
     @include make-flex();
-    @include box(auto, auto);
+    @include box(var(--crp-menu-content-width), var(--crp-menu-content-height));
 
     // If its a list, remove list styles
     list-style: none;

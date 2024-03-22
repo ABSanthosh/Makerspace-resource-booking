@@ -1,9 +1,9 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import clickOutside from '$directive/clickOutside';
   import type { Route } from '$lib/routes';
-  import { SupaStore, SessionStore } from '$store/SupaStore';
+  import { SessionStore } from '$store/SupaStore';
 
-  $: supabase = $SupaStore;
   $: user = $SessionStore!.user;
   export let routes: Route[];
 
@@ -11,15 +11,17 @@
   $: userEmail = user.user_metadata.email;
   $: userPicture = user.user_metadata.picture;
 
-  $: navState = false;
+  $: navState = true;
   $: collapsibleState = {
     ...Object.fromEntries(
       routes.filter((item) => item.children.length > 0).map((item) => [item.route, false])
     )
   } as Record<string, boolean>;
+
+  $: userProfileMenu = false;
 </script>
 
-<div class="Sidebar" class:open={navState}>
+<div class="Sidebar" class:open={navState || userProfileMenu}>
   <div class="Sidebar__logo Row--between gap-15">
     <img src="/assets/images/logo.svg" alt="logo" />
   </div>
@@ -29,11 +31,14 @@
         <a
           class="Sidebar__menuList--item"
           href={route.route}
-          class:active={route.route === $page.url.pathname}
+          class:active={route.route === $page.url.pathname ||
+            route.alt?.some((alt) => alt === $page.url.pathname)}
           data-icon={String.fromCharCode(route.icon)}
           title={route.name}
         >
-          {route.name}
+          <span>
+            {route.name}
+          </span>
         </a>
       {:else if route.children.length > 0}
         <details
@@ -55,7 +60,9 @@
               collapsibleState[route.route] = !collapsibleState[route.route];
             }}
           >
-            {route.name}
+            <span>
+              {route.name}
+            </span>
           </summary>
           <div class="Sidebar__subMenu--content">
             {#each route.children as child}
@@ -64,7 +71,9 @@
                 class="Sidebar__menuList--item"
                 class:active={$page.url.pathname === child.route}
               >
-                {child.name}
+                <span>
+                  {child.name}
+                </span>
               </a>
             {/each}
           </div>
@@ -73,28 +82,41 @@
     {/each}
   </ul>
   <div class="Sidebar__bottom">
-    <div class="Sidebar__user">
-      <span
-        style="background-image: url('{userPicture}'); background-size: cover; background-position: center;"
-      />
-      <div class="Sidebar__bottom--col">
-        <p title={userName}>{userName}</p>
-        <p title={userEmail}>{userEmail}</p>
-      </div>
-      <form action="/auth?/logout" method="POST">
-        <button
-          tabindex="-1"
-          type="submit"
-          title="Logout"
-          data-type="danger"
-          class="CrispButton"
-          data-icon={String.fromCharCode(59834)}
-        />
-      </form>
-    </div>
+    <details
+      data-no-marker
+      use:clickOutside
+      class="CrispMenu w-100"
+      bind:open={userProfileMenu}
+      on:outclick={() => (userProfileMenu = false)}
+    >
+      <summary>
+        <div class="Sidebar__user">
+          <span
+            style="background-image: url('{userPicture}'); background-size: cover; background-position: center;"
+          />
+          <div class="Sidebar__bottom--col">
+            <p title={userName}>{userName}</p>
+            <span title={userEmail}>{userEmail}</span>
+          </div>
+        </div>
+      </summary>
+      <ul class="CrispMenu__content" data-direction="top" data-align="left">
+        <form action="/auth?/logout" method="POST" class="w-100">
+          <button
+            tabindex="-1"
+            type="submit"
+            title="Logout"
+            data-type="danger"
+            class="CrispButton w-100"
+          >
+            Log out
+          </button>
+        </form>
+      </ul>
+    </details>
 
     <button
-      class={`CrispButton Sidebar__toggle${navState ? '--active' : '--item'}`}
+      class={`CrispButton Sidebar__toggle${(navState || userProfileMenu) ? '--active' : '--item'}`}
       on:click={() => {
         navState = !navState;
         collapsibleState = {
@@ -182,6 +204,14 @@
         @include make-flex($dir: row, $just: flex-start);
         overflow: hidden;
         border: 1px solid transparent;
+        transition:
+          color 0.15s ease-in-out,
+          background-color 0.15s ease-in-out;
+
+        & > span {
+          color: inherit;
+          transition: inherit;
+        }
 
         &.active {
           background-color: #e6e8eb;
@@ -192,10 +222,20 @@
         }
 
         &:not(&.active) {
+          &::before {
+            transition: inherit;
+          }
           &:hover,
           &:focus {
             outline: none;
-            background-color: #ebedf1;
+            background-color: #e6e8eb;
+
+            &::before {
+              color: #11181c;
+            }
+            & > span {
+              color: #11181c;
+            }
           }
         }
       }
@@ -269,86 +309,56 @@
 
     &__user {
       display: grid;
-      grid-template-columns: 40px 1fr 25px;
+      grid-template-columns: 37px 1fr;
       @include box($height: auto);
       gap: 10px;
-      border-top: 1px solid #eaecf0;
-      border-bottom: 1px solid #eaecf0;
 
       align-items: end;
-      padding: 10px 0 10px 0;
-
-      // img {
-      // 	border-radius: 50%;
-      // 	border: 1px solid black;
-      // 	@include box(38px, 38px);
-      // }
-
-      // &--col {
-      // 	overflow: hidden;
-
-      // 	p {
-      // 		text-overflow: ellipsis;
-      // 		overflow: hidden;
-
-      // 		&:first-child {
-      // 			font-size: 16px;
-      // 			font-weight: 600;
-      // 		}
-
-      // 		&:last-child {
-      // 			font-size: 14px;
-      // 			font-weight: 500;
-      // 			color: #84878d;
-      // 		}
-      // 	}
-      // }
-
+      padding: 10px 3px 10px 3px;
       & > span {
         border-radius: 50%;
-        @include box(38px, 38px);
+        @include box(35px, 35px);
         @include make-flex();
         font-weight: bolder;
-      }
-
-      button {
-        @include box(25px, auto);
-        &::before {
-          font-size: 18px;
-        }
-        &:hover {
-          &::before {
-            color: white;
-          }
-        }
-        // 	@include box(auto);
-        // 	@include make-flex();
-        // 	font-size: 22px;
-        // 	outline: none;
-        // 	border: none;
-        // 	background-color: transparent;
-        // 	cursor: pointer;
-
-        // 	&:hover,
-        // 	&:focus {
-        // 		outline: none;
-        // 		background-color: #ebedf1;
-        // 	}
       }
     }
 
     &__bottom {
-      @include make-flex();
       gap: 15px;
+      @include make-flex($align: flex-start);
       @include box(100%, auto);
+
+      .CrispMenu {
+        border-top: 1px solid #eaecf0;
+        border-bottom: 1px solid #eaecf0;
+
+        --crp-menu-height: auto;
+        --crp-menu-box-shadow: none;
+        --crp-menu-summary-padding: 0;
+        --crp-menu-background-color: transparent;
+        --crp-menu-border: 1px solid transparent;
+        --crp-menu-border-hover: 1px solid transparent;
+
+        --crp-menu-content-width: 100%;
+      }
 
       &--col {
         overflow: hidden;
 
+        span,
         p {
           text-overflow: ellipsis;
           overflow: hidden;
           white-space: nowrap;
+        }
+
+        p {
+          font-size: 14px;
+          font-weight: 500;
+        }
+        span {
+          color: #525252;
+          font-size: 12px;
         }
       }
     }

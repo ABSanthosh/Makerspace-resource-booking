@@ -2,6 +2,7 @@ export interface Route {
   name: string;
   route: string;
   icon: number;
+  alt?: string[];
   children: Route[];
 }
 
@@ -29,8 +30,9 @@ export const USER_ROUTES: Route[] = [
   },
   {
     name: 'Orders',
-    route: '/dash/orders',
+    route: '/dash/orders/cart',
     icon: 60180,
+    alt: ['/dash/orders/cart', '/dash/orders/bookings'],
     children: [] as Route[]
   }
 ];
