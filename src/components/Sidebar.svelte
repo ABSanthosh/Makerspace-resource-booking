@@ -11,7 +11,7 @@
   $: userEmail = user.user_metadata.email;
   $: userPicture = user.user_metadata.picture;
 
-  $: navState = true;
+  $: navState = false;
   $: collapsibleState = {
     ...Object.fromEntries(
       routes.filter((item) => item.children.length > 0).map((item) => [item.route, false])

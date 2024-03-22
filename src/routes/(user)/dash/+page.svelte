@@ -42,7 +42,7 @@
       id="userProfileForm"
       class="Dashboard__section--content"
     >
-      <SuperDebug bind:data={$profileForm} />
+      <!-- <SuperDebug bind:data={$profileForm} /> -->
       <label
         for="name"
         class="CrispLabel"
