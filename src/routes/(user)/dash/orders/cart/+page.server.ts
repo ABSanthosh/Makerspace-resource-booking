@@ -1,14 +1,19 @@
-import { getUserCart } from '$db/User.db';
+import { getUserCart, makeBooking } from '$db/User.db';
 import { BookingZSchema } from '$lib/schemas';
 import { superValidate } from 'sveltekit-superforms/server';
 import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
-import { makeBooking } from '$db/Equipment.db';
 import { fail } from '@sveltejs/kit';
 
 // @ts-ignore
 export const load: PageServerLoad = async ({ locals }) => {
-  const bookingForm = await superValidate(zod(BookingZSchema));
+  const bookingForm = await superValidate(
+    {
+      userId: locals.session!.user.id,
+    },
+    zod(BookingZSchema),
+    { errors: false }
+  );
 
   return {
     bookingForm,
@@ -33,5 +38,8 @@ export const actions: Actions = {
       bookingForm,
       booking
     }
+  },
+  delete: async ({ request }) => {
+    
   }
 }

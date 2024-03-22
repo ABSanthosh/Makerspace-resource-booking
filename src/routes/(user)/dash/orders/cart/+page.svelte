@@ -12,6 +12,10 @@
 
   $: bookingModal = false;
   $: selectAll = false;
+
+  $: if (data.cart?.items.length === 0 && selectAll) {
+    selectAll = false;
+  }
 </script>
 
 <BookingPane
