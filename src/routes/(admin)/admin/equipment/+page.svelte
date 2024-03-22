@@ -7,7 +7,7 @@
   import clickOutside from '$directive/clickOutside';
   import { enhance } from '$app/forms';
   import ManualPane from './FormPanes/ManualPane.svelte';
-  import type { Manual, Video } from '@prisma/client';
+  import { ESecondaryStatus, type Manual, type Video } from '@prisma/client';
   import VideoPane from './FormPanes/VideoPane.svelte';
   import InstancePane from './FormPanes/InstancePane.svelte';
 
@@ -37,7 +37,8 @@
       model: '',
       image: '',
       description: '',
-      eCategoriesId: ''
+      eCategoriesId: '',
+      secondaryStatus: ESecondaryStatus.ACTIVE
     });
   };
 
@@ -97,7 +98,8 @@ is properly set.
               model: '',
               image: '',
               description: '',
-              eCategoriesId: ''
+              eCategoriesId: '',
+              secondaryStatus: ESecondaryStatus.ACTIVE
             };
           }
         }}
@@ -119,7 +121,10 @@ is properly set.
       <tbody>
         {#if searchEquipment && searchEquipment.length > 0}
           {#each searchEquipment as item}
-            <tr class:disabled={item.isDeleted} title="Equipment is disabled">
+            <!-- Ref: https://svelte.dev/docs/special-tags#const -->
+            {@const isDeleted = item.secondaryStatus === ESecondaryStatus.DELETED}
+            {@const isDisabled = item.secondaryStatus === ESecondaryStatus.DISABLED}
+            <tr class:disabled={isDeleted || isDisabled} title="Equipment is disabled">
               <td> {item.name} </td>
               <td> {item.model} </td>
               <td> {item.category.name} </td>
@@ -161,7 +166,8 @@ is properly set.
                             ...item,
                             // Doc: We have to remove the ?cache from the image URL so it won't be cycled
                             // the name of the image file when we update the image
-                            image: item.image.split('?')[0]
+                            image: item.image.split('?')[0],
+                            secondaryStatus: item.secondaryStatus
                           };
                         }
                         equipmentModal = true;
@@ -208,11 +214,11 @@ is properly set.
                       use:enhance
                       class="w-100"
                       method="POST"
-                      action="/admin/equipment?/{item.isDeleted ? 'enable' : 'disable'}"
+                      action="/admin/equipment?/{isDeleted ? 'enable' : 'disable'}"
                       on:submit={() => {
                         return confirm(
                           `Are you sure you want to ${
-                            item.isDeleted ? 're-enable' : 'delete'
+                            isDeleted ? 're-enable' : 'delete'
                           } this equipment?`
                         );
                       }}
@@ -220,11 +226,11 @@ is properly set.
                       <input type="hidden" name="id" value={item.id} />
                       <button
                         class="CrispButton"
-                        data-type={item.isDeleted ? 'success' : 'danger'}
+                        data-type={isDeleted ? 'success' : 'danger'}
                         data-border="false"
                         class:active={editMenuId === item.id}
                       >
-                        {item.isDeleted ? 'Enable' : 'Disable'}
+                        {isDeleted ? 'Enable' : 'Disable'}
                       </button>
                     </form>
                     <form
@@ -298,7 +304,7 @@ is properly set.
                   </thead>
 
                   <tbody>
-                    {#if !item.isDeleted && item.instances.length > 0}
+                    {#if !isDeleted && item.instances.length > 0}
                       {#each item.instances as instance}
                         <tr>
                           <td> {instance.name} </td>

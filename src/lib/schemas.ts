@@ -1,4 +1,4 @@
-import { BookingStatus, EStatus, ProfileType, Role } from '@prisma/client';
+import { BookingStatus, ESecondaryStatus, EStatus, ProfileType, Role } from '@prisma/client';
 import { z } from 'zod';
 
 const phoneRegex = new RegExp(/(\+91\s)?\d{10}/);
@@ -103,7 +103,8 @@ export const EZodSchema = z.object({
     .or(z.string()),
   description: z.string().optional().default(''),
   eCategoriesId: z.string().min(7, { message: 'Category is required' }),
-  isDeleted: z.boolean().optional().or(z.literal(false))
+  // isDeleted: z.boolean().optional().or(z.literal(false))
+  secondaryStatus: z.nativeEnum(ESecondaryStatus)
 });
 
 export type ESchema = z.infer<typeof EZodSchema>;
@@ -177,13 +178,11 @@ export const CartZSchema = z.object({
 
 export type CartSchema = z.infer<typeof CartZSchema>;
 
-// mentor - text
-// description - text (course, our, research, etc)
-// deadline for the project
 export const BookingZSchema = z.object({
   mentor: z.string().min(2),
   description: z.string().min(2),
   deadline: z.date(),
+  cartId: z.string(),
   instances: z.array(z.string())
 });
 

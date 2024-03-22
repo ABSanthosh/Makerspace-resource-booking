@@ -1,8 +1,8 @@
 import { SupabaseEnum } from '$lib/Enums';
 import { getStorageUrl } from '$lib/SupabaseUtils';
 import { db } from '$lib/prisma';
-import type { ECategoriesSchema, EItemSchema } from '$lib/schemas';
-import type { BookingItem, CartItem, ECategories, Equipment, Manual, Video } from '@prisma/client';
+import type { BookingSchema, ECategoriesSchema, EItemSchema } from '$lib/schemas';
+import { ESecondaryStatus, type BookingItem, type CartItem, type ECategories, type Equipment, type Manual, type Video } from '@prisma/client';
 
 export async function getAllEquipmentPreview(): Promise<
   {
@@ -10,7 +10,7 @@ export async function getAllEquipmentPreview(): Promise<
     name: string;
     model: string;
     image: string;
-    isDeleted: boolean;
+    secondaryStatus: ESecondaryStatus;
     eCategoriesId: string;
   }[]
 > {
@@ -23,7 +23,7 @@ export async function getAllEquipmentPreview(): Promise<
         model: true,
         image: true,
         eCategoriesId: true,
-        isDeleted: true
+        secondaryStatus: true
       }
     })
     .then((res) => {
@@ -131,7 +131,8 @@ export async function toggleEquipment(id: string, state: boolean) {
         id
       },
       data: {
-        isDeleted: state
+        // isDeleted: state
+        secondaryStatus: state ? ESecondaryStatus.ACTIVE : ESecondaryStatus.DELETED
       }
     }),
     db.eInstance.updateMany({
@@ -139,7 +140,7 @@ export async function toggleEquipment(id: string, state: boolean) {
         equipmentId: id
       },
       data: {
-        isDeleted: state
+        secondaryStatus: state ? ESecondaryStatus.ACTIVE : ESecondaryStatus.DELETED
       }
     })
   ]);
@@ -233,4 +234,15 @@ export async function deleteVideos(ids: string[]) {
       }
     }
   });
+}
+
+export async function makeBooking(data: BookingSchema) {
+  const cartItems = await db.cartItem.findMany({
+    where: {
+      id: data.cartId
+    },
+    include: {
+      instance: true
+    }
+  })
 }

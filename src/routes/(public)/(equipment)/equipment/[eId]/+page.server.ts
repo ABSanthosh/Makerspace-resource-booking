@@ -5,6 +5,7 @@ import { CartItemZSchema } from '$lib/schemas';
 import { fail, type Actions, redirect } from '@sveltejs/kit';
 import { addToCart } from '$db/User.db';
 import { zod } from 'sveltekit-superforms/adapters';
+import { ESecondaryStatus } from '@prisma/client';
 
 // @ts-ignore
 export const load: PageServerLoad = async ({ params }) => {
@@ -15,7 +16,7 @@ export const load: PageServerLoad = async ({ params }) => {
   return {
     equipment,
     cartItemForm: await superValidate(zod(CartItemZSchema)),
-    isDeleted: equipment.isDeleted ? true : undefined
+    isDeleted: equipment.secondaryStatus === ESecondaryStatus.DELETED || equipment.secondaryStatus === ESecondaryStatus.DISABLED
   };
 };
 

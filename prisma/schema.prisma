@@ -44,19 +44,25 @@ enum ProfileType {
 }
 
 model Equipment {
-  id            String      @id @unique @default(nanoid(7))
-  name          String
-  model         String
-  description   String      @db.VarChar(2500)
-  image         String
-  instances     EInstance[]
-  eCategoriesId String
-  category      ECategories @relation(fields: [eCategoriesId], references: [id], onDelete: Cascade)
-  isDeleted     Boolean     @default(false) @map("is_deleted")
-  manuals       Manual[]
-  videos        Video[]
+  id              String            @id @unique @default(nanoid(7))
+  name            String
+  model           String
+  description     String            @db.VarChar(2500)
+  image           String
+  instances       EInstance[]
+  eCategoriesId   String
+  category        ECategories       @relation(fields: [eCategoriesId], references: [id], onDelete: Cascade)
+  // isDeleted       Boolean           @default(false) @map("is_deleted")
+  manuals         Manual[]
+  videos          Video[]
+  secondaryStatus ESecondaryStatus @default(ACTIVE) @map("secondary_status")
 }
 
+enum ESecondaryStatus {
+  ACTIVE
+  DELETED
+  DISABLED
+}
 model Manual {
   id          String    @id @unique @default(nanoid(7))
   name        String
@@ -73,17 +79,17 @@ model Video {
 }
 
 model EInstance {
-  id           String        @id @unique @default(nanoid(7))
-  name         String
-  description  String        @db.VarChar(2500)
-  status       EStatus?      @default(available)
-  cost         String
-  equipmentId  String
-  equipment    Equipment     @relation(fields: [equipmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  CartItem     CartItem[]
-  availability Json          @default("{}") @db.Json
-  isDeleted    Boolean       @default(false) @map("is_deleted")
-  BookingItem  BookingItem[]
+  id              String            @id @unique @default(nanoid(7))
+  name            String
+  description     String            @db.VarChar(2500)
+  status          EStatus?          @default(available)
+  cost            String
+  equipmentId     String
+  CartItem        CartItem[]
+  BookingItem     BookingItem[]
+  availability    Json              @default("{}") @db.Json
+  equipment       Equipment         @relation(fields: [equipmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  secondaryStatus ESecondaryStatus @default(ACTIVE) @map("secondary_status")
 }
 
 model Cart {

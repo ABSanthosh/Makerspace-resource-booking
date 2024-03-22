@@ -25,6 +25,7 @@ import {
   upsertInstance,
   upsertEquipment
 } from '$db/Equipment.db';
+import { ESecondaryStatus } from '@prisma/client';
 
 // @ts-ignore
 export const load: PageServerLoad = async ({ locals }) => {
@@ -87,7 +88,7 @@ export const actions: Actions = {
         ...upsertEquipmentForm.data,
         id: upsertEquipmentForm.data.id || '',
         image: upsertEquipmentForm.data.image as string,
-        isDeleted: upsertEquipmentForm.data.isDeleted || false
+        secondaryStatus: upsertEquipmentForm.data.secondaryStatus || ESecondaryStatus.ACTIVE
       }),
       allEquipment: await getAllEquipment()
     });

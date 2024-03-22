@@ -4,7 +4,7 @@
   import { BreadCrumbStore, isEquipmentDeletedStore } from '$store/BreadCrumbStore';
   import AvailabilityPane from './Panes/AvailabilityPane.svelte';
   import type { EItemSchema } from '$lib/schemas';
-  import { EStatus, type CartItem, type BookingItem } from '@prisma/client';
+  import { EStatus, type CartItem, type BookingItem, ESecondaryStatus } from '@prisma/client';
   import { SessionStore } from '$store/SupaStore';
   import ManualViewPane from './Panes/ManualViewPane.svelte';
   import VideoViewPane from './Panes/VideoViewPane.svelte';
@@ -117,7 +117,7 @@
           </tr>
         </thead>
         <tbody>
-          {#if !equipment.isDeleted && equipment.instances}
+          {#if equipment.secondaryStatus === ESecondaryStatus.ACTIVE && equipment.instances}
             {#each equipment.instances as item}
               <tr>
                 <td>{item.name}</td>
