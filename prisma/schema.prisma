@@ -33,6 +33,7 @@ model Profile {
   // student: { yearOfStudy: 1, branch: "CSE", department: "Computer Science", studentId: "1234", clubs: ["club1", "club2"], researchArea: "AI"}
   // faculty: { department: "CSE", branch: "Computer Science", designation: "Assistant Professor", facultyId: "1234"}
   // staff: { department: "CSE", branch: "Computer Science", designation: "Lab Assistant", staffId: "1234"}
+  Events   Events[]
 
   @@map("profile")
 }
@@ -184,4 +185,19 @@ model ContentManagement {
   pathname  String   @unique
   data      Json
   updatedAt DateTime @default(now()) @map("updated_at")
+}
+
+model Events {
+  id               String   @id @unique @default(nanoid(7))
+  name             String
+  shortDescription String
+  description      String
+  image            String
+  status           Boolean  @default(true)
+  date             DateTime
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @default(now()) @map("updated_at")
+
+  authorId String  @db.Uuid
+  author   Profile @relation(fields: [authorId], references: [id])
 }

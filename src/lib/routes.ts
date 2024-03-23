@@ -17,6 +17,12 @@ export const ADMIN_ROUTES: Route[] = [
 		route: '/admin/equipment',
 		icon: 59964,
 		children: [] as Route[]
+	},
+	{
+		name: 'Events',
+		route: '/admin/events',
+		icon: 59964,
+		children: [] as Route[]
 	}
 ];
 
@@ -33,7 +39,7 @@ export const USER_ROUTES: Route[] = [
 		icon: 59596,
 		children: [] as Route[]
 	}
-]
+];
 
 export const HOME_ROUTES: Route[] = [
 	{
