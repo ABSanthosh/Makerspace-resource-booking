@@ -1,4 +1,4 @@
-import { deleteCartItem, getUserCart, makeBooking } from '$db/User.db';
+import { deleteCartItem, getUserCart, makeBooking } from '$db/Cart.db';
 import { BookingZSchema, CartDeleteZSchema } from '$lib/schemas';
 import { superValidate } from 'sveltekit-superforms/server';
 import type { Actions, PageServerLoad } from './$types';
