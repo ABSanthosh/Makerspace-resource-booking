@@ -13,8 +13,11 @@
   };
 
   const { form, enhance } = superForm(formStore, {
+    dataType: 'json',
     onSubmit() {
-      $form.bookingId = booking.id;
+      form.set({
+        bookingId: booking.id
+      });
     },
     onResult(event) {
       modal = false;
@@ -132,7 +135,7 @@
   </svelte:fragment>
   <svelte:fragment slot="footer">
     {#if booking.status === 'PENDING'}
-      <form action={`/dash/orders/bookings?/cancel`} method="POST" use:enhance>
+      <form action="/dash/orders/bookings?/cancel" method="POST" use:enhance>
         <button type="submit" class="CrispButton" data-type="danger"> Cancel </button>
       </form>
     {/if}

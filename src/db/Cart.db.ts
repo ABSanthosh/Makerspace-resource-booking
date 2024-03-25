@@ -139,7 +139,6 @@ export async function makeBooking(data: BookingSchema): Promise<{
 
 // cancel booking
 export async function cancelBooking(bookingId: string) {
-  console.log(BookingStatus.CANCELLED)
   return await db.booking.update({
     where: {
       id: bookingId
