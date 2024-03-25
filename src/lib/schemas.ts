@@ -117,7 +117,6 @@ export const EManualCRUDZSchema = z.object({
 
 export type EManualCRUDSchema = z.infer<typeof EManualCRUDZSchema>;
 
-
 export const EVideoZSchema = z.object({
 	id: z.string(),
 	video: z.string().trim().url(),
@@ -186,3 +185,22 @@ export const CMSZSchema = z.object({
 });
 
 export type CMSSchema = z.infer<typeof CMSZSchema>;
+
+export const EventZodSchema = z.object({
+	id: z.string().optional().or(z.literal('')),
+	name: z.string().min(2),
+	shortDescription: z.string().min(2),
+	description: z.string().min(2),
+	image: z
+		.custom<File>((f) => f instanceof File, 'Please upload a file.')
+		.refine(
+			(f) => ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'].includes(f.type),
+			'.jpg, .jpeg, .png and .webp files are accepted.'
+		)
+		.refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
+		.or(z.string()),
+	status: z.string(),
+	date: z.string()
+});
+
+export type EventSchema = z.infer<typeof EventZodSchema>;

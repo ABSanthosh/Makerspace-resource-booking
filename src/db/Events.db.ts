@@ -80,3 +80,29 @@ export async function getEventById(id: string): Promise<{
 			image: getStorageUrl(SupabaseEnum.EVENTS, item.image)
 		}));
 }
+
+export async function upsertEvent(event: Events) {
+	return await db.events.upsert({
+		where: {
+			id: event.id
+		},
+		update: {
+			name: event.name,
+			shortDescription: event.shortDescription,
+			description: event.description,
+			date: event.date,
+			image: event.image,
+			authorId: event.authorId,
+			status: event.status
+		},
+		create: {
+			name: event.name,
+			shortDescription: event.shortDescription,
+			description: event.description,
+			date: event.date,
+			image: event.image,
+			authorId: event.authorId,
+			status: event.status
+		}
+	});
+}
