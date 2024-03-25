@@ -1,4 +1,16 @@
-import { BookingStatus, ESecondaryStatus, EStatus, ProfileType, Role, type Equipment, type ECategories, type Manual, type Video, type BookingItem, type CartItem } from '@prisma/client';
+import {
+  BookingStatus,
+  ESecondaryStatus,
+  EStatus,
+  ProfileType,
+  Role,
+  type Equipment,
+  type ECategories,
+  type Manual,
+  type Video,
+  type BookingItem,
+  type CartItem
+} from '@prisma/client';
 import { z } from 'zod';
 
 const phoneRegex = new RegExp(/(\+91\s)?\d{10}/);
@@ -180,7 +192,7 @@ export type CartSchema = z.infer<typeof CartZSchema>;
 
 export const CartDeleteZSchema = z.object({
   ids: z.array(z.string())
-})
+});
 export type CartDeleteSchema = z.infer<typeof CartDeleteZSchema>;
 
 export const BookingZSchema = z.object({
@@ -195,8 +207,8 @@ export const BookingZSchema = z.object({
 export type BookingSchema = z.infer<typeof BookingZSchema>;
 
 export const BookingCancelZSchema = z.object({
-  bookingId: z.string()
-})
+  bookingId: z.string().min(2)
+});
 
 export type BookingCancelSchema = z.infer<typeof BookingCancelZSchema>;
 
@@ -219,4 +231,4 @@ export type EquipmentById = Equipment & {
     })[];
     CartItem: CartItem[];
   })[];
-}
+};

@@ -16,7 +16,6 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions: Actions = {
   async cancel({ request }) {
     const bookingDeleteForm = await superValidate(request, zod(BookingCancelZSchema));
-
     if (!bookingDeleteForm.valid) {
       return fail(400, { bookingDeleteForm });
     }
