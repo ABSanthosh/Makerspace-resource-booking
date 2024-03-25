@@ -44,14 +44,14 @@ enum ProfileType {
 }
 
 model Equipment {
-  id              String            @id @unique @default(nanoid(7))
+  id              String           @id @unique @default(nanoid(7))
   name            String
   model           String
-  description     String            @db.VarChar(2500)
+  description     String           @db.VarChar(2500)
   image           String
   instances       EInstance[]
   eCategoriesId   String
-  category        ECategories       @relation(fields: [eCategoriesId], references: [id], onDelete: Cascade)
+  category        ECategories      @relation(fields: [eCategoriesId], references: [id], onDelete: Cascade)
   // isDeleted       Boolean           @default(false) @map("is_deleted")
   manuals         Manual[]
   videos          Video[]
@@ -63,6 +63,7 @@ enum ESecondaryStatus {
   DELETED
   DISABLED
 }
+
 model Manual {
   id          String    @id @unique @default(nanoid(7))
   name        String
@@ -79,16 +80,16 @@ model Video {
 }
 
 model EInstance {
-  id              String            @id @unique @default(nanoid(7))
+  id              String           @id @unique @default(nanoid(7))
   name            String
-  description     String            @db.VarChar(2500)
-  status          EStatus?          @default(available)
+  description     String           @db.VarChar(2500)
+  status          EStatus?         @default(available)
   cost            String
   equipmentId     String
   CartItem        CartItem[]
   BookingItem     BookingItem[]
-  availability    Json              @default("{}") @db.Json
-  equipment       Equipment         @relation(fields: [equipmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  availability    Json             @default("{}") @db.Json
+  equipment       Equipment        @relation(fields: [equipmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   secondaryStatus ESecondaryStatus @default(ACTIVE) @map("secondary_status")
 }
 
@@ -121,18 +122,18 @@ model Booking {
   items       BookingItem[]
   status      BookingStatus @default(PENDING)
   createdAt   DateTime      @default(now()) @map("created_at")
-
-  user Profile @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  adminNotes  String?       @map("admin_notes") @db.VarChar(255)
+  user        Profile       @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model BookingItem {
-  id          String    @id @unique @default(nanoid(12))
-  instanceId  String
-  start       DateTime
-  end         DateTime
-  bookingId   String
-  booking     Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  instance    EInstance @relation(fields: [instanceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id         String    @id @unique @default(nanoid(12))
+  instanceId String
+  start      DateTime
+  end        DateTime
+  bookingId  String
+  booking    Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  instance   EInstance @relation(fields: [instanceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model ECategories {
