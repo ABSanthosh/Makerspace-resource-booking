@@ -1,4 +1,4 @@
-import { BookingStatus, ESecondaryStatus, EStatus, ProfileType, Role } from '@prisma/client';
+import { BookingStatus, ESecondaryStatus, EStatus, ProfileType, Role, type Equipment, type ECategories, type Manual, type Video, type BookingItem, type CartItem } from '@prisma/client';
 import { z } from 'zod';
 
 const phoneRegex = new RegExp(/(\+91\s)?\d{10}/);
@@ -69,7 +69,7 @@ export const EItemZodSchema = z.object({
   description: z.string().optional().or(z.literal('')),
   status: z.nativeEnum(EStatus).default(EStatus.available).optional(),
   cost: z.string().min(1).default('0'),
-  isDeleted: z.boolean().optional().or(z.literal(false)),
+  secondaryStatus: z.nativeEnum(ESecondaryStatus).default(ESecondaryStatus.ACTIVE).optional(),
   availability: z.object({
     starts: z.string(),
     ends: z.string(),
@@ -194,9 +194,29 @@ export const BookingZSchema = z.object({
 
 export type BookingSchema = z.infer<typeof BookingZSchema>;
 
+export const BookingCancelZSchema = z.object({
+  bookingId: z.string()
+})
+
+export type BookingCancelSchema = z.infer<typeof BookingCancelZSchema>;
+
 export const CMSZSchema = z.object({
   id: z.string(),
   data: z.string()
 });
 
 export type CMSSchema = z.infer<typeof CMSZSchema>;
+
+export type EquipmentById = Equipment & {
+  category: ECategories;
+  manuals: Manual[];
+  videos: Video[];
+  instances: (EItemSchema & {
+    BookingItem: (BookingItem & {
+      booking: {
+        status: BookingStatus;
+      };
+    })[];
+    CartItem: CartItem[];
+  })[];
+}

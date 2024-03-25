@@ -1,6 +1,6 @@
 import { db } from '$lib/prisma';
 import type { BookingSchema, CartItemSchema } from '$lib/schemas';
-import type { Booking, Prisma } from '@prisma/client';
+import { BookingStatus, type Booking, type Prisma } from '@prisma/client';
 
 
 export async function addToCart(cardItem: CartItemSchema & { userId: string }) {
@@ -135,4 +135,17 @@ export async function makeBooking(data: BookingSchema): Promise<{
       error: "Booking failed. Please try again."
     }
   }
+}
+
+// cancel booking
+export async function cancelBooking(bookingId: string) {
+  console.log(BookingStatus.CANCELLED)
+  return await db.booking.update({
+    where: {
+      id: bookingId
+    },
+    data: {
+      status: BookingStatus.CANCELLED
+    }
+  });
 }

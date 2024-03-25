@@ -37,7 +37,7 @@
           cartId: ''
         });
       } else if (event.result.status === 400) {
-        modal = false; 
+        modal = false;
         addToast({ message: 'Booking failed', type: 'danger' });
       } else if (event.result.status === 500) {
         modal = false;
@@ -130,6 +130,7 @@
             <tr>
               <th> Name </th>
               <th> Slot Date </th>
+              <th> Timing </th>
               <th> Cost </th>
             </tr>
           </thead>
@@ -145,12 +146,25 @@
                       year: 'numeric'
                     })}
                   </td>
+                  <td>
+                    {new Date(item.start).toLocaleString('en-US', {
+                      hour: 'numeric',
+                      minute: 'numeric',
+                      hour12: true
+                    })}
+                    {' '}-{' '}
+                    {new Date(item.end).toLocaleString('en-US', {
+                      hour: 'numeric',
+                      minute: 'numeric',
+                      hour12: true
+                    })}
+                  </td>
                   <td> {item.instance.cost} </td>
                 </tr>
               {/each}
             {:else}
               <tr>
-                <td colspan="3">
+                <td colspan="4">
                   <i class="CrispMessage" data-type="info" data-format="box"> No items found </i>
                 </td>
               </tr>
@@ -158,7 +172,7 @@
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="3">
+              <td colspan="4">
                 Showing {instances.length} result(s)
               </td>
             </tr>

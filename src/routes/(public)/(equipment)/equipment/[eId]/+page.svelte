@@ -3,8 +3,8 @@
   import type { PageData } from './$types';
   import { BreadCrumbStore, isEquipmentDeletedStore } from '$store/BreadCrumbStore';
   import AvailabilityPane from './Panes/AvailabilityPane.svelte';
-  import type { EItemSchema } from '$lib/schemas';
-  import { EStatus, type CartItem, type BookingItem, ESecondaryStatus } from '@prisma/client';
+  import type { EquipmentById } from '$lib/schemas';
+  import { EStatus, ESecondaryStatus } from '@prisma/client';
   import { SessionStore } from '$store/SupaStore';
   import ManualViewPane from './Panes/ManualViewPane.svelte';
   import VideoViewPane from './Panes/VideoViewPane.svelte';
@@ -35,12 +35,7 @@
   $: availabilityPane = false;
   $: manualPane = false;
   $: videoPane = false;
-  $: selectedInstance = null as
-    | (EItemSchema & {
-        CartItem: CartItem[];
-        BookingItem: BookingItem[];
-      })
-    | null;
+  $: selectedInstance = null as EquipmentById["instances"][0] | null;
 </script>
 
 {#if selectedInstance && user}

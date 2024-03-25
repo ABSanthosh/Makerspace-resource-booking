@@ -1,13 +1,15 @@
 ## Short run ToDo
-- [ ] delete cart items in cart page
+- [x] delete cart items in cart page
 - [ ] remove already booked slots from the times list
   - [ ] In availability rules, add a condition to check the booking status. if approved or pending, remove from the list
+  - [ ] Cancel button in user booking view pane
 - [ ] Admin Booking flow
   - [ ] Add a table to see all bookings
   - [ ] each booking can open a pane to see the details. Add a button to approve or reject the booking 
   - [ ] add a field to booking in schema `admin_notes` to add notes for the admin to give reasons for rejection
 - [ ] Add payment flow to booking
 - [ ] Cost calculation for booking
+- [ ] Refactor booking and booking view pane to one
 
 ## Long run ToDo
 

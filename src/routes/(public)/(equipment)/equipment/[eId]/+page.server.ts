@@ -3,7 +3,7 @@ import { superValidate } from 'sveltekit-superforms/server';
 import type { PageServerLoad } from './$types';
 import { CartItemZSchema } from '$lib/schemas';
 import { fail, type Actions, redirect } from '@sveltejs/kit';
-import { addToCart } from '$db/User.db';
+import { addToCart } from '$db/Cart.db';
 import { zod } from 'sveltekit-superforms/adapters';
 import { ESecondaryStatus } from '@prisma/client';
 

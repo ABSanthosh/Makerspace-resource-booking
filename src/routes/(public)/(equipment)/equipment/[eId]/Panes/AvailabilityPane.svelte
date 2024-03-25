@@ -4,8 +4,7 @@
   import Calendar from '$components/Calendar.svelte';
   import { superForm } from 'sveltekit-superforms/client';
   import type { SuperValidated } from 'sveltekit-superforms';
-  import type { CartItemSchema, EItemSchema } from '$lib/schemas';
-  import type { BookingItem, CartItem, Equipment } from '@prisma/client';
+  import type { CartItemSchema, EquipmentById } from '$lib/schemas';
   import { getSelectionSlots, getSlots } from '$utils/AvailabilityRules';
   import { getWeekdayDates, inverseWeekDaysEnum } from '$utils/WeekDayDates';
 
@@ -14,14 +13,7 @@
     userId: string;
     instanceId: string;
     formStore: SuperValidated<CartItemSchema>;
-    currentEquipment:
-      | (Equipment & {
-          instances: (EItemSchema & {
-            BookingItem: BookingItem[];
-            CartItem: CartItem[];
-          })[];
-        })
-      | null;
+    currentEquipment: EquipmentById | null;
   };
 
   $: equipmentId = currentEquipment?.id!;

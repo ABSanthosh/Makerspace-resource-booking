@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { getUserBookings } from '$db/User.db';
+  import type { getUserBookings } from '$db/Cart.db';
   import type { PageData } from './$types';
   import BookingViewPane from './Panes/BookingViewPane.svelte';
 
@@ -10,7 +10,11 @@
 </script>
 
 {#if selectedBooking}
-  <BookingViewPane bind:modal={bookingModal} booking={selectedBooking} />
+  <BookingViewPane
+    bind:modal={bookingModal}
+    booking={selectedBooking}
+    bind:formStore={data.bookingDeleteForm}
+  />
 {/if}
 
 <table class="FancyTable">
@@ -25,7 +29,7 @@
   </thead>
   <tbody>
     {#if data.bookings && data.bookings.length > 0}
-      {#each data.bookings as booking}
+      {#each data.bookings.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) as booking}
         <tr>
           <td> {booking.id} </td>
           <td> {booking.mentor} </td>

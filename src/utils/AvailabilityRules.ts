@@ -1,4 +1,5 @@
-import type { BookingItem, CartItem } from '@prisma/client';
+import type { EquipmentById } from '$lib/schemas';
+import { BookingStatus, type BookingItem, type CartItem } from '@prisma/client';
 
 interface ISlot {
   currentDay: Date | null;
@@ -7,7 +8,7 @@ interface ISlot {
     start: string;
     end: string;
   };
-  booked: BookingItem[];
+  booked: EquipmentById['instances'][0]['BookingItem'][0][];
   carted: CartItem[];
 }
 
@@ -52,13 +53,16 @@ export function getSlots(data: ISlot): IRange {
       item.end.getDate() === currentDay!.getDate()
     ) {
       for (let i = item.start.getTime(); i < item.end.getTime(); i += slotSize * 60000) {
-        bookedSlots[
-          new Date(i).toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
-          })
-        ] = new Date(i);
+        // Doc: If the booking is pending or approved, don't include the slot
+        if ((item.booking.status === BookingStatus.APPROVED || item.booking.status === BookingStatus.PENDING)) {
+          bookedSlots[
+            new Date(i).toLocaleTimeString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: false
+            })
+          ] = new Date(i);
+        }
       }
     }
   });
@@ -104,9 +108,7 @@ export function getSelectionSlots(data: ISelectSlots): {
   startRange: IRange;
   endRange: IRange;
 } {
-  const { selectedStartTime, selectedEndTime, slots } = data;
-
-  const selectedEndTimeDate = selectedEndTime ? new Date(selectedEndTime) : null;
+  const { selectedStartTime, slots } = data;
   const selectedStartTimeDate = selectedStartTime ? new Date(selectedStartTime) : null;
 
   // if selectedStartTime is not null, remove all slots that are less than selectedStartTime
