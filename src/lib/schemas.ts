@@ -201,7 +201,8 @@ export const BookingZSchema = z.object({
   description: z.string().min(2),
   deadline: z.date(),
   cartId: z.string(),
-  instances: z.array(z.string())
+  instances: z.array(z.string()),
+  adminNotes: z.string().optional().or(z.literal(''))
 });
 
 export type BookingSchema = z.infer<typeof BookingZSchema>;
@@ -209,6 +210,14 @@ export type BookingSchema = z.infer<typeof BookingZSchema>;
 export const BookingCancelZSchema = z.object({
   bookingId: z.string().min(2)
 });
+
+export const BookingUpdateZSchema = z.object({
+  bookingId: z.string().min(2),
+  status: z.nativeEnum(BookingStatus),
+  adminNotes: z.string().optional().or(z.literal(''))
+});
+
+export type BookingUpdateSchema = z.infer<typeof BookingUpdateZSchema>;
 
 export type BookingCancelSchema = z.infer<typeof BookingCancelZSchema>;
 

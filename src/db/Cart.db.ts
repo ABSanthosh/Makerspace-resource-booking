@@ -2,7 +2,6 @@ import { db } from '$lib/prisma';
 import type { BookingSchema, CartItemSchema } from '$lib/schemas';
 import { BookingStatus, type Booking, type Prisma } from '@prisma/client';
 
-
 export async function addToCart(cardItem: CartItemSchema & { userId: string }) {
   /**
    * Doc: Start and end are converted from string of date object
@@ -81,12 +80,35 @@ export async function getUserBookings(userId: string) {
   });
 }
 
-export async function makeBooking(data: BookingSchema): Promise<{
-  booking: Booking;
-  cart: Prisma.BatchPayload;
-} | {
-  error: string;
-}> {
+export async function getAllBookings() {
+  return await db.booking.findMany({
+    include: {
+      items: {
+        include: {
+          instance: true
+        }
+      },
+      user: {
+        select: {
+          id: true,
+          name: true,
+          mobile: true,
+          email: true
+        }
+      }
+    }
+  });
+}
+
+export async function makeBooking(data: BookingSchema): Promise<
+  | {
+      booking: Booking;
+      cart: Prisma.BatchPayload;
+    }
+  | {
+      error: string;
+    }
+> {
   const cartItems = await db.cartItem.findMany({
     where: {
       cartId: data.cartId,
@@ -100,44 +122,45 @@ export async function makeBooking(data: BookingSchema): Promise<{
       instanceId: true,
       start: true
     }
-  })
+  });
 
   try {
-    return await db.booking.create({
-      data: {
-        mentor: data.mentor,
-        description: data.description,
-        deadline: data.deadline,
-        userId: data.userId,
-        items: {
-          create: cartItems.map((item) => ({
-            end: item.end,
-            start: item.start,
-            instanceId: item.instanceId
-          }))
-        }
-      }
-    }).then(async (res) => {
-      return {
-        booking: res,
-        cart: await db.cartItem.deleteMany({
-          where: {
-            id: {
-              in: data.instances
-            }
+    return await db.booking
+      .create({
+        data: {
+          mentor: data.mentor,
+          description: data.description,
+          deadline: data.deadline,
+          userId: data.userId,
+          items: {
+            create: cartItems.map((item) => ({
+              end: item.end,
+              start: item.start,
+              instanceId: item.instanceId
+            }))
           }
-        })
-      }
-    })
+        }
+      })
+      .then(async (res) => {
+        return {
+          booking: res,
+          cart: await db.cartItem.deleteMany({
+            where: {
+              id: {
+                in: data.instances
+              }
+            }
+          })
+        };
+      });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return {
-      error: "Booking failed. Please try again."
-    }
+      error: 'Booking failed. Please try again.'
+    };
   }
 }
 
-// cancel booking
 export async function cancelBooking(bookingId: string) {
   return await db.booking.update({
     where: {
@@ -145,6 +168,26 @@ export async function cancelBooking(bookingId: string) {
     },
     data: {
       status: BookingStatus.CANCELLED
+    }
+  });
+}
+
+export async function updateBooking({
+  bookingId,
+  status,
+  adminNotes
+}: {
+  bookingId: string;
+  status: BookingStatus;
+  adminNotes: string;
+}) {
+  return await db.booking.update({
+    where: {
+      id: bookingId
+    },
+    data: {
+      status,
+      adminNotes
     }
   });
 }
