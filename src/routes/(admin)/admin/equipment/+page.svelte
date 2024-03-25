@@ -372,6 +372,7 @@ is properly set.
     padding: 24px;
     @include box();
     @include make-flex($just: flex-start);
+    max-width: $maxDashWidth;
 
     & > header {
       gap: 15px;

@@ -75,7 +75,7 @@
   </thead>
   <tbody>
     {#if data.cart && data.cart.items.length > 0}
-      {#each data.cart.items as item}
+      {#each data.cart.items as item (item.id)}
         <tr class:selected={selectedItemIDs.includes(item.id)}>
           <td>
             <input

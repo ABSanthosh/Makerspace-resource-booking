@@ -43,6 +43,7 @@
     height: 100vh;
     max-height: 100vh;
     overflow-x: auto;
+    width: 100%;
     grid-template-columns: 255px 1fr;
 
     & > aside {

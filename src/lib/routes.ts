@@ -18,6 +18,12 @@ export const ADMIN_ROUTES: Route[] = [
     route: '/admin/equipment',
     icon: 59964,
     children: [] as Route[]
+  },
+  {
+    name: 'Orders',
+    route: '/admin/orders',
+    icon: 60180,
+    children: [] as Route[]
   }
 ];
 

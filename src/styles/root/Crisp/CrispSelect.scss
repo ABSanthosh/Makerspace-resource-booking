@@ -10,6 +10,9 @@
   --crp-select-content-border: 0.2px solid #c9c9c966;
   --crp-select-icon: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>');
 
+  --crp-select-color-disabled: #929292;
+  --crp-select-border-color-disabled: #d9d9d9;
+
   min-width: var(--crp-select-min-width);
   @include box(var(--crp-select-width), var(--crp-select-height));
 
@@ -49,7 +52,13 @@
   background-image: var(--crp-select-icon);
   background-position: calc(100% - var(--crp-select-icon-offset)) 50%;
 
-  &:hover {
+  &:disabled {
+    color: var(--crp-select-color-disabled);
+    border-color: var(--crp-select-border-color-disabled);
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
     color: var(--crp-select-color-hover);
     border: var(--crp-select-border-hover);
   }

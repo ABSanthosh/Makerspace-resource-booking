@@ -31,7 +31,9 @@
     {#if data.bookings && data.bookings.length > 0}
       {#each data.bookings.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) as booking}
         <tr>
-          <td> {booking.id} </td>
+          <td>
+            <pre> {booking.id} </pre>
+          </td>
           <td> {booking.mentor} </td>
           <td>
             {new Date(booking.deadline).toLocaleString('en-US', {

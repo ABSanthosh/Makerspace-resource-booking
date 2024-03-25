@@ -324,7 +324,7 @@
     }
 
     &__bottom {
-      gap: 15px;
+      gap: 10px;
       @include make-flex($align: flex-start);
       @include box(100%, auto);
 
@@ -344,12 +344,14 @@
 
       &--col {
         overflow: hidden;
+        @include make-flex($align: flex-start);
 
         span,
         p {
           text-overflow: ellipsis;
           overflow: hidden;
           white-space: nowrap;
+          width: 100%;
         }
 
         p {

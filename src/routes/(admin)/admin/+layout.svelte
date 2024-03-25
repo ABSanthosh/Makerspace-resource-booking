@@ -25,6 +25,11 @@
     grid-template-columns: min-content 1fr;
     grid-template-areas: 'sidebar content';
 
+    &__content {
+      @include box();
+      @include make-flex($just: flex-start);
+    }
+
     @include respondAt(845px) {
       padding-left: 56px;
       grid-template-columns: minmax(0, 1fr);

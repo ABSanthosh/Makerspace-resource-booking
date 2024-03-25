@@ -34,8 +34,10 @@
           // @ts-ignore
           deadline: undefined,
           instances: [],
-          cartId: ''
+          cartId: '',
+          adminNotes: ''
         });
+        instances = [];
       } else if (event.result.status === 400) {
         modal = false;
         addToast({ message: 'Booking failed', type: 'danger' });
@@ -62,7 +64,8 @@
       description: '',
       // @ts-ignore
       deadline: undefined,
-      instances: []
+      instances: [],
+      adminNotes: ''
     };
   }}
 >
@@ -123,7 +126,7 @@
           <p class="CrispMessage w-100" data-type="error">{$errors.deadline}</p>
         {/if}
       </label>
-      <label for="instance" class="CrispLabel">
+      <label for="instance" class="CrispLabel" style="overflow-x: auto; padding-bottom: 10px">
         <span style="color: inherit;"> Instances </span>
         <table class="FancyTable">
           <thead>
