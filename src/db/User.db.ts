@@ -70,6 +70,16 @@ export async function addToCart(cardItem: CartItemSchema & { userId: string }) {
   });
 }
 
+export async function deleteCartItem(ids: string[]) {
+  return await db.cartItem.deleteMany({
+    where: {
+      id: {
+        in: ids
+      }
+    }
+  });
+}
+
 export async function getUserCart(userId: string) {
   return await db.cart.findUnique({
     where: { userId },

@@ -2,6 +2,8 @@
   import type { CartItem, EInstance } from '@prisma/client';
   import BookingPane from './Panes/BookingPane.svelte';
   import type { PageData } from './$types';
+  import { superForm } from 'sveltekit-superforms';
+  import { addToast } from '$store/ToastStore';
 
   export let data: PageData;
 
@@ -16,6 +18,24 @@
   $: if (data.cart?.items.length === 0 && selectAll) {
     selectAll = false;
   }
+
+  const { form: cardDeleteForm, enhance: cartDeleteEnhance } = superForm(data.cartDeleteForm, {
+    id: 'cartDeleteForm',
+    dataType: 'json',
+    taintedMessage: null,
+    onSubmit() {
+      if (selectedItemIDs.length === 0) {
+        addToast({ message: 'No items selected', type: 'danger' });
+        return;
+      }
+      $cardDeleteForm.ids = selectedItemIDs;
+    },
+    onResult(event) {
+      if (event.result.status === 200) {
+        addToast({ message: 'Cart item deleted', type: 'success' });
+      }
+    }
+  });
 </script>
 
 <BookingPane
@@ -127,15 +147,21 @@
             Showing {data.cart?.items.length ?? 0} result(s)
           </span>
           <div class="Row--center gap-10">
-            <button
-              data-type="danger"
-              class="CrispButton"
-              style="--crp-button-height: 25px;"
-              disabled={selectedItemIDs.length === 0}
+            <form
+              method="POST"
+              id="cartDeleteForm"
+              use:cartDeleteEnhance
+              action="/dash/orders/cart?/delete"
             >
-              Delete
-            </button>
-
+              <button
+                data-type="danger"
+                class="CrispButton"
+                style="--crp-button-height: 25px;"
+                disabled={selectedItemIDs.length === 0}
+              >
+                Delete
+              </button>
+            </form>
             <button
               data-type="success"
               class="CrispButton"

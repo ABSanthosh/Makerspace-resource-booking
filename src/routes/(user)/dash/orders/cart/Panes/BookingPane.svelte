@@ -37,8 +37,10 @@
           cartId: ''
         });
       } else if (event.result.status === 400) {
+        modal = false; 
         addToast({ message: 'Booking failed', type: 'danger' });
       } else if (event.result.status === 500) {
+        modal = false;
         addToast({ message: 'Server error', type: 'danger' });
       }
     }

@@ -178,6 +178,11 @@ export const CartZSchema = z.object({
 
 export type CartSchema = z.infer<typeof CartZSchema>;
 
+export const CartDeleteZSchema = z.object({
+  ids: z.array(z.string())
+})
+export type CartDeleteSchema = z.infer<typeof CartDeleteZSchema>;
+
 export const BookingZSchema = z.object({
   userId: z.string(),
   mentor: z.string().min(2),
