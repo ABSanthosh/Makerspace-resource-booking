@@ -12,14 +12,23 @@ interface ISlot {
   carted: CartItem[];
 }
 
+export enum SlotStatus {
+  AVAILABLE = 'AVAILABLE',
+  BOOKED = 'BOOKED',
+  IN_CART = 'IN_CART'
+}
+
 interface IRange {
-  [key: string]: Date;
+  [key: string]: {
+    slot: Date;
+    status: SlotStatus;
+  };
 }
 
 export function getSlots(data: ISlot): IRange {
   const { currentDay, instance, booked, carted, slotSize = 30 } = data;
 
-  const allSlots: { [key: string]: Date } = {};
+  const allSlots: IRange = {};
   // Generate every slot of slotSize minutes between instance.start and instance.end for the current day
   if (currentDay) {
     const start = new Date(currentDay);
@@ -39,7 +48,10 @@ export function getSlots(data: ISlot): IRange {
           minute: '2-digit',
           hour12: false
         })
-      ] = new Date(i);
+      ] = {
+        slot: new Date(i),
+        status: SlotStatus.AVAILABLE
+      };
     }
   } else {
     return {};
@@ -54,7 +66,10 @@ export function getSlots(data: ISlot): IRange {
     ) {
       for (let i = item.start.getTime(); i < item.end.getTime(); i += slotSize * 60000) {
         // Doc: If the booking is pending or approved, don't include the slot
-        if ((item.booking.status === BookingStatus.APPROVED || item.booking.status === BookingStatus.PENDING)) {
+        if (
+          item.booking.status === BookingStatus.APPROVED ||
+          item.booking.status === BookingStatus.PENDING
+        ) {
           bookedSlots[
             new Date(i).toLocaleTimeString('en-US', {
               hour: '2-digit',
@@ -88,11 +103,19 @@ export function getSlots(data: ISlot): IRange {
 
   // Remove booked and carted slots from all slots
   for (const key in bookedSlots) {
-    delete allSlots[key];
+    // delete allSlots[key];
+    allSlots[key] = {
+      slot: bookedSlots[key],
+      status: SlotStatus.BOOKED
+    };
   }
 
   for (const key in cartedSlots) {
-    delete allSlots[key];
+    // delete allSlots[key];
+    allSlots[key] = {
+      slot: cartedSlots[key],
+      status: SlotStatus.IN_CART
+    };
   }
 
   return allSlots;
@@ -109,16 +132,51 @@ export function getSelectionSlots(data: ISelectSlots): {
   endRange: IRange;
 } {
   const { selectedStartTime, slots } = data;
-  const selectedStartTimeDate = selectedStartTime ? new Date(selectedStartTime) : null;
+  // selectedStartTime is a string is key of slots entry
+  // Check if selectedStartTime is not null and selectedStartTime is a valid key in slots
+  const selectedStartTimeDate =
+    selectedStartTime && slots[selectedStartTime] && slots[selectedStartTime].slot
+      ? new Date(slots[selectedStartTime].slot)
+      : null;
 
   // if selectedStartTime is not null, remove all slots that are less than selectedStartTime
-  const startRange: IRange = slots;
+  const availableSlotSets: IRange[] = Object.keys(slots)
+    .reduce(
+      (acc: IRange[], key) => {
+        if (slots[key].status === SlotStatus.AVAILABLE) {
+          acc[acc.length - 1][key] = slots[key];
+        } else {
+          acc.push({});
+        }
+        return acc;
+      },
+      [{}]
+    )
+    .filter((set) => Object.keys(set).length > 0);
+
+  // availableSlotSets is in the format [ {a: "a", b: "b"}, {c: "c", d: "d"}]
+  // We need to merge all the objects in the array to get the startRange
+  const startRange: IRange =
+    availableSlotSets.length > 0
+      ? availableSlotSets
+          .filter((set) => Object.keys(set).length > 1)
+          .reduce((acc, curr) => {
+            return { ...acc, ...curr };
+          }, {})
+      : slots;
+
   const endRange: IRange = {};
 
   if (selectedStartTimeDate) {
+    // We need to select the slot set that contains the selectedStartTime 
+    // so that we can get all the slots that are greater than selectedStartTime
+    let selectedSlotSet: IRange = availableSlotSets.filter((set) => {
+      return Object.keys(set).includes(selectedStartTime!);
+    })[0];
+
     // end time should be greater than start time
-    for (const key in slots) {
-      if (slots[key].getTime() > selectedStartTimeDate.getTime()) {
+    for (const key in selectedSlotSet) {
+      if (slots[key].slot.getTime() > selectedStartTimeDate.getTime()) {
         endRange[key] = slots[key];
       }
     }
