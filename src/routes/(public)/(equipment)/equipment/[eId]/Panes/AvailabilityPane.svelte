@@ -5,7 +5,7 @@
   import { superForm } from 'sveltekit-superforms/client';
   import type { SuperValidated } from 'sveltekit-superforms';
   import type { CartItemSchema, EquipmentById } from '$lib/schemas';
-  import { getSelectionSlots, getSlots } from '$utils/AvailabilityRules';
+  import { SlotStatus, getSelectionSlots, getSlots } from '$utils/AvailabilityRules';
   import { getWeekdayDates, inverseWeekDaysEnum } from '$utils/WeekDayDates';
 
   export let { modal, formStore, currentEquipment, instanceId, userId } = $$props as {
@@ -18,14 +18,21 @@
 
   $: equipmentId = currentEquipment?.id!;
 
+  $: dateSelector = null as Date | null;
+
+  $: currentInstance = currentEquipment?.instances.find((item) => item.id === instanceId);
+  $: maxOffset = currentInstance?.availability.maxOffset || 1;
+  $: disableWeekDays = inverseWeekDaysEnum(currentInstance?.availability.repeat || []);
+  $: blackout = getWeekdayDates(disableWeekDays, maxOffset);
+
   const { form, errors, enhance } = superForm(formStore, {
     id: 'cartItemForm',
     taintedMessage: null,
     dataType: 'json',
     onSubmit() {
       $form = {
-        end: $form.end,
-        start: $form.start,
+        end: `${slots[$form.end].slot}`,
+        start: `${slots[$form.start].slot}`,
         equipmentId,
         instanceId,
         userId
@@ -50,13 +57,6 @@
     },
     resetForm: true
   });
-
-  $: dateSelector = null as Date | null;
-
-  $: currentInstance = currentEquipment?.instances.find((item) => item.id === instanceId);
-  $: maxOffset = currentInstance?.availability.maxOffset || 1;
-  $: disableWeekDays = inverseWeekDaysEnum(currentInstance?.availability.repeat || []);
-  $: blackout = getWeekdayDates(disableWeekDays, maxOffset);
 
   $: slots = getSlots({
     booked: currentInstance?.BookingItem!,
@@ -116,7 +116,9 @@
         <select class="CrispSelect w-100" bind:value={$form.start}>
           <option value="" disabled selected> Select a start time </option>
           {#each Object.keys(selectedSlots.startRange) as item}
-            <option value={`${slots[item]}`}>{item}</option>
+            {#if selectedSlots.startRange[item].status === SlotStatus.AVAILABLE}
+              <option value={item}>{item}</option>
+            {/if}
           {/each}
         </select>
         {#if $errors.start}
@@ -129,7 +131,9 @@
         <select class="CrispSelect w-100" bind:value={$form.end}>
           <option value="" disabled selected> Select an end time </option>
           {#each Object.keys(selectedSlots.endRange) as item}
-            <option value={`${slots[item]}`}>{item}</option>
+            {#if selectedSlots.endRange[item].status === SlotStatus.AVAILABLE}
+              <option value={item}>{item}</option>
+            {/if}
           {/each}
         </select>
         {#if $errors.end}
