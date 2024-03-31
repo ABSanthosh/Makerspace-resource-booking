@@ -1,19 +1,8 @@
 ## Short run ToDo
+
 - [ ] Add payment flow to booking
 - [ ] Cost calculation for booking
 - [ ] Refactor booking and booking view pane to one
-- [ ] booking deadline should be after all the slots
-- [ ] If the slot time from 7 am to 3 pm is booked, the next slot shouldn't be able to book around 7 to 3,
-say 6 to 4 or 8 to 2. Basically, if there is a slot like 
--7       ---
--#8        |
--#9        |
--#10       |   then the next slot should be not be able to book around 7 to 3 
--#11       |
--#12       |
--#1        | 
--2       ---
--3
 
 ## Long run ToDo
 
@@ -25,13 +14,25 @@ say 6 to 4 or 8 to 2. Basically, if there is a slot like
 
 ## Completed Short run ToDo
 
+- [x] booking deadline should be after all the slots
+- [x] If the slot time from 7 am to 3 pm is booked, the next slot shouldn't be able to book around 7 to 3,
+      say 6 to 4 or 8 to 2. Basically, if there is a slot like
+      -7 ---
+      -#8 |
+      -#9 |
+      -#10 | then the next slot should be not be able to book around 7 to 3
+      -#11 |
+      -#12 |
+      -#1 |
+      -2 ---
+      -3
 - [x] delete cart items in cart page
 - [x] remove already booked slots from the times list
   - [x] In availability rules, add a condition to check the booking status. if approved or pending, remove from the list
   - [x] Cancel button in user booking view pane
 - [x] Admin Booking flow
   - [x] Add a table to see all bookings
-  - [x] each booking can open a pane to see the details. Add a button to approve or reject the booking 
+  - [x] each booking can open a pane to see the details. Add a button to approve or reject the booking
   - [x] add a field to booking in schema `admin_notes` to add notes for the admin to give reasons for rejection
 - [x] Add modal for booking details
 - [x] Rework booking system to handle cart and booking properly
