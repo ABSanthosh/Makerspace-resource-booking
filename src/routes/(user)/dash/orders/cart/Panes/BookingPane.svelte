@@ -52,6 +52,9 @@
 
   // Doc: Add all the selected instances to the form
   $: $form.instances = instances.map((i) => i.id);
+
+  // Doc: Get the max end time of all instances so that the deadline is always after the last slot
+  $: maxInstanceEndTime = new Date(Math.max(...instances.map((i) => new Date(i.end).getTime())));
 </script>
 
 <Pane
@@ -116,7 +119,7 @@
           id="deadline"
           type="date"
           name="deadline"
-          min={new Date().toISOString().split('T')[0]}
+          min={maxInstanceEndTime.toISOString().split('T')[0]}
           class="CrispInput"
           bind:value={$proxyDate}
           {...$constraints.deadline}
