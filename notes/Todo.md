@@ -2,6 +2,18 @@
 - [ ] Add payment flow to booking
 - [ ] Cost calculation for booking
 - [ ] Refactor booking and booking view pane to one
+- [ ] booking deadline should be after all the slots
+- [ ] If the slot time from 7 am to 3 pm is booked, the next slot shouldn't be able to book around 7 to 3,
+say 6 to 4 or 8 to 2. Basically, if there is a slot like 
+-7       ---
+-#8        |
+-#9        |
+-#10       |   then the next slot should be not be able to book around 7 to 3 
+-#11       |
+-#12       |
+-#1        | 
+-2       ---
+-3
 
 ## Long run ToDo
 
