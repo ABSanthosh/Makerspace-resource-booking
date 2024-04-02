@@ -2,9 +2,14 @@
 	import type { HTMLDialogAttributes } from 'svelte/elements';
 	interface $$restProps extends HTMLDialogAttributes {}
 
-	export let { open = false, className } = $$props as {
+	export let {
+		open = false,
+		className,
+		onCloseButtonClick
+	} = $$props as {
 		open: boolean;
 		className?: string;
+		onCloseButtonClick?: () => void;
 	};
 
 	let pane: HTMLDialogElement;
@@ -49,6 +54,7 @@
 				on:click={() => {
 					pane.close();
 					open = false;
+					if (onCloseButtonClick) onCloseButtonClick();
 				}}
 				data-icon={String.fromCharCode(58829)}
 			/>

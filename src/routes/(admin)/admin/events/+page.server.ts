@@ -4,22 +4,23 @@ import { EventZodSchema } from '$lib/schemas';
 import { zod } from 'sveltekit-superforms/adapters';
 import { fail, type Actions } from '@sveltejs/kit';
 import { SupabaseEnum } from '$lib/Enums';
-import { nanoid } from 'nanoid';
-import { getAllEventsPreveiw, upsertEvent } from '$db/Events.db';
+
+import { getAllEvents, upsertEvent } from '$db/Events.db';
+import nanoid from '$lib/nanoid';
 
 // @ts-ignore
 export const load: PageServerLoad = async ({ locals }) => {
 	const upsertEventForm = await superValidate(zod(EventZodSchema));
-	if (Object.keys(locals).length === 0) return { upsertEventForm };
+	if (Object.keys(locals).length === 0) return { upsertEventForm, allEvents: [] };
 
 	return {
 		upsertEventForm,
-		allEvent: await getAllEventsPreveiw()
+		allEvents: await getAllEvents()
 	};
 };
 
 export const actions: Actions = {
-	upsertEvent: async ({ request, locals: { supabase } }) => {
+	upsertEvent: async ({ request, locals: { supabase, session } }) => {
 		const upsertEventForm = await superValidate(request, zod(EventZodSchema));
 		const imageFile = upsertEventForm.data.image as File;
 
@@ -30,7 +31,7 @@ export const actions: Actions = {
 		if (typeof imageFile !== 'string') {
 			if (upsertEventForm.data.id) {
 				const { data, error } = await supabase.storage
-					.from(SupabaseEnum.EVENTS)
+					.from(SupabaseEnum.EVENT)
 					.update(imageFile.name, imageFile, {
 						upsert: true,
 						cacheControl: '0'
@@ -45,7 +46,7 @@ export const actions: Actions = {
 				upsertEventForm.data.image = data.path + '?cache=' + new Date().getTime();
 			} else {
 				const { data, error } = await supabase.storage
-					.from(SupabaseEnum.EVENTS)
+					.from(SupabaseEnum.EVENT)
 					.upload(`${nanoid()}.${imageFile.name.split('.').pop()}`, imageFile);
 				if (error) {
 					return fail(400, withFiles({ upsertEventForm }));
@@ -55,20 +56,12 @@ export const actions: Actions = {
 			}
 		}
 
-		const { data: user } = await supabase.from('profile').select('id');
-
 		return withFiles({
 			upsertEventForm,
 			response: await upsertEvent({
 				...upsertEventForm.data,
-				id: upsertEventForm.data.id || '',
-				image: upsertEventForm.data.image as string,
-				authorId: user ? user.toString() : '',
-				status: false,
-				createdAt: new Date(),
-				updatedAt: new Date()
-			}),
-			allEvent: await getAllEventsPreveiw()
+				userId: session?.user.id!
+			})
 		});
 	}
 };

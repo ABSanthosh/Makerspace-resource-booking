@@ -6,7 +6,7 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({ params }) => {
 	const event = await getEventById(params.eID);
 
-	if (event === undefined) {
+	if (!event) {
 		throw redirect(307, '/events');
 	}
 

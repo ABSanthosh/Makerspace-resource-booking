@@ -21,7 +21,7 @@ export const ADMIN_ROUTES: Route[] = [
 	{
 		name: 'Events',
 		route: '/admin/events',
-		icon: 59964,
+		icon: 59512,
 		children: [] as Route[]
 	}
 ];

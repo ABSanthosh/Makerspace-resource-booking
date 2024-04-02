@@ -1,108 +1,95 @@
 import { SupabaseEnum } from '$lib/Enums';
 import { getStorageUrl } from '$lib/SupabaseUtils';
 import { db } from '$lib/prisma';
-import type { Events } from '@prisma/client';
+import type { EventSchema } from '$lib/schemas';
+import type { Event } from '@prisma/client';
 
-export async function getAllEventsPreveiw(): Promise<Events[]> {
-	// @ts-ignore
-	return await db.events
+export async function getAllEventsPreview() {
+	return await db.event
 		.findMany({
 			select: {
 				id: true,
-				name: true,
-				shortDescription: true,
-				description: true,
-				date: true,
+				title: true,
+				previewDesc: true,
 				image: true,
-				authorId: true,
-				author: {
+				startTime: true,
+				user: {
 					select: {
 						id: true,
 						name: true
 					}
 				},
-				createdAt: true,
-				updatedAt: true,
 				status: true
 			}
 		})
 		.then((res) => {
-			return res.map((item) => ({
-				...item,
-				image: getStorageUrl(SupabaseEnum.EVENTS, item.image)
-			}));
+			return (
+				res.map((item) => ({
+					...item,
+					image: getStorageUrl(SupabaseEnum.EVENT, item.image)
+				})) || []
+			);
 		});
 }
 
-export async function getEventById(id: string): Promise<{
-	id: string;
-	name: string;
-	shortDescription: string;
-	description: string;
-	date: Date;
-	image: string;
-	authorId: string;
-	author: {
-		id: string;
-		name: string;
-	};
-	createdAt: Date;
-	updatedAt: Date;
-	status: string;
-}> {
-	// @ts-ignore
-	return await db.events
+export async function getAllEvents() {
+	return await db.event.findMany();
+}
+
+export async function getEventById(id: string) {
+	return await db.event
 		.findUnique({
 			where: {
 				id
 			},
-			select: {
-				id: true,
-				name: true,
-				shortDescription: true,
-				description: true,
-				date: true,
-				image: true,
-				authorId: true,
-				author: {
+			include: {
+				user: {
 					select: {
 						id: true,
 						name: true
 					}
-				},
-				createdAt: true,
-				updatedAt: true,
-				status: true
+				}
 			}
 		})
-		.then((item) => ({
-			...item,
-			image: getStorageUrl(SupabaseEnum.EVENTS, item.image)
-		}));
+		.then((item) => {
+			if (!item) return null;
+			return {
+				...item,
+				image: getStorageUrl(SupabaseEnum.EVENT, item?.image)
+			};
+		});
 }
 
-export async function upsertEvent(event: Events) {
-	return await db.events.upsert({
+export async function upsertEvent(event: EventSchema) {
+	return await db.event.upsert({
 		where: {
-			id: event.id
+			id: event.id || '0'
 		},
 		update: {
-			name: event.name,
-			shortDescription: event.shortDescription,
-			description: event.description,
-			date: event.date,
-			image: event.image,
-			authorId: event.authorId,
-			status: event.status
+			...event,
+			image: event.image as string
 		},
 		create: {
-			name: event.name,
-			shortDescription: event.shortDescription,
-			description: event.description,
-			date: event.date,
-			image: event.image,
-			authorId: event.authorId,
-			status: event.status
+			...event,
+			image: event.image as string
 		}
 	});
 }
+// update: {
+// 	name: event.name,
+// 	shortDescription: event.shortDescription,
+// 	description: event.description,
+// 	date: event.date,
+// 	image: event.image,
+// 	authorId: event.authorId,
+// 	status: event.status
+// },
+// create: {
+// 	name: event.name,
+// 	shortDescription: event.shortDescription,
+// 	description: event.description,
+// 	date: event.date,
+// 	image: event.image,
+// 	authorId: event.authorId,
+// 	status: event.status
+// }

@@ -2,9 +2,12 @@
 - [ ] Add trigger to delete manual from bucket when deleted from database
 - [ ] remove already booked slots from the times list
 - [ ] Add modal for booking details
+- [ ] replace [eId] in equipment page with equipmentId
+- [ ] replace [eId] in event page with eventId
 
 ## Long run ToDo
-- [ ] Convert isDeleted to SecondaryStatus enum with values: deleted, disabled, enabled with default value enabled so that we can delete the ones with no dependents
+- [ ] Convert isDeleted to SecondaryStatus enum with values: deleted, disabled, enabled with default value enabled so that we can delete the ones with no dependents  
+- [ ] refactor image upload with conditions to a function to supabaseUtils file. It is used in multiple files(Search "const { data, error } = await supabase.storage")
 
 ## Completed Short run ToDo
 - [x] Move instances from pane to table inside the equipment table

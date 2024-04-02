@@ -1,7 +1,8 @@
-import { EStatus, Prisma, PrismaClient } from '@prisma/client';
+import { EStatus, EventStatus, Prisma, PrismaClient } from '@prisma/client';
 import { createBrowserClient } from '@supabase/ssr';
 import { SupabaseEnum } from '../src/lib/Enums';
 import fs from 'fs';
+import type { EventSchema } from '../src/lib/schemas';
 
 const prisma = new PrismaClient();
 const supabase = createBrowserClient(
@@ -144,13 +145,13 @@ async function makeNewBucket(name: string) {
 		await prisma.$executeRawUnsafe(`
 		INSERT INTO storage.buckets (id, name, public)
 		VALUES ('${name}', '${name}', true);`);
-	} catch (e) { }
+	} catch (e) {}
 
 	try {
 		await prisma.$transaction([
 			...Object.values(policies).map((policy) => prisma.$executeRawUnsafe(policy))
 		]);
-	} catch (e) { }
+	} catch (e) {}
 }
 
 async function seedEquipments() {
@@ -182,15 +183,9 @@ async function seedEquipments() {
 			description: '',
 			equipmentId: '_iPoLfl',
 			availability: {
-				"starts": "07:00",
-				"ends": "16:45",
-				"repeat": [
-					"MO",
-					"TU",
-					"WE",
-					"TH",
-					"FR"
-				]
+				starts: '07:00',
+				ends: '16:45',
+				repeat: ['MO', 'TU', 'WE', 'TH', 'FR']
 			}
 		},
 		{
@@ -200,15 +195,9 @@ async function seedEquipments() {
 			description: '',
 			equipmentId: '_iPoLfl',
 			availability: {
-				"starts": "07:00",
-				"ends": "16:45",
-				"repeat": [
-					"MO",
-					"TU",
-					"WE",
-					"TH",
-					"FR"
-				]
+				starts: '07:00',
+				ends: '16:45',
+				repeat: ['MO', 'TU', 'WE', 'TH', 'FR']
 			}
 		},
 		{
@@ -218,15 +207,9 @@ async function seedEquipments() {
 			description: '',
 			equipmentId: '_iPoLfl',
 			availability: {
-				"starts": "07:00",
-				"ends": "16:45",
-				"repeat": [
-					"MO",
-					"TU",
-					"WE",
-					"TH",
-					"FR"
-				]
+				starts: '07:00',
+				ends: '16:45',
+				repeat: ['MO', 'TU', 'WE', 'TH', 'FR']
 			}
 		},
 		{
@@ -236,15 +219,9 @@ async function seedEquipments() {
 			description: '',
 			equipmentId: 'cAZ0IdL',
 			availability: {
-				"starts": "07:00",
-				"ends": "16:45",
-				"repeat": [
-					"MO",
-					"TU",
-					"WE",
-					"TH",
-					"FR"
-				]
+				starts: '07:00',
+				ends: '16:45',
+				repeat: ['MO', 'TU', 'WE', 'TH', 'FR']
 			}
 		}
 	];
@@ -340,6 +317,37 @@ async function seedVideos() {
 	});
 }
 
+async function seedEvents() {
+	return await prisma.event.createMany({
+		data: [
+			{
+				userId: 'b0e5144c-2341-4ab2-ae6c-f36e63ab16b7',
+				desc: 'This is a complete desc',
+				previewDesc: 'this is the preview desc',
+				status: EventStatus.UPCOMING,
+				endTime: new Date(),
+				image: '' as string,
+				startTime: new Date(),
+				venue: 'SNU',
+				venueLink: 'https://maps.app.goo.gl/vCDgZsXTxVhes9YM6',
+				title: 'Demo event'
+			},
+			{
+				userId: 'b0e5144c-2341-4ab2-ae6c-f36e63ab16b7',
+				desc: 'This is a complete desc 2',
+				previewDesc: 'this is the preview desc 2',
+				status: EventStatus.UPCOMING,
+				endTime: new Date(),
+				image: '' as string,
+				startTime: new Date(),
+				venue: 'SNU',
+				venueLink: 'https://maps.app.goo.gl/vCDgZsXTxVhes9YM6',
+				title: 'Demo event 2'
+			}
+		]
+	});
+}
+
 async function main() {
 	await seedCategories()
 		.then(() => console.log('✅ eCategories seeded'))
@@ -368,6 +376,9 @@ async function main() {
 	await makeNewBucket(SupabaseEnum.MANUAL)
 		.then(() => console.log('✅ Manuals Bucket created'))
 		.catch((e) => console.error(`🚨 ${e}`));
+	await makeNewBucket(SupabaseEnum.EVENT)
+		.then(() => console.log('✅ Events Bucket created'))
+		.catch((e) => console.error(`🚨 ${e}`));
 	await seedEquipments()
 		.then(() => console.log('✅ Equipments seeded'))
 		.catch((e) => console.error(`🚨 ${e}`));
@@ -376,6 +387,10 @@ async function main() {
 		.catch((e) => console.error(`🚨 CMS Error`));
 	await seedVideos()
 		.then(() => console.log('✅ Videos seeded'))
+		.catch((e) => console.error(`🚨 ${e}`));
+
+	await seedEvents()
+		.then(() => console.log('✅ Events seeded'))
 		.catch((e) => console.error(`🚨 ${e}`));
 }
 

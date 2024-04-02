@@ -1,9 +1,7 @@
 <script lang="ts">
-import { onMount } from "svelte"
-	import type { PageData } from "./$types";
-	import moment from "moment";
+	import type { PageData } from './$types';
 
-export let data: PageData;
+	export let data: PageData;
 </script>
 
 <div class="LandingPage">
@@ -18,17 +16,28 @@ export let data: PageData;
 		</h3>
 		<div class="LandingPage__hero--events">
 			{#each data.allEvents as item}
-			<a href={`/events/${item.id}`}>
-				<div class="LandingPage__event">
-					<img src="/assets/images/event.png" alt="Event" />
-					<h4>{item.name}</h4>
-					<p>{(item.shortDescription)}</p>
-					<div>
-						<p>Event Date: {moment(item.date).format("MMM Do, YYYY")}</p>
-						<p>Created at: {moment(item.createdAt).format("MMM Do, YYYY")}</p>
+				<a href={`/events/${item.id}`}>
+					<div class="LandingPage__event">
+						<img src={item.image} alt="Event" />
+						<h4>{item.title}</h4>
+						<p>{item.previewDesc}</p>
+						<div class="Row--between w-100">
+							<span>
+								{item.user.name}
+							</span>
+							<span>
+								{new Date(item.startTime).toLocaleString('en-US', {
+									month: 'short',
+									day: 'numeric',
+									year: 'numeric',
+									hour12: true,
+									hour: '2-digit',
+									minute: '2-digit'
+								})}
+							</span>
+						</div>
 					</div>
-				</div>
-			</a>
+				</a>
 			{/each}
 		</div>
 	</section>
@@ -54,7 +63,6 @@ export let data: PageData;
 					font-weight: 700;
 					line-height: 1.5;
 					text-align: left;
-					
 
 					@include respondAt(500px) {
 						font-size: 32px;
@@ -132,7 +140,5 @@ export let data: PageData;
 				}
 			}
 		}
-
-		
 	}
 </style>

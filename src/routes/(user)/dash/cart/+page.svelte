@@ -4,8 +4,6 @@
 
 	export let data: PageData;
 
-	$: console.log(data.cart);
-
 	const { form, errors, enhance, constraints } = superForm(data.bookingForm, {
 		id: 'bookingForm',
 		dataType: 'json',

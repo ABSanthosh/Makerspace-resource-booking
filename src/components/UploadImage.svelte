@@ -3,10 +3,11 @@
 	import { getStorageUrl } from '$lib/SupabaseUtils';
 	import type { ValidationErrors } from 'sveltekit-superforms';
 
-	export let { name, errors, image } = $$props as {
+	export let { name, errors, image, bucket } = $$props as {
 		name: string;
 		image: File | string | null;
 		errors: string[] | ValidationErrors<any>;
+		bucket: SupabaseEnum;
 	};
 </script>
 
@@ -39,7 +40,7 @@
 			aria-invalid={errors ? 'true' : undefined}
 		/>
 		{#if typeof image === 'string' && image !== ''}
-			<img src={getStorageUrl(SupabaseEnum.EQUIPMENT, image)} alt="Old" />
+			<img src={getStorageUrl(bucket, image)} alt="Old" />
 		{:else if image}
 			<img src={URL.createObjectURL(image)} alt="Uploaded" />
 		{:else}
