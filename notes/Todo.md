@@ -1,12 +1,11 @@
 ## Short run ToDo
 
-- [ ] Add payment flow to booking
-- [ ] Cost calculation for booking
 - [ ] Refactor booking and booking view pane to one
-- [ ] admin_notes not shown in user booking pane
+- [ ] refactor schema.ts to schema folder with *.schema.ts files
 
 ## Long run ToDo
 
+- [ ] If item is added to cart and is there for longer than 5 days, do not consider that in AvailabilityRules. Can be achieved by `createdAt` attribute in CartItem table. Just add if cartItem.createdAt >= 5 days, ignore
 - [ ] Add trigger to delete manual from bucket when deleted from database
 - [ ] Add types to seed.ts
 - [ ] replace fluent library with [custom component](https://svelte.dev/repl/f391b3186f804fb0bb0931e73388553a?version=3.46.4)
@@ -15,6 +14,9 @@
 
 ## Completed Short run ToDo
 
+- [x] Add payment flow to booking
+- [x] Cost calculation for booking
+- [x] admin_notes not shown in user booking pane
 - [x] booking deadline should be after all the slots
 - [x] If the slot time from 7 am to 3 pm is booked, the next slot shouldn't be able to book around 7 to 3,
       say 6 to 4 or 8 to 2. Basically, if there is a slot like

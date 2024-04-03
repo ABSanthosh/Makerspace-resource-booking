@@ -4,7 +4,7 @@
   import { addToast } from '$store/ToastStore';
   import Pane from '$components/Pane.svelte';
   import TipTap from '$components/TipTap.svelte';
-  import { EStatus } from '@prisma/client';
+  import { EStatus, EBillingType } from '@prisma/client';
   import WeekDays from '$components/WeekDays.svelte';
 
   export let { currentInstance, modal, formStore } = $$props as {
@@ -22,7 +22,7 @@
     dataType: 'json',
     onResult(event) {
       if (event.result.status === 200) {
-        addToast({ message: 'Instance Upserted', type: 'success'  });
+        addToast({ message: 'Instance Upserted', type: 'success' });
         modal = false;
       }
     }
@@ -85,6 +85,32 @@
           {$instanceErrors.cost}
         </p>
       {/if}
+
+      <label
+        class="CrispLabel"
+        for="billingType"
+        data-direction="row"
+        style="justify-content: space-between;"
+      >
+        <span data-mandatory style="color: inherit;"> Billing Type </span>
+        <select
+          id="billingType"
+          class="CrispSelect"
+          style="--crp-select-width: 50%;"
+          bind:value={$instanceForm.billingType}
+          aria-invalid={$instanceForm.billingType ? 'true' : undefined}
+        >
+          {#each Object.values(EBillingType) as item}
+            <option value={item}>{item}</option>
+          {/each}
+        </select>
+      </label>
+      {#if $instanceErrors.billingType}
+        <p class="CrispMessage w-100" data-type="error">
+          {$instanceErrors.billingType}
+        </p>
+      {/if}
+
       <label
         class="CrispLabel"
         for="status"
@@ -201,9 +227,26 @@
           aria-invalid={$instanceForm.availability.maxOffset ? 'true' : undefined}
         />
       </label>
-      <!-- <span class="CrispMessage" data-type="info" data-format="box">
-				The maximum number of months from today that the instance can be booked in advance.
-			</span> -->
+
+      <label
+        class="CrispLabel"
+        for="slotSize"
+        data-direction="row"
+        style="justify-content: space-between;"
+      >
+        <span data-mandatory style="color: inherit;" title="The size of each slot in minutes.">
+          Slot Size(mins)
+        </span>
+        <input
+          id="slotSize"
+          type="number"
+          name="slotSize"
+          class="CrispInput"
+          style="--crp-input-width: 50%"
+          bind:value={$instanceForm.availability.slotSize}
+          aria-invalid={$instanceForm.availability.slotSize ? 'true' : undefined}
+        />
+      </label>
 
       <label class="CrispLabel" for="description">
         <span style="color: inherit;"> Description </span>

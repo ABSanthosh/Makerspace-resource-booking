@@ -1,6 +1,6 @@
 import { db } from '$lib/prisma';
 import type { BookingSchema, CartItemSchema } from '$lib/schemas';
-import { BookingStatus, type Booking, type Prisma } from '@prisma/client';
+import { BookingStatus, type Booking, type Prisma, PaymentStatus } from '@prisma/client';
 
 export async function initUserCart(userId: string) {
   return await db.cart.create({
@@ -140,6 +140,7 @@ export async function makeBooking(data: BookingSchema): Promise<
           description: data.description,
           deadline: data.deadline,
           userId: data.userId,
+          cost: data.cost,
           items: {
             create: cartItems.map((item) => ({
               end: item.end,
@@ -162,7 +163,6 @@ export async function makeBooking(data: BookingSchema): Promise<
         };
       });
   } catch (err) {
-    console.log(err);
     return {
       error: 'Booking failed. Please try again.'
     };
@@ -183,11 +183,15 @@ export async function cancelBooking(bookingId: string) {
 export async function updateBooking({
   bookingId,
   status,
-  adminNotes
+  adminNotes,
+  paymentId,
+  paymentStatus
 }: {
   bookingId: string;
   status: BookingStatus;
   adminNotes: string;
+  paymentId?: string;
+  paymentStatus?: PaymentStatus
 }) {
   return await db.booking.update({
     where: {
@@ -195,7 +199,9 @@ export async function updateBooking({
     },
     data: {
       status,
-      adminNotes
+      adminNotes,
+      paymentId,
+      paymentStatus
     }
   });
 }

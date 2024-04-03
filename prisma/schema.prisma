@@ -37,12 +37,6 @@ model Profile {
   @@map("profile")
 }
 
-enum ProfileType {
-  STUDENT
-  FACULTY
-  STAFF
-}
-
 model Equipment {
   id              String           @id @unique @default(nanoid(7))
   name            String
@@ -56,12 +50,6 @@ model Equipment {
   manuals         Manual[]
   videos          Video[]
   secondaryStatus ESecondaryStatus @default(ACTIVE) @map("secondary_status")
-}
-
-enum ESecondaryStatus {
-  ACTIVE
-  DELETED
-  DISABLED
 }
 
 model Manual {
@@ -84,7 +72,8 @@ model EInstance {
   name            String
   description     String           @db.VarChar(2500)
   status          EStatus?         @default(available)
-  cost            String
+  cost            Float
+  billingType     EBillingType     @default(PER_SLOT) @map("billing_type")
   equipmentId     String
   CartItem        CartItem[]
   BookingItem     BookingItem[]
@@ -114,16 +103,19 @@ model CartItem {
 }
 
 model Booking {
-  id          String        @id @unique @default(nanoid(7))
-  userId      String        @db.Uuid
-  mentor      String
-  description String
-  deadline    DateTime
-  items       BookingItem[]
-  status      BookingStatus @default(PENDING)
-  createdAt   DateTime      @default(now()) @map("created_at")
-  adminNotes  String?       @map("admin_notes") @db.VarChar(255)
-  user        Profile       @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id            String        @id @unique @default(nanoid(7))
+  userId        String        @db.Uuid
+  mentor        String
+  description   String
+  deadline      DateTime
+  cost          Float
+  items         BookingItem[]
+  paymentId     String?
+  status        BookingStatus @default(PENDING)
+  createdAt     DateTime      @default(now()) @map("created_at")
+  adminNotes    String?       @map("admin_notes") @db.VarChar(255)
+  user          Profile       @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  paymentStatus PaymentStatus @default(PENDING) @map("payment_status")
 }
 
 model BookingItem {
@@ -162,6 +154,14 @@ model RepoMaterials {
   description String? @db.VarChar(255)
 }
 
+model ContentManagement {
+  id        String   @id @unique @default(nanoid(7))
+  name      String
+  pathname  String   @unique
+  data      Json
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+
 // Enums
 enum EStatus {
   available
@@ -171,7 +171,6 @@ enum EStatus {
 }
 
 enum BookingStatus {
-  // TODO: While it is in pending, block the slot.
   PENDING
   APPROVED
   REJECTED
@@ -183,10 +182,26 @@ enum Role {
   user
 }
 
-model ContentManagement {
-  id        String   @id @unique @default(nanoid(7))
-  name      String
-  pathname  String   @unique
-  data      Json
-  updatedAt DateTime @default(now()) @map("updated_at")
+enum ProfileType {
+  STUDENT
+  FACULTY
+  STAFF
+}
+
+enum ESecondaryStatus {
+  ACTIVE
+  DELETED
+  DISABLED
+}
+
+enum PaymentStatus {
+  PENDING
+  VERIFICATION
+  SUCCESS
+  FAILED
+}
+
+enum EBillingType {
+  PER_SLOT
+  PER_SESSION
 }

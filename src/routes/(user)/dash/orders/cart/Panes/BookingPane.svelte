@@ -2,6 +2,7 @@
   import Pane from '$components/Pane.svelte';
   import type { BookingSchema } from '$lib/schemas';
   import { addToast } from '$store/ToastStore';
+  import { bookingCost } from '$utils/BookingCost';
   import type { CartItem, EInstance } from '@prisma/client';
   import { dateProxy, superForm, type SuperValidated } from 'sveltekit-superforms';
 
@@ -21,7 +22,8 @@
       form.set({
         ...$form,
         cartId: instances[0].cartId,
-        deadline: new Date($form.deadline)
+        deadline: new Date($form.deadline),
+        cost: bookingCost(instances)
       });
     },
     onResult(event) {
@@ -132,6 +134,23 @@
           <p class="CrispMessage w-100" data-type="error">{$errors.deadline}</p>
         {/if}
       </label>
+
+      <label for="cost" class="CrispLabel">
+        <span style="color: inherit;"> Cost </span>
+        <input
+          disabled
+          readonly
+          id="cost"
+          type="text"
+          name="cost"
+          class="CrispInput"
+          value={new Intl.NumberFormat('en-IN', {
+            style: 'currency',
+            currency: 'INR'
+          }).format(bookingCost(instances))}
+        />
+      </label>
+
       <label for="instance" class="CrispLabel" style="overflow-x: auto; padding-bottom: 10px">
         <span style="color: inherit;"> Instances </span>
         <table class="FancyTable">
@@ -140,6 +159,7 @@
               <th> Name </th>
               <th> Slot Date </th>
               <th> Timing </th>
+              <th> Billing Type </th>
               <th> Cost </th>
             </tr>
           </thead>
@@ -168,12 +188,18 @@
                       hour12: true
                     })}
                   </td>
-                  <td> {item.instance.cost} </td>
+                  <td> {item.instance.billingType} </td>
+                  <td>
+                    {new Intl.NumberFormat('en-IN', {
+                      style: 'currency',
+                      currency: 'INR'
+                    }).format(parseFloat(item.instance.cost))}
+                  </td>
                 </tr>
               {/each}
             {:else}
               <tr>
-                <td colspan="4">
+                <td colspan="5">
                   <i class="CrispMessage" data-type="info" data-format="box"> No items found </i>
                 </td>
               </tr>
@@ -181,7 +207,7 @@
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="4">
+              <td colspan="5">
                 Showing {instances.length} result(s)
               </td>
             </tr>

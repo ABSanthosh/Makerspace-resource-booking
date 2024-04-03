@@ -66,7 +66,7 @@
       start: currentInstance?.availability.starts || '00:00',
       end: currentInstance?.availability.ends || '24:00'
     },
-    slotSize: 30
+    slotSize: currentInstance?.availability.slotSize || 30
   });
 
   $: selectedSlots = getSelectionSlots({

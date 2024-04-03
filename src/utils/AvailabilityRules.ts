@@ -25,6 +25,33 @@ interface IRange {
   };
 }
 
+interface ISlotCount {
+  slotSize: number;
+  start: Date;
+  end: Date;
+}
+
+export function getNumberOfSlots(data: ISlotCount) {
+  const { slotSize, start, end } = data;
+  const startTime = new Date(start);
+  const endTime = new Date(end);
+  const slots: IRange = {};
+  for (let i = startTime.getTime(); i < endTime.getTime(); i += slotSize * 60000) {
+    slots[
+      new Date(i).toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      })
+    ] = {
+      slot: new Date(i),
+      status: SlotStatus.AVAILABLE
+    };
+  }
+
+  return Object.keys(slots).length;
+}
+
 export function getSlots(data: ISlot): IRange {
   const { currentDay, instance, booked, carted, slotSize = 30 } = data;
 
@@ -168,7 +195,7 @@ export function getSelectionSlots(data: ISelectSlots): {
   const endRange: IRange = {};
 
   if (selectedStartTimeDate) {
-    // We need to select the slot set that contains the selectedStartTime 
+    // We need to select the slot set that contains the selectedStartTime
     // so that we can get all the slots that are greater than selectedStartTime
     let selectedSlotSet: IRange = availableSlotSets.filter((set) => {
       return Object.keys(set).includes(selectedStartTime!);

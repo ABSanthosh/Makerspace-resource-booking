@@ -5,12 +5,15 @@
   import { addToast } from '$store/ToastStore';
   import { BookingStatus } from '@prisma/client';
   import { superForm, type SuperValidated } from 'sveltekit-superforms';
-
+  import { PaymentStatus } from '@prisma/client';
   export let { modal, formStore, booking } = $$props as {
     modal: boolean;
     formStore: SuperValidated<BookingUpdateSchema>;
     booking: Awaited<ReturnType<typeof getUserBookings>>[0];
   };
+
+  const defaultPaymentStatus = booking.paymentStatus;
+  const defaultStatus = booking.status;
 
   const { form, enhance } = superForm(formStore, {
     id: 'bookingUpdateForm',
@@ -30,14 +33,11 @@
     }
   });
 
-  const defaultStatus = booking.status;
-
-  // $: console.log($form.adminNotes)
-  // $form.adminNotes = booking.adminNotes || '';
   $: form.set({
     bookingId: booking.id,
     status: booking.status,
-    adminNotes: booking.adminNotes!
+    adminNotes: booking.adminNotes!,
+    paymentStatus: booking.paymentStatus
   });
 </script>
 
@@ -165,7 +165,7 @@
       </label>
 
       <label for="status" class="CrispLabel" style="overflow-x: auto; padding-bottom: 10px;">
-        <span style="color: inherit;" data-mandatory> Status </span>
+        <span style="color: inherit;" data-mandatory> Booking Status </span>
         <select
           id="status"
           name="status"
@@ -182,19 +182,39 @@
           {/each}
         </select>
       </label>
-      {#if booking.status !== BookingStatus.CANCELLED}
-        <label for="adminNotes" class="CrispLabel">
-          <span style="color: inherit;"> Admin Notes </span>
-          <textarea
-            id="adminNotes"
-            name="adminNotes"
-            class="CrispInput"
-            data-type="text-area"
-            bind:value={$form.adminNotes}
-            placeholder="Add notes for the user..."
-          />
-        </label>
-      {/if}
+
+      <label for="paymentStatus" class="CrispLabel" style="overflow-x: auto; padding-bottom: 10px;">
+        <span style="color: inherit;" data-mandatory> Payment Status </span>
+        <select
+          id="paymentStatus"
+          name="paymentStatus"
+          class="CrispSelect w-100"
+          bind:value={$form.paymentStatus}
+          disabled={booking.status === BookingStatus.CANCELLED}
+          required
+        >
+          <!-- <option value="" disabled selected> Select Payment Status </option> -->
+          {#each Object.keys(PaymentStatus) as item}
+            <option value={item} selected={item === booking.paymentStatus ? true : undefined}>
+              {item}
+            </option>
+          {/each}
+        </select>
+
+        {#if booking.status !== BookingStatus.CANCELLED}
+          <label for="adminNotes" class="CrispLabel">
+            <span style="color: inherit;"> Admin Notes </span>
+            <textarea
+              id="adminNotes"
+              name="adminNotes"
+              class="CrispInput"
+              data-type="text-area"
+              bind:value={$form.adminNotes}
+              placeholder="Add notes for the user..."
+            />
+          </label>
+        {/if}
+      </label>
     </form>
   </svelte:fragment>
   <svelte:fragment slot="footer">
@@ -203,7 +223,8 @@
         class="CrispButton"
         type="submit"
         form="bookingUpdateForm"
-        disabled={defaultStatus === $form.status && booking.adminNotes === $form.adminNotes}
+        disabled={(defaultStatus === $form.status && booking.adminNotes === $form.adminNotes) ||
+          defaultPaymentStatus === $form.paymentStatus}
         data-type="black-outline"
       >
         Update Booking

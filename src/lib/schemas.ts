@@ -9,7 +9,9 @@ import {
   type Manual,
   type Video,
   type BookingItem,
-  type CartItem
+  type CartItem,
+  EBillingType,
+  PaymentStatus
 } from '@prisma/client';
 import { z } from 'zod';
 
@@ -80,7 +82,8 @@ export const EItemZodSchema = z.object({
   equipmentId: z.string(),
   description: z.string().optional().or(z.literal('')),
   status: z.nativeEnum(EStatus).default(EStatus.available).optional(),
-  cost: z.string().min(1).default('0'),
+  cost: z.number().min(0.0),
+  billingType: z.nativeEnum(EBillingType),
   secondaryStatus: z.nativeEnum(ESecondaryStatus).default(ESecondaryStatus.ACTIVE).optional(),
   availability: z.object({
     starts: z.string(),
@@ -94,8 +97,8 @@ export const EItemZodSchema = z.object({
       .default(1)
       .describe(
         'The maximum number of months from today that the instance can be booked in advance.'
-      )
-    // interval: z.number().optional().default(30).describe('The step in minutes for the time picker.'),
+      ),
+    slotSize: z.number().optional().default(30).describe('The step in minutes for the time picker.')
   })
 });
 
@@ -202,7 +205,10 @@ export const BookingZSchema = z.object({
   deadline: z.date(),
   cartId: z.string(),
   instances: z.array(z.string()),
-  adminNotes: z.string().optional().or(z.literal(''))
+  cost: z.number().min(0.0),
+  adminNotes: z.string().optional().or(z.literal('')),
+  paymentStatus: z.nativeEnum(PaymentStatus),
+  paymentId: z.string().optional().or(z.literal(''))
 });
 
 export type BookingSchema = z.infer<typeof BookingZSchema>;
@@ -214,7 +220,9 @@ export const BookingCancelZSchema = z.object({
 export const BookingUpdateZSchema = z.object({
   bookingId: z.string().min(2),
   status: z.nativeEnum(BookingStatus),
-  adminNotes: z.string().optional().or(z.literal(''))
+  adminNotes: z.string().optional().or(z.literal('')),
+  paymentStatus: z.nativeEnum(PaymentStatus).optional(),
+  paymentId: z.string().optional().or(z.literal(''))
 });
 
 export type BookingUpdateSchema = z.infer<typeof BookingUpdateZSchema>;
