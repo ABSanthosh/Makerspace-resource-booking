@@ -1,6 +1,5 @@
 import { db } from '$lib/prisma';
-import type { BookingSchema, CartItemSchema, UserProfileSchema } from '$lib/schemas';
-import type { Booking, Prisma } from '@prisma/client';
+import type { UserProfileSchema } from '$lib/schemas';
 
 export async function initCustomClaim(id: string) {
   return await db.$executeRawUnsafe(`

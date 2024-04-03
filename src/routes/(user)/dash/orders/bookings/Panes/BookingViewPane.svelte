@@ -79,7 +79,7 @@
             </tr>
           </thead>
           <tbody>
-            {#if booking.items.length >= 0}
+            {#if booking.items.length > 0}
               {#each booking.items as item}
                 <tr>
                   <td>
@@ -131,6 +131,39 @@
           </tfoot>
         </table>
       </label>
+
+      <label for="status" class="CrispLabel" style="overflow-x: auto; padding-bottom: 10px;">
+        <span style="color: inherit;" data-mandatory> Status </span>
+        <select
+          disabled
+          id="status"
+          name="status"
+          class="CrispSelect w-100"
+          bind:value={booking.status}
+          required
+        >
+          <!-- <option value="" disabled selected> Select Status </option> -->
+          {#each Object.values(BookingStatus) as item}
+            <option value={item} selected={item === booking.status ? true : undefined}>
+              {item}
+            </option>
+          {/each}
+        </select>
+      </label>
+      {#if booking.status !== BookingStatus.CANCELLED}
+        <label for="adminNotes" class="CrispLabel">
+          <span style="color: inherit;"> Admin Notes </span>
+          <textarea
+            disabled
+            id="adminNotes"
+            name="adminNotes"
+            class="CrispInput"
+            data-type="text-area"
+            bind:value={booking.adminNotes}
+            placeholder="Add notes for the user..."
+          />
+        </label>
+      {/if}
     </div>
   </svelte:fragment>
   <svelte:fragment slot="footer">
