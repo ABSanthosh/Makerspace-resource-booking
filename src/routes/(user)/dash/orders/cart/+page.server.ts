@@ -26,7 +26,6 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions: Actions = {
   book: async ({ request }) => {
     const bookingForm = await superValidate(request, zod(BookingZSchema));
-    console.log(bookingForm);
     if (!bookingForm.valid) {
       return fail(400, { bookingForm });
     }

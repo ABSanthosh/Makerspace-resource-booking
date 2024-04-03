@@ -64,7 +64,6 @@ export const actions: Actions = {
             cacheControl: '0'
           });
         if (error) {
-          console.log('error', error);
           return fail(400, withFiles({ upsertEquipmentForm, error }));
         }
 

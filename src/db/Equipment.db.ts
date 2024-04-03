@@ -2,7 +2,13 @@ import { SupabaseEnum } from '$lib/Enums';
 import { getStorageUrl } from '$lib/SupabaseUtils';
 import { db } from '$lib/prisma';
 import type { ECategoriesSchema, EItemSchema, EquipmentById } from '$lib/schemas';
-import { ESecondaryStatus, type BookingItem, type CartItem, type ECategories, type Equipment, type Manual, type Video, Prisma, type Booking } from '@prisma/client';
+import {
+  ESecondaryStatus,
+  type ECategories,
+  type Equipment,
+  type Manual,
+  type Video
+} from '@prisma/client';
 
 export async function getAllEquipmentPreview(): Promise<
   {
@@ -68,7 +74,7 @@ export async function getEquipmentById(id: string): Promise<EquipmentById> {
               include: {
                 booking: {
                   select: {
-                    status: true,
+                    status: true
                   }
                 }
               }
@@ -233,4 +239,3 @@ export async function deleteVideos(ids: string[]) {
     }
   });
 }
-

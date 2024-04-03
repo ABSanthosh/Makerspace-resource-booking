@@ -9,22 +9,6 @@
 
   $: orderSearch = '';
 
-  // $: isFilterOpen = false;
-  // let filters = [
-  //   {
-  //     name: 'By Deadline',
-  //     checked: false
-  //   },
-  //   {
-  //     name: 'By Status',
-  //     checked: false
-  //   },
-  //   {
-  //     name: 'By User',
-  //     checked: false
-  //   }
-  // ];
-
   $: bookings = data.bookings
     .filter((item) => item.user.email.includes(orderSearch))
     .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
@@ -49,31 +33,6 @@
       bind:value={orderSearch}
       placeholder="Search Orders by User mail"
     />
-    <!-- <span class="Row--center gap-15">
-      <details
-        use:clickOutside
-        bind:open={isFilterOpen}
-        class="CrispMenu AdminOrder__filter"
-        on:outclick={() => (isFilterOpen = false)}
-      >
-        <summary data-no-marker data-icon={String.fromCharCode(57682)}>
-          Filters
-          <span>
-            {filters.filter((item) => item.checked).length}
-          </span>
-        </summary>
-        <ul class="CrispMenu__content">
-          {#each filters as filter}
-            <li class="CrispMenu__item">
-              <label class="CrispLabel gap-10" data-direction="row">
-                <input type="checkbox" class="CrispInput" bind:checked={filter.checked} />
-                {filter.name}
-              </label>
-            </li>
-          {/each}
-        </ul>
-      </details>
-    </span> -->
   </header>
   <div class="AdminOrder__content">
     <table class="FancyTable">
@@ -82,7 +41,8 @@
           <th> Mentor </th>
           <th> Deadline </th>
           <th> User name </th>
-          <th> Status </th>
+          <th> Booking Status </th>
+          <th> Payment Status </th>
           <th> </th>
         </tr>
       </thead>
@@ -107,6 +67,11 @@
                 </span>
               </td>
               <td>
+                <span class="AdminOrder__status--{booking.paymentStatus.toLowerCase()}">
+                  {booking.paymentStatus}
+                </span>
+            </td>
+              <td>
                 <span class="Row--j-end w-100">
                   <button
                     class="CrispButton"
@@ -124,7 +89,7 @@
           {/each}
         {:else}
           <tr>
-            <td colspan="5">
+            <td colspan="6">
               <i class="CrispMessage" data-type="info" data-format="box"> No bookings found </i>
             </td>
           </tr>
@@ -132,7 +97,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan="5">
+          <td colspan="6">
             Showing {data.bookings.length ?? 0} result(s)
           </td>
         </tr>
@@ -183,23 +148,29 @@
       &--pending,
       &--approved,
       &--rejected,
-      &--cancelled {
+      &--cancelled,
+      &--verification,
+      &--failed,
+      &--success {
         @include box();
         @include make-flex($align: flex-start);
         padding: 6px 10px;
         border-radius: 5px;
       }
 
-      &--pending {
+      &--pending,
+      &--verification {
         background-color: #f9d852;
         // color: #f9f9f9;
       }
 
-      &--approved {
+      &--approved,
+      &--success {
         background-color: #2ecc71;
         color: #f9f9f9;
       }
 
+      &--failed,
       &--rejected {
         background-color: #e74c3c;
         color: #f9f9f9;

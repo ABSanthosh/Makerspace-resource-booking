@@ -1,8 +1,8 @@
-import { EStatus, Prisma, PrismaClient } from '@prisma/client';
+import { EBillingType, EStatus, Prisma, PrismaClient } from '@prisma/client';
 import { createBrowserClient } from '@supabase/ssr';
 import { SupabaseEnum } from '../src/lib/Enums';
+import { WeekDaysEnum, type EItemSchema } from '../src/lib/schemas';
 import fs from 'fs';
-import nanoid from '../src/lib/nanoid';
 
 const prisma = new PrismaClient();
 const supabase = createBrowserClient(
@@ -179,53 +179,65 @@ async function seedEquipments() {
     }
   ];
 
-  const instances = [
+  const instances: EItemSchema[] = [
     {
       name: 'CR-10 SE - 1',
       status: EStatus.available,
-      cost: '0',
+      cost: 0,
       description: '',
       equipmentId: '_iPoLfl',
+      billingType: EBillingType.PER_SESSION,
       availability: {
         starts: '07:00',
         ends: '16:45',
-        repeat: ['MO', 'TU', 'WE', 'TH', 'FR']
+        repeat: [WeekDaysEnum.M, WeekDaysEnum.T, WeekDaysEnum.W, WeekDaysEnum.Th, WeekDaysEnum.F],
+        maxOffset: 1,
+        slotSize: 30
       }
     },
     {
       name: 'CR-10 SE - 2',
       status: EStatus.inUse,
-      cost: '0',
+      cost: 0,
       description: '',
+      billingType: EBillingType.PER_SESSION,
       equipmentId: '_iPoLfl',
       availability: {
         starts: '07:00',
         ends: '16:45',
-        repeat: ['MO', 'TU', 'WE', 'TH', 'FR']
+        repeat: [WeekDaysEnum.M, WeekDaysEnum.T, WeekDaysEnum.W, WeekDaysEnum.Th, WeekDaysEnum.F],
+        maxOffset: 1,
+        slotSize: 30
       }
     },
     {
       name: 'CR-10 SE - 3',
       status: EStatus.broken,
-      cost: '0',
+      billingType: EBillingType.PER_SESSION,
+      cost: 0,
       description: '',
       equipmentId: '_iPoLfl',
       availability: {
         starts: '07:00',
         ends: '16:45',
-        repeat: ['MO', 'TU', 'WE', 'TH', 'FR']
+        repeat: [WeekDaysEnum.M, WeekDaysEnum.T, WeekDaysEnum.W, WeekDaysEnum.Th, WeekDaysEnum.F],
+        maxOffset: 1,
+        slotSize: 30
       }
     },
     {
       name: 'ENON - 1',
       status: EStatus.available,
-      cost: '0',
+      billingType: EBillingType.PER_SESSION,
+      cost: 0,
       description: '',
       equipmentId: 'cAZ0IdL',
       availability: {
         starts: '07:00',
         ends: '16:45',
-        repeat: ['MO', 'TU', 'WE', 'TH', 'FR']
+        repeat: [WeekDaysEnum.M, WeekDaysEnum.T, WeekDaysEnum.W, WeekDaysEnum.Th, WeekDaysEnum.F],
+        maxOffset: 1,
+        slotSize: 30
       }
     }
   ];
@@ -243,7 +255,10 @@ async function seedEquipments() {
       data: equipments
     }),
     prisma.eInstance.createMany({
-      data: instances
+      data: instances.map((instance) => ({
+        ...instance,
+        description: instance.description!
+      }))
     })
   ]);
 }
@@ -343,12 +358,15 @@ async function main() {
   await onDeleteUser()
     .then(() => console.log('✅ onDeleteUser trigger created'))
     .catch((e) => console.error(`🚨 ${e}`));
+
+  // Buckets
   await makeNewBucket(SupabaseEnum.EQUIPMENT)
     .then(() => console.log('✅ Equipments Bucket created'))
     .catch((e) => console.error(`🚨 ${e}`));
   await makeNewBucket(SupabaseEnum.MANUAL)
     .then(() => console.log('✅ Manuals Bucket created'))
     .catch((e) => console.error(`🚨 ${e}`));
+
   await seedEquipments()
     .then(() => console.log('✅ Equipments seeded'))
     .catch((e) => console.error(`🚨 ${e}`));
