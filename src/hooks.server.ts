@@ -1,8 +1,9 @@
+import { initUserCart } from '$db/Cart.db';
 import { initCustomClaim } from '$db/User.db';
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 import { getCustomClaim } from '$lib/SupabaseUtils';
 import { createServerClient } from '@supabase/ssr';
-import { redirect, type Handle, error } from '@sveltejs/kit';
+import { redirect, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
 const createSupabaseClient: Handle = async ({ event, resolve }) => {
@@ -37,6 +38,7 @@ const createSupabaseClient: Handle = async ({ event, resolve }) => {
     event.locals.session?.user.app_metadata.custom_claims === undefined
   ) {
     await initCustomClaim(event.locals.session?.user.id);
+    await initUserCart(event.locals.session?.user.id);
     event.locals.supabase.auth.refreshSession();
     event.locals.session = await event.locals.getSession();
   }

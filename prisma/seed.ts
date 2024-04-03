@@ -92,9 +92,6 @@ async function onNewUser(columns: { [name: string]: string }) {
 			mobile = COALESCE(new.phone, ''),
 			email = COALESCE(new.email, '')
 			WHERE id = new.id;
-
-		-- Make a new cart
-		INSERT INTO public."Cart" (id, user_id) VALUES ('${nanoid()}', new.id);
 			
 		RETURN NEW;
 		END;

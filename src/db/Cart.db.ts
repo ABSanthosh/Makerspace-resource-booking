@@ -2,6 +2,14 @@ import { db } from '$lib/prisma';
 import type { BookingSchema, CartItemSchema } from '$lib/schemas';
 import { BookingStatus, type Booking, type Prisma } from '@prisma/client';
 
+export async function initUserCart(userId: string) {
+  return await db.cart.create({
+    data: {
+      userId
+    }
+  });
+}
+
 export async function addToCart(cardItem: CartItemSchema & { userId: string }) {
   /**
    * Doc: Start and end are converted from string of date object
