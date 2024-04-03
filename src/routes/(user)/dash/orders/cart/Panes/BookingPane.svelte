@@ -54,7 +54,10 @@
   $: $form.instances = instances.map((i) => i.id);
 
   // Doc: Get the max end time of all instances so that the deadline is always after the last slot
-  $: maxInstanceEndTime = new Date(Math.max(...instances.map((i) => new Date(i.end).getTime())));
+  $: maxInstanceEndTime =
+    instances.length > 0
+      ? new Date(Math.max(...instances.map((i) => new Date(i.end).getTime())))
+      : new Date();
 </script>
 
 <Pane

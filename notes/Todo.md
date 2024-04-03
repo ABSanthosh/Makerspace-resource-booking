@@ -3,6 +3,7 @@
 - [ ] Add payment flow to booking
 - [ ] Cost calculation for booking
 - [ ] Refactor booking and booking view pane to one
+- [ ] admin_notes not shown in user booking pane
 
 ## Long run ToDo
 
