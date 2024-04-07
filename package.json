@@ -14,7 +14,8 @@
     "db:build": "npx prisma db push && npx prisma db seed",
     "sb-stop": "supabase stop --backup",
     "sb-restart": "supabase stop --backup && supabase start",
-    "sb-reset": "supabase db reset && yarn sb-restart && prisma db push"
+    "sb-reset": "supabase db reset && yarn sb-restart && prisma db push",
+    "pdf:EUD": "markdown-pdf -o 'notes/end-user-documentation.pdf' 'notes/end-user-documentation.md'"
   },
   "prisma": {
     "seed": "npx tsx prisma/seed.ts"
@@ -33,6 +34,8 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.35.1",
     "fluent-svelte": "^1.6.0",
+    "markdown-pdf": "^11.0.0",
+    "mermaid": "^10.9.0",
     "prettier": "^3.1.1",
     "prettier-plugin-svelte": "^3.1.2",
     "sass": "^1.69.6",

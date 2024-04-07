@@ -2,6 +2,7 @@
 
 - [ ] Refactor booking and booking view pane to one
 - [ ] refactor schema.ts to schema folder with *.schema.ts files
+- [ ] Payment id input issue
 
 ## Long run ToDo
 
