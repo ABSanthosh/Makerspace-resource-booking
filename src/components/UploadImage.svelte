@@ -3,49 +3,50 @@
   import { getStorageUrl } from '$lib/SupabaseUtils';
   import type { ValidationErrors } from 'sveltekit-superforms';
 
-  export let { name, errors, image } = $$props as {
-    name: string;
-    image: File | string | null;
-    errors: string[] | ValidationErrors<any>;
-  };
+	export let { name, errors, image, bucket } = $$props as {
+		name: string;
+		image: File | string | null;
+		errors: string[] | ValidationErrors<any>;
+		bucket: SupabaseEnum;
+	};
 </script>
 
 <label class="CrispLabel UploadImage" for={name}>
-  <span data-mandatory style="color: inherit;"> Image </span>
-  <div
-    class="UploadImage__dnd"
-    data-image={typeof image !== null && image !== '' ? true : undefined}
-  >
-    <input
-      {name}
-      id={name}
-      type="file"
-      accept="image/*"
-      on:input={(e) => {
-        const imageFile = e.currentTarget.files?.item(0) ?? null;
-        if (typeof image === 'string' && imageFile && image !== '') {
-          // Doc: Rename the file to the same name as image. This will be used when equipment is updated
-          // to replace the old image with the new one.
-          const tempFile = new File([imageFile], image, {
-            type: imageFile.type,
-            lastModified: imageFile.lastModified
-          });
-          image = tempFile;
-        } else if (imageFile) {
-          image = imageFile;
-        }
-      }}
-      class="CrispInput"
-      aria-invalid={errors ? 'true' : undefined}
-    />
-    {#if typeof image === 'string' && image !== ''}
-      <img src={getStorageUrl(SupabaseEnum.EQUIPMENT, image)} alt="Old" />
-    {:else if image}
-      <img src={URL.createObjectURL(image)} alt="Uploaded" />
-    {:else}
-      Upload image
-    {/if}
-  </div>
+	<span data-mandatory style="color: inherit;"> Image </span>
+	<div
+		class="UploadImage__dnd"
+		data-image={typeof image !== null && image !== '' ? true : undefined}
+	>
+		<input
+			{name}
+			id={name}
+			type="file"
+			accept="image/*"
+			on:input={(e) => {
+				const imageFile = e.currentTarget.files?.item(0) ?? null;
+				if (typeof image === 'string' && imageFile && image !== '') {
+					// Doc: Rename the file to the same name as image. This will be used when equipment is updated
+					// to replace the old image with the new one.
+					const tempFile = new File([imageFile], image, {
+						type: imageFile.type,
+						lastModified: imageFile.lastModified
+					});
+					image = tempFile;
+				} else if (imageFile) {
+					image = imageFile;
+				}
+			}}
+			class="CrispInput"
+			aria-invalid={errors ? 'true' : undefined}
+		/>
+		{#if typeof image === 'string' && image !== ''}
+			<img src={getStorageUrl(bucket, image)} alt="Old" />
+		{:else if image}
+			<img src={URL.createObjectURL(image)} alt="Uploaded" />
+		{:else}
+			Upload image
+		{/if}
+	</div>
 
   {#if errors}
     <p class="CrispMessage w-100" data-type="error">

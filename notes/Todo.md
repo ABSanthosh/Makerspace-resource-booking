@@ -1,17 +1,13 @@
 ## Short run ToDo
-
-- [ ] Refactor booking and booking view pane to one
-- [ ] refactor schema.ts to schema folder with *.schema.ts files
-- [ ] Payment id input issue
+- [ ] Add trigger to delete manual from bucket when deleted from database
+- [ ] remove already booked slots from the times list
+- [ ] Add modal for booking details
+- [ ] replace [eId] in equipment page with equipmentId
+- [ ] replace [eId] in event page with eventId
 
 ## Long run ToDo
-
-- [ ] If item is added to cart and is there for longer than 5 days, do not consider that in AvailabilityRules. Can be achieved by `createdAt` attribute in CartItem table. Just add if cartItem.createdAt >= 5 days, ignore
-- [ ] Add trigger to delete manual from bucket when deleted from database
-- [ ] Add types to seed.ts
-- [ ] replace fluent library with [custom component](https://svelte.dev/repl/f391b3186f804fb0bb0931e73388553a?version=3.46.4)
-- [ ] refactor FancyTable to CrispTable
-- [ ] Trailing slash in http://localhost:5173/dash/orders/ is not the same as http://localhost:5173/dash/orders (missing slash). Need to fix this.
+- [ ] Convert isDeleted to SecondaryStatus enum with values: deleted, disabled, enabled with default value enabled so that we can delete the ones with no dependents  
+- [ ] refactor image upload with conditions to a function to supabaseUtils file. It is used in multiple files(Search "const { data, error } = await supabase.storage")
 
 ## Completed Short run ToDo
 

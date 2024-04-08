@@ -2,6 +2,7 @@ import {
   BookingStatus,
   ESecondaryStatus,
   EStatus,
+  EventStatus,
   ProfileType,
   Role,
   type Equipment,
@@ -236,16 +237,30 @@ export const CMSZSchema = z.object({
 
 export type CMSSchema = z.infer<typeof CMSZSchema>;
 
-export type EquipmentById = Equipment & {
-  category: ECategories;
-  manuals: Manual[];
-  videos: Video[];
-  instances: (EItemSchema & {
-    BookingItem: (BookingItem & {
-      booking: {
-        status: BookingStatus;
-      };
-    })[];
-    CartItem: CartItem[];
-  })[];
-};
+export const EventZodSchema = z
+  .object({
+    id: z.string().optional().or(z.literal('')),
+    userId: z.string(),
+    title: z.string().min(2),
+    previewDesc: z.string().min(2),
+    desc: z.string().min(2),
+    image: z
+      .custom<File>((f) => f instanceof File, 'Please upload a file.')
+      .refine(
+        (f) => ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'].includes(f.type),
+        '.jpg, .jpeg, .png and .webp files are accepted.'
+      )
+      .refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
+      .or(z.string()),
+    startTime: z.date(),
+    endTime: z.date(),
+    status: z.nativeEnum(EventStatus).default(EventStatus.UPCOMING),
+    venue: z.string().min(2),
+    venueLink: z.string().trim().url().optional()
+  })
+  .refine((data) => data.endTime > data.startTime, {
+    message: 'End time cannot be earlier than start time.',
+    path: ['endTime']
+  });
+
+export type EventSchema = z.infer<typeof EventZodSchema>;

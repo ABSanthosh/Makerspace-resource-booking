@@ -1,8 +1,9 @@
-import { EBillingType, EStatus, Prisma, PrismaClient } from '@prisma/client';
+import { EBillingType, EStatus, EventStatus, Prisma, PrismaClient } from '@prisma/client';
 import { createBrowserClient } from '@supabase/ssr';
 import { SupabaseEnum } from '../src/lib/Enums';
 import { WeekDaysEnum, type EItemSchema } from '../src/lib/schemas';
 import fs from 'fs';
+import type { EventSchema } from '../src/lib/schemas';
 
 const prisma = new PrismaClient();
 const supabase = createBrowserClient(
@@ -150,6 +151,7 @@ async function makeNewBucket(name: string) {
 		INSERT INTO storage.buckets (id, name, public)
 		VALUES ('${name}', '${name}', true);`);
   } catch (e) {}
+	} catch (e) {}
 
   try {
     await prisma.$transaction([
@@ -334,6 +336,127 @@ async function seedVideos() {
       }
     ]
   });
+}
+
+async function seedEvents() {
+	const allEvents = [
+
+	];
+
+	await supabase.storage.from(SupabaseEnum.EVENT).upload('event.png', fs.readFileSync('prisma/seed/event.png'));
+
+	// TODO: An error is coming here when we run npm run db`
+	await prisma.$transaction([
+		prisma.event.createMany({
+			data: [
+				{
+					"id": "zWZCZVx",
+					"title": "Aryan",
+					"previewDesc": "lkj",
+					"desc": "lkj",
+					"image": "event.png",
+					"startTime": "2024-12-31T18:29:00Z",
+					"endTime": "2025-01-11T18:29:00Z",
+					"venue": "lkj",
+					"venueLink": "https://www.google.com",
+					"status": "UPCOMING",
+					"createdAt": "2024-04-08T09:49:38.121Z",
+					"updatedAt": "2024-04-08T09:49:38.121Z",
+					"userId": "7554133e-339e-4b2d-a857-56ca983c4ed6"
+				},
+				{
+					"id": "wJIsn8s",
+					"title": "Lorem Ipsum",
+					"previewDesc": "Lorem Ipsum",
+					"desc": "Lorem Ipsum",
+					"image": "event.png",
+					"startTime": "2024-04-06T17:13:56Z",
+					"endTime": "2024-04-06T17:14:02Z",
+					"venue": "Lorem Ipsum",
+					"venueLink": "",
+					"status": "UPCOMING",
+					"createdAt": "2024-04-06T17:14:22Z",
+					"updatedAt": "2024-04-06T17:14:25Z",
+					"userId": "7554133e-339e-4b2d-a857-56ca983c4ed6"
+				},
+				{
+					"id": "dJKlKOp",
+					"title": "Local Art Exhibition",
+					"previewDesc": "Support local artists!",
+					"desc": "This exhibition showcases the work of talented local creators!",
+					"image": "event.png",
+					"startTime": "2024-04-18T18:00:00Z",
+					"endTime": "2024-04-18T21:00:00Z",
+					"venue": "City Art Gallery",
+					"venueLink": "https://cityartgallery.org/exhibitions",
+					"status": "UPCOMING",
+					"createdAt": "2024-04-06T17:14:25Z",
+					"updatedAt": "2024-04-06T17:14:25Z",
+					"userId": "7554133e-339e-4b2d-a857-56ca983c4ed6"
+				},
+				{
+					"id": "o1o1o1o1",
+					"title": "Movie Night Under the Stars",
+					"previewDesc": "Bring your blankets and snacks!",
+					"desc": "Enjoy a classic film outdoors under a beautiful night sky!",
+					"image": "event.png",
+					"startTime": "2024-04-23T20:00:00Z",
+					"endTime": "2024-04-24T00:00:00Z",
+					"venue": "Central Park",
+					"venueLink": "https://www.centralpark.com/events",
+					"status": "UPCOMING",
+					"createdAt": "2024-04-06T17:14:25Z",
+					"updatedAt": "2024-04-06T17:14:25Z",
+					"userId": "7554133e-339e-4b2d-a857-56ca983c4ed6"
+				},
+				{
+					"id": "IuIuIuIu",
+					"title": "Live Music Performance",
+					"previewDesc": "Dance the night away!",
+					"desc": "Get ready for a night of music and fun with a popular band!",
+					"image": "event.png",
+					"startTime": "2024-04-27T21:00:00Z",
+					"endTime": "2024-04-28T01:00:00Z",
+					"venue": "The Venue Club",
+					"venueLink": "https://thevenueclub.com/events",
+					"status": "UPCOMING",
+					"createdAt": "2024-04-06T17:14:25Z",
+					"updatedAt": "2024-04-06T17:14:25Z",
+					"userId": "7554133e-339e-4b2d-a857-56ca983c4ed6"
+				},
+				{
+					"id": "xpto3Z92",
+					"title": "Book Club Meeting",
+					"previewDesc": "Discussion on [Book Title Here]",
+					"desc": "Join us for a lively discussion about this thought-provoking book!",
+					"image": "event.png",
+					"startTime": "2024-04-20T14:00:00Z",
+					"endTime": "2024-04-20T16:00:00Z",
+					"venue": "Library Auditorium",
+					"venueLink": "https://www.library.com/events",
+					"status": "UPCOMING",
+					"createdAt": "2024-04-06T17:14:25Z",
+					"updatedAt": "2024-04-06T17:14:25Z",
+					"userId": "7554133e-339e-4b2d-a857-56ca983c4ed6"
+				},
+				{
+					"id": "n7b0uHL",
+					"title": "Hello",
+					"previewDesc": "Helo",
+					"desc": "helo\n",
+					"image": "event.png",
+					"startTime": "2025-04-08T15:27:00Z",
+					"endTime": "2024-04-10T16:32:00Z",
+					"venue": "Hello",
+					"venueLink": "",
+					"status": "UPCOMING",
+					"createdAt": "2024-04-08T12:28:09.602Z",
+					"updatedAt": "2024-04-08T12:28:09.602Z",
+					"userId": "7554133e-339e-4b2d-a857-56ca983c4ed6"
+				}
+			]
+		})
+	]);
 }
 
 async function main() {
