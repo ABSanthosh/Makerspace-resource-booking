@@ -35,10 +35,12 @@
   $: availabilityPane = false;
   $: manualPane = false;
   $: videoPane = false;
-  $: selectedInstance = null as EquipmentById["instances"][0] | null;
+  $: selectedInstance = null as EquipmentById['instances'][0] | null;
+
+  $: isUserBlacklisted = user?.app_metadata.custom_claims.is_blacklisted ?? false;
 </script>
 
-{#if selectedInstance && user}
+{#if selectedInstance && user && !isUserBlacklisted}
   <AvailabilityPane
     bind:userId={user.id}
     bind:modal={availabilityPane}
@@ -99,6 +101,12 @@
       Instances
       <hr />
     </h3>
+    {#if user && isUserBlacklisted}
+      <i class="CrispMessage" data-format="box" data-type="error">
+        You are blacklisted and cannot make any bookings. Visit Makerspace to resolve this issue.
+      </i>
+    {/if}
+
     <div class="Equipment__tableContainer">
       <table class="FancyTable">
         <thead>
@@ -124,7 +132,7 @@
                   {#if user}
                     <button
                       class="CrispButton"
-                      disabled={item.status !== EStatus.available}
+                      disabled={item.status !== EStatus.available || isUserBlacklisted}
                       data-type="black-outline"
                       on:click={() => {
                         selectedInstance = item;
