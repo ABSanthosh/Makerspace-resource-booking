@@ -20,7 +20,7 @@ const queries = {
 				FOR EACH ROW EXECUTE PROCEDURE onNewUser();
 		`,
     Prisma.sql`
-			-- When public.profile.{isnew|role} is updated, update the user's custom claims
+			-- When public.profile.{isnew|role|is_blacklisted} is updated, update the user's custom claims
 			CREATE or REPLACE FUNCTION on_user_profile_update()
 			RETURNS trigger
 			LANGUAGE plpgsql
@@ -31,7 +31,7 @@ const queries = {
 				SET raw_app_meta_data = jsonb_set(
 					COALESCE(raw_app_meta_data, '{}'::jsonb),
 					'{custom_claims}',
-					json_build_object('role', NEW.role, 'isnew', NEW.isnew)::jsonb,
+					json_build_object('role', NEW.role, 'isnew', NEW.isnew, 'is_blacklisted', NEW.is_blacklisted)::jsonb,
 					true
 				) WHERE id = NEW.id;
 				RETURN NEW;
@@ -92,6 +92,14 @@ async function onNewUser(columns: { [name: string]: string }) {
 			mobile = COALESCE(new.phone, ''),
 			email = COALESCE(new.email, '')
 			WHERE id = new.id;
+
+    UPDATE auth.users
+    SET raw_app_meta_data = jsonb_set(
+      COALESCE(raw_app_meta_data, '{}'::jsonb),
+      '{custom_claims}',
+      '{"role": "user", "isnew": true, "is_blacklisted": false}',
+      true
+    ) WHERE id = new.id;
 			
 		RETURN NEW;
 		END;

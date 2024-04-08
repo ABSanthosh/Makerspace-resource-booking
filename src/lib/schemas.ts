@@ -3,7 +3,7 @@ import {
   ESecondaryStatus,
   EStatus,
   ProfileType,
-  Role,
+  UserRole,
   type Equipment,
   type ECategories,
   type Manual,
@@ -59,8 +59,9 @@ export const UserProfileZodSchema = z
     name: z.string().min(2),
     mobile: z.string().regex(phoneRegex, { message: 'Invalid phone number' }),
     email: z.string().email(),
-    role: z.nativeEnum(Role),
-    isNew: z.boolean()
+    role: z.nativeEnum(UserRole),
+    isNew: z.boolean(),
+    isBlacklisted: z.boolean()
   })
   .and(profileSchema);
 
