@@ -1,3 +1,10 @@
+---
+title: 'End User Documentation for Makerspace Management System'
+author: Santhosh
+date: March 22, 2005
+geometry: margin=2cm
+---
+
 # End User Documentation for Makerspace Management System
 
 Version 1.0  
@@ -25,7 +32,12 @@ This document is intended to provide a comprehensive guide to the Makerspace Man
 MMS requires users to create an account in order to access features such as equipment reservation. To create an account, follow these steps:
 
 1. Go to the MMS website.  
-   ![MMS Website](./assets/MMS_Website.png)
+    <img
+      src="./assets/MMS_Website.png"
+      alt="MMS Website"
+      style="width: 400px;"
+    />
+   ![MMS Website](./assets/MMS_Website.png){ width=400px }
 
 2. Click on the "Sign In" button. Both new and existing users can sign in here.  
    <img
@@ -33,6 +45,7 @@ MMS requires users to create an account in order to access features such as equi
      alt="Sign In Button"
      style="width: 350px;"
    />
+   ![Sign In Button](./assets/SignIn.png){ width=350px }
 
 3. Choose your Organization account from the options provided. If your organization account is not listed, add it using "Use another account" and follow the prompts.
 
@@ -42,6 +55,7 @@ MMS requires users to create an account in order to access features such as equi
      alt="Dashboard Dropdown"
      style="width: 300px;"
    />
+   ![Dashboard Dropdown](./assets/DashboardDropdown.png){ width=300px }
 
 5. In the Dashboard, you will be prompted with a form to fill in your personal details. Select your category from the dropdown, fill in the required fields and click `Save`.  
    <img
@@ -49,6 +63,7 @@ MMS requires users to create an account in order to access features such as equi
      alt="Personal Details Form"
      style="width: 400px;"
    />
+   ![Personal Details Form](./assets/UserOnboarding.png){ width=350px }
 
 6. Now you'll be able to make reservations for equipment in Equipments page!
 
@@ -62,12 +77,14 @@ To reserve equipment, follow these steps:
      alt="Equipment Navigation"
      style="width: 400px;"
    />
+   ![Equipment Navigation](./assets/EquipmentPage.png)
 
-2. Select on of the available instances of the equipment by clicking on the `View` button.
+2. Select on of the available instances of the equipment by clicking on the `View` button.  
    <img
      src="./assets/EquipmentInstances.png"
      alt="Equipment Instance"
    />
+   ![Equipment Instance](./assets/EquipmentInstances.png)
 
 3. Here, you can see the availability of the instance.
 
@@ -79,6 +96,7 @@ To reserve equipment, follow these steps:
     alt="Reserve Equipment"
     width="400"
   />
+  ![Reserve Equipment](./assets/AvailabilityPane.png)
 
 ### Managing Cart and Bookings
 
@@ -89,13 +107,15 @@ To reserve equipment, follow these steps:
      src="./assets/InitBooking.png"
      alt="Cart Page"
    />
+   ![Cart Page](./assets/InitBooking.png)
 
 3. Fill in the required details in the pane and click on `Book`. Please make sure to fill in appropriate details to ensure your booking verification is timely.  
    <img
      src="./assets/BookingPane.png"
      alt="Booking Pane"
-     width="400"
+     width="350"
    />
+   ![Booking Pane](./assets/BookingPane.png){ width=280px }
 
 4. Your booking is now placed! You can view your bookings in the `Bookings` page.
 
