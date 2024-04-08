@@ -23,7 +23,9 @@
 
 <div class="Sidebar" class:open={navState || userProfileMenu}>
   <div class="Sidebar__logo Row--between gap-15">
-    <img src="/assets/images/logo.svg" alt="logo" />
+    <a href="/">
+      <img src="/assets/images/logo.svg" alt="logo" />
+    </a>
   </div>
   <ul class="Sidebar__menuList">
     {#each routes as route}
@@ -116,7 +118,7 @@
     </details>
 
     <button
-      class={`CrispButton Sidebar__toggle${(navState || userProfileMenu) ? '--active' : '--item'}`}
+      class={`CrispButton Sidebar__toggle${navState || userProfileMenu ? '--active' : '--item'}`}
       on:click={() => {
         navState = !navState;
         collapsibleState = {

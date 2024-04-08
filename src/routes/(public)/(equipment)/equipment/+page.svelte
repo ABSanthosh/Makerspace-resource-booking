@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import type { PageData } from './$types';
   import { BreadCrumbStore, isEquipmentDeletedStore } from '$store/BreadCrumbStore';
+  import { ESecondaryStatus } from '@prisma/client';
 
   export let data: PageData;
 
@@ -49,7 +50,10 @@
       if (categoryFilter === '') return item;
       return item.eCategoriesId === categoryFilter;
     }) as item (item.id)}
-      <div class="Equipment__card" class:disabled={item.isDeleted}>
+      <div
+        class="Equipment__card"
+        class:disabled={item.secondaryStatus === ESecondaryStatus.DELETED}
+      >
         <img src={item.image} alt={item.name} />
         <h2 class="w-100">{item.name}</h2>
         <p class="w-100">{item.model}</p>

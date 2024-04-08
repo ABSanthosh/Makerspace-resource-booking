@@ -3,11 +3,17 @@ import type { BookingSchema, CartItemSchema } from '$lib/schemas';
 import { BookingStatus, type Booking, type Prisma, PaymentStatus } from '@prisma/client';
 
 export async function initUserCart(userId: string) {
-  return await db.cart.create({
-    data: {
-      userId
-    }
-  });
+  try {
+    return await db.cart.create({
+      data: {
+        userId
+      }
+    });
+  } catch (err) {
+    return {
+      error: 'Cart initialization failed. Please try again.'
+    };
+  }
 }
 
 export async function addToCart(cardItem: CartItemSchema & { userId: string }) {
@@ -191,7 +197,7 @@ export async function updateBooking({
   status: BookingStatus;
   adminNotes: string;
   paymentId?: string;
-  paymentStatus?: PaymentStatus
+  paymentStatus?: PaymentStatus;
 }) {
   return await db.booking.update({
     where: {
