@@ -15,6 +15,7 @@
 
 ## Completed Short run ToDo
 
+- [x] User management page in admin panel
 - [x] Add payment flow to booking
 - [x] Cost calculation for booking
 - [x] admin_notes not shown in user booking pane

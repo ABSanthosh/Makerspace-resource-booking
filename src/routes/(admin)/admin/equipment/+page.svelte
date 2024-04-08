@@ -1,13 +1,13 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import type { EItemSchema, ESchema } from '$lib/schemas';
+  import type { ESchema } from '$lib/schemas';
   import { type Writable } from 'svelte/store';
   import EquipmentPane from './FormPanes/EquipmentPane.svelte';
   import CategoryPane from './FormPanes/CategoryPane.svelte';
   import clickOutside from '$directive/clickOutside';
   import { enhance } from '$app/forms';
   import ManualPane from './FormPanes/ManualPane.svelte';
-  import { ESecondaryStatus, type Manual, type Video } from '@prisma/client';
+  import { EBillingType, ESecondaryStatus, type Manual, type Video } from '@prisma/client';
   import VideoPane from './FormPanes/VideoPane.svelte';
   import InstancePane from './FormPanes/InstancePane.svelte';
 
@@ -283,13 +283,15 @@ is properly set.
                               if (upsertInstanceForm) {
                                 upsertInstanceForm.data = {
                                   name: `${item.name} - ${item.instances.length + 1}`,
-                                  cost: '0',
+                                  cost: 0,
                                   description: '',
+                                  billingType: EBillingType.PER_SESSION,
                                   availability: {
                                     ends: '',
                                     starts: '',
                                     repeat: [],
-                                    maxOffset: 1
+                                    maxOffset: 1,
+                                    slotSize: 30
                                   },
                                   equipmentId: item.id
                                 };

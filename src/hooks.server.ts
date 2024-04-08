@@ -33,7 +33,9 @@ const createSupabaseClient: Handle = async ({ event, resolve }) => {
 
   // Doc: This is the session data that gets trickled down to all parts of the app
   event.locals.session = await event.locals.getSession();
+  // console.log('session', event.locals.session?.user.app_metadata);
   if (
+    event.locals.session &&
     event.locals.session?.user.app_metadata.provider !== undefined &&
     event.locals.session?.user.app_metadata.custom_claims === undefined
   ) {

@@ -2,7 +2,6 @@
   import type { JsonValue } from '@prisma/client/runtime/library';
   import { superForm, type SuperValidated } from 'sveltekit-superforms';
   import type { CMSSchema } from '$lib/schemas';
-  import { date } from 'zod';
   import TipTap from '$components/TipTap.svelte';
   import { addToast } from '$store/ToastStore';
 

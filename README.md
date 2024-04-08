@@ -114,3 +114,9 @@ javascript: (() => {
   };
 })();
 ```
+
+### Delete trigger
+
+```
+drop trigger on_auth_user_deleted | on_auth_user_created  on auth.users;
+```
