@@ -30,6 +30,10 @@
   // All folders are named according to: https://kit.svelte.dev/docs/advanced-routing#advanced-layouts
 </script>
 
+<svelte:head>
+  <title>SNU Makerspace</title>
+</svelte:head>
+
 {#if $navigating}
   <BlurredSpinner />
 {/if}
