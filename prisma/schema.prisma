@@ -193,8 +193,8 @@ model Event {
   previewDesc String
   desc        String
   image       String
-  startTime   DateTime      @map("start_time")
-  endTime     DateTime      @map("end_time")
+  startTime   DateTime    @map("start_time")
+  endTime     DateTime    @map("end_time")
   venue       String
   venueLink   String?     @map("venue_link")
   status      EventStatus @default(UPCOMING)

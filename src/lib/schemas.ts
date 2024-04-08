@@ -205,9 +205,9 @@ export const EventZodSchema = z
 		endTime: z.date(),
 		status: z.nativeEnum(EventStatus).default(EventStatus.UPCOMING),
 		venue: z.string().min(2),
-		venueLink: z.string().trim().url()
+		venueLink: z.string().trim().url().optional(),
 	})
-	.refine((data) => data.endTime > data.startTime, {
+	.refine((data) => (data.endTime > data.startTime), {
 		message: 'End time cannot be earlier than start time.',
 		path: ['endTime']
 	});

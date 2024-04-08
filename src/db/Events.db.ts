@@ -13,18 +13,22 @@ export async function getAllEventsPreview() {
 				previewDesc: true,
 				image: true,
 				startTime: true,
+				endTime: true,
 				user: {
 					select: {
 						id: true,
 						name: true
 					}
 				},
-				status: true
+				status: true,
+				venueLink: true,
 			}
 		})
 		.then((res) => {
 			return (
-				res.map((item) => ({
+				res.sort((event) => {
+					return event.startTime.getTime() - event.endTime.getTime();
+				}).map((item) => ({
 					...item,
 					image: getStorageUrl(SupabaseEnum.EVENT, item.image)
 				})) || []
@@ -33,7 +37,7 @@ export async function getAllEventsPreview() {
 }
 
 export async function getAllEvents() {
-	return await db.event.findMany();
+	return (await db.event.findMany()).sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
 }
 
 export async function getEventById(id: string) {
@@ -61,6 +65,8 @@ export async function getEventById(id: string) {
 }
 
 export async function upsertEvent(event: EventSchema) {
+	console.log(event);
+	
 	return await db.event.upsert({
 		where: {
 			id: event.id || '0'

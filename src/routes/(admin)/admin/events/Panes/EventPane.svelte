@@ -83,7 +83,7 @@
 					class="CrispInput"
 					bind:value={$startTime}
 					aria-invalid={$errors.startTime ? 'true' : undefined}
-					min={new Date().toISOString().slice(0, 16)}
+					min={status !== "UPCOMING" ? new Date().toISOString().slice(0, 16) : undefined}
 				/>
 			</label>
 			{#if $errors.startTime}
@@ -122,9 +122,9 @@
 					{/each}
 				</select>
 			</label>
-			{#if $errors.endTime}
+			{#if $errors.status}
 				<p class="CrispMessage w-100" data-type="error">
-					{$errors.endTime}
+					{$errors.status}
 				</p>
 			{/if}
 
@@ -155,7 +155,7 @@
 					class="CrispInput"
 					placeholder="https://..."
 					bind:value={$form.venueLink}
-					aria-invalid={$errors.venueLink ? 'true' : undefined}
+					required={false}
 					{...$constraints.venueLink}
 				/>
 			</label>

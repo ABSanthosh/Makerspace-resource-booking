@@ -31,23 +31,26 @@ export const actions: Actions = {
 		if (typeof imageFile !== 'string') {
 			if (upsertEventForm.data.id) {
 				const { data, error } = await supabase.storage
-					.from(SupabaseEnum.EVENT)
-					.update(imageFile.name, imageFile, {
-						upsert: true,
-						cacheControl: '0'
-					});
-
+				.from(SupabaseEnum.EVENT)
+				.update(imageFile.name, imageFile, {
+					upsert: true,
+					cacheControl: '0'
+				})
+				
 				if (error) {
 					console.log('error', error);
-					return fail(400, withFiles({ upsertEventForm }));
-				}
+					return fail(400, withFiles({ upsertEventForm, error }));
+				} 
 
-				// Doc: When the image is updated, the cache is invalidated so the new image is shown.
-				upsertEventForm.data.image = data.path + '?cache=' + new Date().getTime();
+				upsertEventForm.data.image = data?.path ? data.path + '?cache=' + new Date().getTime() : '';;
+
+				console.log("Updated", upsertEventForm.data.image);
 			} else {
+				const imageFile = upsertEventForm.data.image as File;
 				const { data, error } = await supabase.storage
 					.from(SupabaseEnum.EVENT)
 					.upload(`${nanoid()}.${imageFile.name.split('.').pop()}`, imageFile);
+
 				if (error) {
 					return fail(400, withFiles({ upsertEventForm }));
 				}

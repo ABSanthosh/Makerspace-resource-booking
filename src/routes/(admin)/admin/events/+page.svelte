@@ -98,7 +98,7 @@
 												// Doc: We have to remove the ?cache from the image URL so it won't be cycled
 												// the name of the image file when we update the image
 												image: event.image.split('?')[0],
-												venueLink: ''
+												venueLink: event.venueLink || ""
 											};
 										}
 										eventModal = true;

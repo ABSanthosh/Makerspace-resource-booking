@@ -2,6 +2,9 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
+
+	$: activeEvents = data.allEvents.filter((event) => new Date(event.endTime) > new Date() || event.status === "ONGOING" || event.status === "UPCOMING");
+	$: pastEvents = data.allEvents.filter((event) => new Date(event.endTime) < new Date() && event.status === "COMPLETED");
 </script>
 
 <div class="LandingPage">
@@ -15,7 +18,43 @@
 			<hr />
 		</h3>
 		<div class="LandingPage__hero--events">
-			{#each data.allEvents as item}
+			{#if activeEvents.length === 0}
+				<p>No active events</p>
+			{/if}
+			{#each activeEvents as item}
+				<a href={`/events/${item.id}`}>
+					<div class="LandingPage__event">
+						<img src={item.image} alt="Event" />
+						<h4>{item.title}</h4>
+						<p>{item.previewDesc}</p>
+						<div class="Row--between w-100">
+							<span>
+								{item.user.name}
+							</span>
+							<span>
+								{new Date(item.startTime).toLocaleString('en-US', {
+									month: 'short',
+									day: 'numeric',
+									year: 'numeric',
+									hour12: true,
+									hour: '2-digit',
+									minute: '2-digit'
+								})}
+							</span>
+						</div>
+					</div>
+				</a>
+			{/each}
+		</div>
+		<h3 class="w-100">
+			Past Events
+			<hr />
+		</h3>
+		<div class="LandingPage__hero--events">
+			{#if pastEvents.length === 0}
+				<p>No past events</p>
+			{/if}
+			{#each pastEvents as item}
 				<a href={`/events/${item.id}`}>
 					<div class="LandingPage__event">
 						<img src={item.image} alt="Event" />
