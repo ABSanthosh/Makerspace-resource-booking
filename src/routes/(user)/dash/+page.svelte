@@ -153,6 +153,10 @@
               type="number"
               name="yearOfStudy"
               class="CrispInput"
+              on:click={(e) => {
+                // @ts-ignore
+                e.target.select();
+              }}
               bind:value={$profileForm.typeData.yearOfStudy}
             />
             <!-- {...$constraints.typeData} -->

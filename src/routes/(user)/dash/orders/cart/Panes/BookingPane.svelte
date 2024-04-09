@@ -193,7 +193,7 @@
                     {new Intl.NumberFormat('en-IN', {
                       style: 'currency',
                       currency: 'INR'
-                    }).format(parseFloat(item.instance.cost))}
+                    }).format(item.instance.cost)}
                   </td>
                 </tr>
               {/each}

@@ -37,7 +37,8 @@
     bookingId: booking.id,
     status: booking.status,
     adminNotes: booking.adminNotes!,
-    paymentStatus: booking.paymentStatus
+    paymentStatus: booking.paymentStatus,
+    paymentId: booking.paymentId ?? ''
   });
 </script>
 
@@ -162,6 +163,35 @@
             </tr>
           </tfoot>
         </table>
+      </label>
+
+      <label for="cost" class="CrispLabel">
+        <span style="color: inherit;"> Cost </span>
+        <input
+          disabled
+          readonly
+          id="cost"
+          type="text"
+          name="cost"
+          class="CrispInput"
+          value={new Intl.NumberFormat('en-IN', {
+            style: 'currency',
+            currency: 'INR'
+          }).format(0)}
+        />
+      </label>
+
+      <label for="paymentId" class="CrispLabel">
+        <span style="color: inherit;" data-mandatory> paymentId </span>
+        <input
+          id="paymentId"
+          name="paymentId"
+          class="CrispInput"
+          type="text"
+          disabled
+          readonly
+          bind:value={booking.paymentId}
+        />
       </label>
 
       <label for="status" class="CrispLabel" style="overflow-x: auto; padding-bottom: 10px;">

@@ -5,6 +5,7 @@
   import type { BookingCancelSchema, BookingUpdateSchema } from '$lib/schemas';
   import { superForm, type SuperValidated } from 'sveltekit-superforms';
   import { BookingStatus, PaymentStatus } from '@prisma/client';
+  import { bookingCost } from '$utils/BookingCost';
 
   export let { modal, booking, formStore, updateFormStore } = $$props as {
     modal: boolean;
@@ -50,6 +51,11 @@
       }
     }
   });
+
+  const defaultPaymentId = booking.paymentId || '';
+
+  // @ts-ignore
+  $: bookingItemsCost = bookingCost(booking.items);
 </script>
 
 <Pane bind:open={modal} style="--paneWidth: 450px;" on:close={() => (modal = false)}>
@@ -87,6 +93,21 @@
           disabled
           class="CrispInput"
           value={new Date(booking.deadline).toISOString().split('T')[0]}
+        />
+      </label>
+      <label for="cost" class="CrispLabel">
+        <span style="color: inherit;"> Cost </span>
+        <input
+          disabled
+          readonly
+          id="cost"
+          type="text"
+          name="cost"
+          class="CrispInput"
+          value={new Intl.NumberFormat('en-IN', {
+            style: 'currency',
+            currency: 'INR'
+          }).format(bookingItemsCost)}
         />
       </label>
       <label for="instance" class="CrispLabel" style="overflow-x: auto; padding-bottom: 10px;">
@@ -180,8 +201,8 @@
           name="paymentId"
           class="CrispInput"
           type="text"
-          readonly={$updateForm.paymentId !== ''}
-          disabled={$updateForm.paymentId !== ''}
+          disabled={defaultPaymentId !== ''}
+          readonly={defaultPaymentId !== ''}
           bind:value={$updateForm.paymentId}
         />
       </label>
