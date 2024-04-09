@@ -1,8 +1,9 @@
-import { EBillingType, EStatus, Prisma, PrismaClient } from '@prisma/client';
+import { EBillingType, EStatus, EventStatus, Prisma, PrismaClient } from '@prisma/client';
 import { createBrowserClient } from '@supabase/ssr';
 import { SupabaseEnum } from '../src/lib/Enums';
 import { WeekDaysEnum, type EItemSchema } from '../src/lib/schemas';
 import fs from 'fs';
+import type { EventSchema } from '../src/lib/schemas';
 
 const prisma = new PrismaClient();
 const supabase = createBrowserClient(
@@ -344,6 +345,127 @@ async function seedVideos() {
   });
 }
 
+async function seedEvents() {
+  await supabase.storage
+    .from(SupabaseEnum.EVENT)
+    .upload('event.png', fs.readFileSync('prisma/seed/event.png'));
+
+  const userId = '6ea966e9-3a62-4e9a-806d-2d75a925879c';
+
+  // TODO: An error is coming here when we run npm run db`
+  await prisma.$transaction([
+    prisma.event.createMany({
+      data: [
+        {
+          id: 'zWZCZVx',
+          title: 'Aryan',
+          previewDesc: 'lkj',
+          desc: 'lkj',
+          image: 'event.png',
+          startTime: '2024-12-31T18:29:00Z',
+          endTime: '2025-01-11T18:29:00Z',
+          venue: 'lkj',
+          venueLink: 'https://www.google.com',
+          status: 'UPCOMING',
+          createdAt: '2024-04-08T09:49:38.121Z',
+          updatedAt: '2024-04-08T09:49:38.121Z',
+          userId
+        },
+        {
+          id: 'wJIsn8s',
+          title: 'Lorem Ipsum',
+          previewDesc: 'Lorem Ipsum',
+          desc: 'Lorem Ipsum',
+          image: 'event.png',
+          startTime: '2024-04-06T17:13:56Z',
+          endTime: '2024-04-06T17:14:02Z',
+          venue: 'Lorem Ipsum',
+          venueLink: '',
+          status: 'UPCOMING',
+          createdAt: '2024-04-06T17:14:22Z',
+          updatedAt: '2024-04-06T17:14:25Z',
+          userId
+        },
+        {
+          id: 'dJKlKOp',
+          title: 'Local Art Exhibition',
+          previewDesc: 'Support local artists!',
+          desc: 'This exhibition showcases the work of talented local creators!',
+          image: 'event.png',
+          startTime: '2024-04-18T18:00:00Z',
+          endTime: '2024-04-18T21:00:00Z',
+          venue: 'City Art Gallery',
+          venueLink: 'https://cityartgallery.org/exhibitions',
+          status: 'UPCOMING',
+          createdAt: '2024-04-06T17:14:25Z',
+          updatedAt: '2024-04-06T17:14:25Z',
+          userId
+        },
+        {
+          id: 'o1o1o1o1',
+          title: 'Movie Night Under the Stars',
+          previewDesc: 'Bring your blankets and snacks!',
+          desc: 'Enjoy a classic film outdoors under a beautiful night sky!',
+          image: 'event.png',
+          startTime: '2024-04-23T20:00:00Z',
+          endTime: '2024-04-24T00:00:00Z',
+          venue: 'Central Park',
+          venueLink: 'https://www.centralpark.com/events',
+          status: 'UPCOMING',
+          createdAt: '2024-04-06T17:14:25Z',
+          updatedAt: '2024-04-06T17:14:25Z',
+          userId
+        },
+        {
+          id: 'IuIuIuIu',
+          title: 'Live Music Performance',
+          previewDesc: 'Dance the night away!',
+          desc: 'Get ready for a night of music and fun with a popular band!',
+          image: 'event.png',
+          startTime: '2024-04-27T21:00:00Z',
+          endTime: '2024-04-28T01:00:00Z',
+          venue: 'The Venue Club',
+          venueLink: 'https://thevenueclub.com/events',
+          status: 'UPCOMING',
+          createdAt: '2024-04-06T17:14:25Z',
+          updatedAt: '2024-04-06T17:14:25Z',
+          userId
+        },
+        {
+          id: 'xpto3Z92',
+          title: 'Book Club Meeting',
+          previewDesc: 'Discussion on [Book Title Here]',
+          desc: 'Join us for a lively discussion about this thought-provoking book!',
+          image: 'event.png',
+          startTime: '2024-04-20T14:00:00Z',
+          endTime: '2024-04-20T16:00:00Z',
+          venue: 'Library Auditorium',
+          venueLink: 'https://www.library.com/events',
+          status: 'UPCOMING',
+          createdAt: '2024-04-06T17:14:25Z',
+          updatedAt: '2024-04-06T17:14:25Z',
+          userId
+        },
+        {
+          id: 'n7b0uHL',
+          title: 'Hello',
+          previewDesc: 'Helo',
+          desc: 'helo\n',
+          image: 'event.png',
+          startTime: '2025-04-08T15:27:00Z',
+          endTime: '2024-04-10T16:32:00Z',
+          venue: 'Hello',
+          venueLink: '',
+          status: 'UPCOMING',
+          createdAt: '2024-04-08T12:28:09.602Z',
+          updatedAt: '2024-04-08T12:28:09.602Z',
+          userId
+        }
+      ]
+    })
+  ]);
+}
+
 async function main() {
   await seedCategories()
     .then(() => console.log('✅ eCategories seeded'))
@@ -383,6 +505,10 @@ async function main() {
     .catch((e) => console.error(`🚨 CMS Error`));
   await seedVideos()
     .then(() => console.log('✅ Videos seeded'))
+    .catch((e) => console.error(`🚨 ${e}`));
+
+  await seedEvents()
+    .then(() => console.log('✅ Events seeded'))
     .catch((e) => console.error(`🚨 ${e}`));
 }
 

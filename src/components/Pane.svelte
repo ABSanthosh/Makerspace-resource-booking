@@ -2,10 +2,15 @@
   import type { HTMLDialogAttributes } from 'svelte/elements';
   interface $$restProps extends HTMLDialogAttributes {}
 
-  export let { open = false, className } = $$props as {
-    open: boolean;
-    className?: string;
-  };
+	export let {
+		open = false,
+		className,
+		onCloseButtonClick
+	} = $$props as {
+		open: boolean;
+		className?: string;
+		onCloseButtonClick?: () => void;
+	};
 
   let pane: HTMLDialogElement;
 
@@ -39,33 +44,34 @@
     open = false;
   }}
 >
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <div on:click|stopPropagation>
-    <header>
-      <slot name="header" />
-      <button
-        class="Pane--close"
-        on:click={() => {
-          pane.close();
-          open = false;
-        }}
-        data-icon={String.fromCharCode(58829)}
-      />
-    </header>
-    {#if $$slots.main}
-      <main>
-        <slot name="main" />
-      </main>
-    {:else}
-      <slot name="free" />
-    {/if}
-    {#if $$slots.footer}
-      <footer>
-        <slot name="footer" />
-      </footer>
-    {/if}
-  </div>
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
+	<div on:click|stopPropagation>
+		<header>
+			<slot name="header" />
+			<button
+				class="Pane--close"
+				on:click={() => {
+					pane.close();
+					open = false;
+					if (onCloseButtonClick) onCloseButtonClick();
+				}}
+				data-icon={String.fromCharCode(58829)}
+			/>
+		</header>
+		{#if $$slots.main}
+			<main>
+				<slot name="main" />
+			</main>
+		{:else}
+			<slot name="free" />
+		{/if}
+		{#if $$slots.footer}
+			<footer>
+				<slot name="footer" />
+			</footer>
+		{/if}
+	</div>
 </dialog>
 
 <style lang="scss">

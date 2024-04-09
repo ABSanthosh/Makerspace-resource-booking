@@ -32,7 +32,7 @@
     z-index: 5;
     position: fixed;
     @include box(100%, 64px);
-    background: #ffffff99;
+    background: #ffffff;
     box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.06);
     backdrop-filter: blur(5px);
     @include make-flex();
