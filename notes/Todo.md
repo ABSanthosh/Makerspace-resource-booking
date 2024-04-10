@@ -1,7 +1,5 @@
 ## Short run ToDo
 - [ ] Add trigger to delete manual from bucket when deleted from database
-- [ ] remove already booked slots from the times list
-- [ ] Add modal for booking details
 - [ ] replace [eId] in equipment page with equipmentId
 - [ ] replace [eId] in event page with eventId
 - [ ] New tutorial slots
