@@ -4,6 +4,15 @@
 - [ ] Add modal for booking details
 - [ ] replace [eId] in equipment page with equipmentId
 - [ ] replace [eId] in event page with eventId
+- [ ] New tutorial slots
+  - [ ] Each tutorial will have 
+    - Name
+    - Description
+    - From time
+    - To time
+    - Date
+    - list of equipment Ids
+    - text field for mentors
 
 ## Long run ToDo
 - [ ] Convert isDeleted to SecondaryStatus enum with values: deleted, disabled, enabled with default value enabled so that we can delete the ones with no dependents  
