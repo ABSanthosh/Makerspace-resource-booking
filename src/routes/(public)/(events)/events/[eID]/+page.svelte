@@ -9,7 +9,7 @@
 	<div class="Event__background">1</div>
 	<section class="Event__content">
 		<h1 class="Event__content--title">{event.title}</h1>
-		<p class="Event__content--desc">{event.previewDesc}</p>
+		<p class="Event__content--desc">{@html event.previewDesc}</p>
 		<img src={event.image} alt="Event" class="Event__content--image" />
 		<div class="Event__content--author">
 			<div class="Event__content--author-profile">
@@ -47,7 +47,7 @@
 		</div>
 		<hr class="Event__content--divider" />
 		<p class="Event__content--paragraph">
-			{event.desc}
+			{@html event.desc}
 		</p>
 	</section>
 </div>

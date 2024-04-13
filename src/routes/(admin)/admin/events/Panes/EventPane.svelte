@@ -174,15 +174,12 @@
 
 			<label class="CrispLabel" for="previewDesc">
 				<span data-mandatory style="color: inherit;"> Preview Description </span>
-				<textarea
-					id="previewDesc"
-					name="previewDesc"
-					class="CrispInput"
-					data-type="text-area"
-					bind:value={$form.previewDesc}
-					aria-invalid={$errors.previewDesc ? 'true' : undefined}
-					{...$constraints.previewDesc}
-				/>
+				<TipTap name="previewDesc" bind:content={$form.previewDesc} />
+				{#if $errors.previewDesc}
+					<p class="CrispMessage w-100" data-type="error">
+						{$errors.previewDesc}
+					</p>
+				{/if}
 			</label>
 			{#if $errors.previewDesc}
 				<p class="CrispMessage w-100" data-type="error">
@@ -190,17 +187,14 @@
 				</p>
 			{/if}
 
-			<label class="CrispLabel" for="desc">
+			<label class="CrispLabel" for="previewDesc">
 				<span data-mandatory style="color: inherit;"> Description </span>
-				<textarea
-					id="desc"
-					name="desc"
-					class="CrispInput"
-					data-type="text-area"
-					bind:value={$form.desc}
-					aria-invalid={$errors.desc ? 'true' : undefined}
-					{...$constraints.desc}
-				/>
+				<TipTap name="previewDesc" bind:content={$form.desc} />
+				{#if $errors.desc}
+					<p class="CrispMessage w-100" data-type="error">
+						{$errors.desc}
+					</p>
+				{/if}
 			</label>
 			{#if $errors.desc}
 				<p class="CrispMessage w-100" data-type="error">

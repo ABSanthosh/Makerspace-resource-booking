@@ -3,8 +3,8 @@
 
 	export let data: PageData;
 
-	$: activeEvents = data.allEvents.filter((event) => new Date(event.endTime) > new Date() || event.status === "ONGOING" || event.status === "UPCOMING");
-	$: pastEvents = data.allEvents.filter((event) => new Date(event.endTime) < new Date() && event.status === "COMPLETED");
+	$: activeEvents = data.allEvents.filter((event) => new Date(event.endTime) > new Date() && (event.status === "ONGOING" || event.status === "UPCOMING"));
+	$: pastEvents = data.allEvents.filter((event) => new Date(event.endTime) < new Date() || event.status === "COMPLETED");
 </script>
 
 <div class="LandingPage">
@@ -24,16 +24,18 @@
 			{#each activeEvents as item}
 				<a href={`/events/${item.id}`}>
 					<div class="LandingPage__event">
-						<img src={item.image} alt="Event" />
+						<div class="LandingPage__event--img">
+							<img src={item.image} alt="Event" />
+						</div>
 						<h4>{item.title}</h4>
-						<p>{item.previewDesc}</p>
-						<div class="Row--between w-100">
-							<span>
+						<p>{@html item.previewDesc}</p>
+						<div class="Row--between LandingPage__event--details">
+							<span class="LandingPage__event--user">
 								{item.user.name}
 							</span>
-							<span>
+							<span class="LandingPage__event--date">
 								{new Date(item.startTime).toLocaleString('en-US', {
-									month: 'short',
+									month: 'long',
 									day: 'numeric',
 									year: 'numeric',
 									hour12: true,
@@ -55,28 +57,30 @@
 				<p>No past events</p>
 			{/if}
 			{#each pastEvents as item}
-				<a href={`/events/${item.id}`}>
-					<div class="LandingPage__event">
+			<a href={`/events/${item.id}`}>
+				<div class="LandingPage__event">
+					<div class="LandingPage__event--img">
 						<img src={item.image} alt="Event" />
-						<h4>{item.title}</h4>
-						<p>{item.previewDesc}</p>
-						<div class="Row--between w-100">
-							<span>
-								{item.user.name}
-							</span>
-							<span>
-								{new Date(item.startTime).toLocaleString('en-US', {
-									month: 'short',
-									day: 'numeric',
-									year: 'numeric',
-									hour12: true,
-									hour: '2-digit',
-									minute: '2-digit'
-								})}
-							</span>
-						</div>
 					</div>
-				</a>
+					<h4>{item.title}</h4>
+					<p>{@html item.previewDesc}</p>
+					<div class="Row--between LandingPage__event--details">
+						<span class="LandingPage__event--user">
+							{item.user.name}
+						</span>
+						<span class="LandingPage__event--date">
+							{new Date(item.startTime).toLocaleString('en-US', {
+								month: 'long',
+								day: 'numeric',
+								year: 'numeric',
+								hour12: true,
+								hour: '2-digit',
+								minute: '2-digit'
+							})}
+						</span>
+					</div>
+				</div>
+			</a>
 			{/each}
 		</div>
 	</section>
@@ -149,32 +153,63 @@
 				}
 
 				.LandingPage__event {
-					@include box(24rem, 100%);
+					@include box(25rem, 100%);
 					@include make-flex($dir: column, $just: flex-start, $align: flex-start);
-					gap: 15px;
+					gap: 12px;
 					padding: 1rem;
 					border-radius: 10px;
 					transition: all 0.15s ease-in-out;
 
 					&:hover {
-						background-color: #fff;
-						box-shadow: #00000020 0px 0px 10px 0px;
+						// background-color: #fff;
+						// box-shadow: #00000020 0px 0px 10px 0px;
+
+						img {
+							transform: scale(1.05);
+						}
 					}
 
-					img {
+					&--img {
 						@include box(100%, auto);
-						border-radius: 5px;
+						@include make-flex();
+						border-radius: 10px;
+						overflow: hidden;
+
+						img {
+							height: 100%;
+							width: 100%;
+							object-fit: cover;
+							object-position: center;
+							transition: all 0.2s ease-in;
+						}
 					}
 
 					h4 {
 						font-size: 20px;
-						font-weight: 500;
+						font-weight: 600;
 					}
 
 					p {
 						font-size: 16px;
 						line-height: 1.5;
 						text-align: justify;
+						color: #394451;
+					}
+
+					&--details {
+						display: flex;
+						gap: 1rem;
+						justify-items: center;
+					}
+
+					&--user {
+						font-size: 1rem;
+						font-weight: 600;
+					}
+
+					&--date {
+						font-size: 0.8rem;
+						font-weight: 400;
 					}
 				}
 			}
