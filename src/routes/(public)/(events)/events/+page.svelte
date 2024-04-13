@@ -144,16 +144,27 @@
 			}
 
 			&--events {
-				@include make-flex($dir: row, $just: space-between, $align: flex-start);
-				flex-wrap: wrap;
+				// @include make-flex($dir: row, $just: flex-start, $align: flex-start);
+				// flex-wrap: wrap;
+				@include box();
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
 				gap: 24px;
+
+				@include respondAt(1024px) {
+					grid-template-columns: repeat(2, 1fr);
+				}
+
+				@include respondAt(768px) {
+					grid-template-columns: repeat(1, 1fr);
+				}
 
 				& > a {
 					text-decoration: none;
 				}
 
 				.LandingPage__event {
-					@include box(25rem, 100%);
+					@include box(100%, 100%);
 					@include make-flex($dir: column, $just: flex-start, $align: flex-start);
 					gap: 12px;
 					padding: 1rem;

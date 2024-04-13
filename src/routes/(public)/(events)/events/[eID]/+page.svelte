@@ -6,10 +6,10 @@
 </script>
 
 <div class="Event">
-	<div class="Event__background">1</div>
+	<div class="Event__background"></div>
 	<section class="Event__content">
 		<h1 class="Event__content--title">{event.title}</h1>
-		<p class="Event__content--desc">{@html event.previewDesc}</p>
+		<div class="Event__content--desc">{@html event.previewDesc}</div>
 		<img src={event.image} alt="Event" class="Event__content--image" />
 		<div class="Event__content--author">
 			<div class="Event__content--author-profile">
@@ -61,6 +61,10 @@
 		position: relative;
 		z-index: 0;
 
+		@include respondAt(1024px) {
+			padding: 30px 10px 20px 10px;
+		}
+
 		&__background {
 			position: absolute;
 			background-color: #22272e;
@@ -69,6 +73,11 @@
 			width: 100%;
 			top: 0;
 			left: 0;
+
+			@include respondAt(768px) {
+				height: 50vh;
+			}
+
 		}
 
 		&__content {
@@ -78,6 +87,18 @@
 			@include make-flex($just: flex-start, $align: flex-start, $dir: column);
 			margin-top: 64px;
 			gap: 24px;
+
+			@include respondAt(1024px) {
+				padding: 30px 100px;
+			}
+
+			@include respondAt(768px) {
+				padding: 30px 50px;
+			}
+			
+			@include respondAt(480px) {
+				padding: 30px 20px;
+			}
 
 			&--title {
 				font-size: 36px;
@@ -91,17 +112,28 @@
 				font-size: 17px;
 				line-height: 0.5;
 				text-align: justify;
-				color: #cbcbcb;
+				color: #cbcbcb !important;
+
+				:global(*) {
+					color: #cbcbcb !important;
+					line-height: 1.5rem;
+				}
 			}
 
 			&--image {
 				@include box();
+				aspect-ratio: 16 / 9;
 			}
 
 			&--author {
 				@include make-flex($just: space-between, $dir: row);
 				@include box();
 				gap: 24px;
+
+				@include respondAt(768px) {
+					flex-direction: column;
+					align-items: flex-start;
+				}
 
 				&-profile {
 					@include make-flex(row, center, flex-start);
