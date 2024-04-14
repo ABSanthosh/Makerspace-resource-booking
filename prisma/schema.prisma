@@ -228,9 +228,28 @@ model Event {
   status      EventStatus @default(UPCOMING)
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime    @default(now()) @map("updated_at")
+  type        EventType   @default(GENERAL)
 
   userId String  @db.Uuid
   user   Profile @relation(fields: [userId], references: [id])
+}
+
+model Tutorials {
+  id          String   @id @unique @default(nanoid(7))
+  title       String
+  previewDesc String
+  desc        String
+  startTime   DateTime @map("start_time")
+  endTime     DateTime @map("end_time")
+  date        DateTime
+  // equipments Equipment[]
+  mentors     String
+}
+
+enum EventType {
+  GENERAL
+  // WORKSHOP
+  // TUTORIALS
 }
 
 enum EventStatus {

@@ -346,7 +346,7 @@ async function seedVideos() {
 }
 
 async function seedEvents() {
-  await supabase.storage
+await supabase.storage
     .from(SupabaseEnum.EVENT)
     .upload('event.png', fs.readFileSync('prisma/seed/event.png'));
 
@@ -467,46 +467,48 @@ async function seedEvents() {
 }
 
 async function main() {
-  await seedCategories()
-    .then(() => console.log('✅ eCategories seeded'))
-    .catch((e) => console.error(`🚨 ${e}`));
-  // Values are passed without quotes and postgresql only considers
-  // single quotes as quotes and double quotes as identifiers.
-  // Postgres converts all uppercase identifiers to lowercase.
-  await onNewUser({
-    id: 'new.id',
-    role: "'user'",
-    isnew: 'true',
-    name: "''",
-    mobile: "''",
-    email: "''",
-    type: "'STUDENT'",
-    type_data: "'{}'"
-  })
-    .then(() => console.log('✅ onNewUser trigger created'))
-    .catch((e) => console.error(`🚨 ${e}`));
-  await onDeleteUser()
-    .then(() => console.log('✅ onDeleteUser trigger created'))
-    .catch((e) => console.error(`🚨 ${e}`));
-
-  // Buckets
-  await makeNewBucket(SupabaseEnum.EQUIPMENT)
-    .then(() => console.log('✅ Equipments Bucket created'))
-    .catch((e) => console.error(`🚨 ${e}`));
-  await makeNewBucket(SupabaseEnum.MANUAL)
-    .then(() => console.log('✅ Manuals Bucket created'))
-    .catch((e) => console.error(`🚨 ${e}`));
-
-  await seedEquipments()
-    .then(() => console.log('✅ Equipments seeded'))
-    .catch((e) => console.error(`🚨 ${e}`));
-  await seedContentManagement()
-    .then(() => console.log('✅ Content Management seeded'))
-    .catch((e) => console.error(`🚨 CMS Error`));
-  await seedVideos()
-    .then(() => console.log('✅ Videos seeded'))
-    .catch((e) => console.error(`🚨 ${e}`));
-
+	await seedCategories()
+		.then(() => console.log('✅ eCategories seeded'))
+		.catch((e) => console.error(`🚨 ${e}`));
+	// Values are passed without quotes and postgresql only considers
+	// single quotes as quotes and double quotes as identifiers.
+	// Postgres converts all uppercase identifiers to lowercase.
+	await onNewUser({
+		id: 'new.id',
+		role: "'user'",
+		isnew: 'true',
+		name: "''",
+		mobile: "''",
+		email: "''",
+		type: "'STUDENT'",
+		type_data: "'{}'"
+	})
+		.then(() => console.log('✅ onNewUser trigger created'))
+		.catch((e) => console.error(`🚨 ${e}`));
+	await onDeleteUser()
+		.then(() => console.log('✅ onDeleteUser trigger created'))
+		.catch((e) => console.error(`🚨 ${e}`));
+	await makeNewBucket(SupabaseEnum.EQUIPMENT)
+		.then(() => console.log('✅ Equipments Bucket created'))
+		.catch((e) => console.error(`🚨 ${e}`));
+	await makeNewBucket(SupabaseEnum.MANUAL)
+		.then(() => console.log('✅ Manuals Bucket created'))
+		.catch((e) => console.error(`🚨 ${e}`));
+	await makeNewBucket(SupabaseEnum.EVENT)
+		.then(() => console.log('✅ Events Bucket created'))
+		.catch((e) => console.error(`🚨 ${e}`));
+	await seedEquipments()
+		.then(() => console.log('✅ Equipments seeded'))
+		.catch((e) => console.error(`🚨 ${e}`));
+	await seedEvents()
+		.then(() => console.log('✅ Events seeded'))
+		.catch((e) => console.error(`🚨 ${e}`));
+	await seedContentManagement()
+		.then(() => console.log('✅ Content Management seeded'))
+		.catch((e) => console.error(`🚨 CMS Error`));
+	await seedVideos()
+		.then(() => console.log('✅ Videos seeded'))
+		.catch((e) => console.error(`🚨 ${e}`));
   await seedEvents()
     .then(() => console.log('✅ Events seeded'))
     .catch((e) => console.error(`🚨 ${e}`));
