@@ -3,34 +3,34 @@
 
 import type { Database } from '$lib/generated/supabase/types';
 import type {
-	SupabaseClient,
-	Session as SupabaseSession,
-	UserAppMetadata
+  SupabaseClient,
+  Session as SupabaseSession,
+  UserAppMetadata
 } from '@supabase/supabase-js';
 
 import '@supabase/supabase-js';
 
 declare global {
-	namespace App {
-		// interface Error {}
-		interface Locals {
-			supabase: SupabaseClient<Database>;
-			session: SupabaseSession | null;
-			getSession(): Promise<SupabaseSession | null>;
-		}
-		interface PageData {
-			supabase: SupabaseClient<Database>;
-			session: SupabaseSession | null;
-		}
-		// interface PageState {}
-		// interface Platform {}
-	}
+  namespace App {
+    // interface Error {}
+    interface Locals {
+      supabase: SupabaseClient<Database>;
+      session: SupabaseSession | null;
+      getSession(): Promise<SupabaseSession | null>;
+    }
+    interface PageData {
+      supabase: SupabaseClient<Database>;
+      session: SupabaseSession | null;
+    }
+    // interface PageState {}
+    // interface Platform {}
+  }
 
-	namespace svelteHTML {
-		interface HTMLAttributes<T> {
-			'on:outclick'?: () => boolean;
-		}
-	}
+  namespace svelteHTML {
+    interface HTMLAttributes<T> {
+      'on:outclick'?: () => boolean;
+    }
+  }
 }
 
 // declare module '@supabase/supabase-js' {

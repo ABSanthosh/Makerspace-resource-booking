@@ -20,42 +20,45 @@ model Profile {
   email  String
 
   // Doc: Needed in on_profile_role_updated trigger
-  role     Role      @default(user)
+  role          UserRole      @default(user)
   // Doc: Needed in on_profile_isnew_updated trigger
-  isNew    Boolean   @default(true) @map("isnew")
-  cart     Cart?
-  cartId   String?
-  bookings Booking[]
+  isNew         Boolean   @default(true) @map("isnew")
+  isBlacklisted Boolean  @default(false) @map("is_blacklisted")
+  cart          Cart?
+  cartId        String?
+  bookings      Booking[]
 
-  type     ProfileType @default(STUDENT)
-  typeData Json?       @default("{}") @map("type_data") @db.Json
+  type              ProfileType        @default(STUDENT)
+  typeData          Json?              @default("{}") @map("type_data") @db.Json
   // Doc: This will have the data for each type
   // student: { yearOfStudy: 1, branch: "CSE", department: "Computer Science", studentId: "1234", clubs: ["club1", "club2"], researchArea: "AI"}
   // faculty: { department: "CSE", branch: "Computer Science", designation: "Assistant Professor", facultyId: "1234"}
   // staff: { department: "CSE", branch: "Computer Science", designation: "Lab Assistant", staffId: "1234"}
+  RevalidateProfile RevalidateProfile?
   events   Event[]
 
   @@map("profile")
 }
 
-enum ProfileType {
-  STUDENT
-  FACULTY
-  STAFF
+model RevalidateProfile {
+  id     String  @id @default(nanoid(7))
+  userId String  @unique @db.Uuid
+  user   Profile @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Equipment {
-  id            String      @id @unique @default(nanoid(7))
-  name          String
-  model         String
-  description   String      @db.VarChar(2500)
-  image         String
-  instances     EInstance[]
-  eCategoriesId String
-  category      ECategories @relation(fields: [eCategoriesId], references: [id], onDelete: Cascade)
-  isDeleted     Boolean     @default(false) @map("is_deleted")
-  manuals       Manual[]
-  videos        Video[]
+  id              String           @id @unique @default(nanoid(7))
+  name            String
+  model           String
+  description     String           @db.VarChar(2500)
+  image           String
+  instances       EInstance[]
+  eCategoriesId   String
+  category        ECategories      @relation(fields: [eCategoriesId], references: [id], onDelete: Cascade)
+  // isDeleted       Boolean           @default(false) @map("is_deleted")
+  manuals         Manual[]
+  videos          Video[]
+  secondaryStatus ESecondaryStatus @default(ACTIVE) @map("secondary_status")
 }
 
 model Manual {
@@ -74,41 +77,64 @@ model Video {
 }
 
 model EInstance {
-  id           String     @id @unique @default(nanoid(7))
-  name         String
-  description  String     @db.VarChar(2500)
-  status       EStatus?   @default(available)
-  cost         String
-  equipmentId  String
-  // manuals
-  // TODO: new model to hold availability of each instance
-  // TODO: custom time for each instance
-  equipment    Equipment  @relation(fields: [equipmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  CartItem     CartItem[]
-  availability Json       @default("{}") @db.Json
-  isDeleted    Boolean    @default(false) @map("is_deleted")
+  id              String           @id @unique @default(nanoid(7))
+  name            String
+  description     String           @db.VarChar(2500)
+  status          EStatus?         @default(available)
+  cost            Float
+  billingType     EBillingType     @default(PER_SLOT) @map("billing_type")
+  equipmentId     String
+  CartItem        CartItem[]
+  BookingItem     BookingItem[]
+  availability    Json             @default("{}") @db.Json
+  equipment       Equipment        @relation(fields: [equipmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  secondaryStatus ESecondaryStatus @default(ACTIVE) @map("secondary_status")
 }
 
 model Cart {
-  id        String        @id @unique @default(nanoid(7))
-  userId    String        @unique @db.Uuid
-  items     CartItem[]
-  status    BookingStatus @default(pending)
-  createdAt DateTime      @default(now()) @map("created_at")
-  updatedAt DateTime      @default(now()) @map("updated_at")
+  id     String     @id @unique @default(nanoid(7))
+  userId String     @unique @map("user_id") @db.Uuid
+  items  CartItem[]
 
   user Profile @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model CartItem {
-  id          String    @id @unique @default(nanoid(12))
-  equipmentId String
-  instanceId  String
-  start       DateTime
-  end         DateTime
-  cartId      String
-  cart        Cart      @relation(fields: [cartId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  instance    EInstance @relation(fields: [instanceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id         String   @id @unique @default(nanoid(12))
+  instanceId String
+  start      DateTime
+  end        DateTime
+  cartId     String
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  cart     Cart      @relation(fields: [cartId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  instance EInstance @relation(fields: [instanceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Booking {
+  id            String        @id @unique @default(nanoid(7))
+  userId        String        @db.Uuid
+  mentor        String
+  description   String
+  deadline      DateTime
+  cost          Float
+  items         BookingItem[]
+  paymentId     String?
+  status        BookingStatus @default(PENDING)
+  createdAt     DateTime      @default(now()) @map("created_at")
+  adminNotes    String?       @map("admin_notes") @db.VarChar(255)
+  user          Profile       @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  paymentStatus PaymentStatus @default(PENDING) @map("payment_status")
+}
+
+model BookingItem {
+  id         String    @id @unique @default(nanoid(12))
+  instanceId String
+  start      DateTime
+  end        DateTime
+  bookingId  String
+  booking    Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  instance   EInstance @relation(fields: [instanceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model ECategories {
@@ -137,6 +163,14 @@ model RepoMaterials {
   description String? @db.VarChar(255)
 }
 
+model ContentManagement {
+  id        String   @id @unique @default(nanoid(7))
+  name      String
+  pathname  String   @unique
+  data      Json
+  updatedAt DateTime @default(now()) @map("updated_at")
+}
+
 // Enums
 enum EStatus {
   available
@@ -146,45 +180,39 @@ enum EStatus {
 }
 
 enum BookingStatus {
-  // TODO: While it is in pending, block the slot.
-  pending
-  approved
-  rejected
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
 }
 
-enum Role {
+enum UserRole {
   admin
   user
 }
 
-// Booking info
-// mentor - text
-// description - text (course, our, research, etc)
-// deadline for the project
-// status - pending, approved, rejected
-// payment qr code for the materials
-
-// Default time for all instances
-
-model Booking {
-  id          String        @id @unique @default(nanoid(7))
-  userId      String        @db.Uuid
-  mentor      String
-  description String
-  deadline    DateTime
-  status      BookingStatus @default(pending)
-  createdAt   DateTime      @default(now()) @map("created_at")
-  updatedAt   DateTime      @default(now()) @map("updated_at")
-
-  user Profile @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+enum ProfileType {
+  STUDENT
+  FACULTY
+  STAFF
 }
 
-model ContentManagement {
-  id        String   @id @unique @default(nanoid(7))
-  name      String
-  pathname  String   @unique
-  data      Json
-  updatedAt DateTime @default(now()) @map("updated_at")
+enum ESecondaryStatus {
+  ACTIVE
+  DELETED
+  DISABLED
+}
+
+enum PaymentStatus {
+  PENDING
+  VERIFICATION
+  SUCCESS
+  FAILED
+}
+
+enum EBillingType {
+  PER_SLOT
+  PER_SESSION
 }
 
 model Event {

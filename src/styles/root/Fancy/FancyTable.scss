@@ -1,75 +1,81 @@
 .FancyTable {
-	width: 100%;
-	border-collapse: separate;
-	border-spacing: 0;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
 
-	thead tr th {
-		position: sticky;
-		top: 0;
-	}
-	tr {
-		background-color: #fbfcfd;
+  thead tr th {
+    position: sticky;
+    top: 0;
+  }
 
-		&.empty {
-			& > td {
-				text-align: center;
-				padding: 24px;
-				color: #687076;
-			}
-		}
+  tr {
+    background-color: #fbfcfd;
 
-		& > th,
-		& > td {
-			padding: 12px 24px;
-			text-align: left;
-			font-size: 15px;
-			white-space: nowrap;
+    &.empty {
+      & > td {
+        text-align: center;
+        padding: 24px;
+        color: #687076;
+      }
+    }
 
-			&:first-child {
-				border-left: 1px solid var(--border);
-				padding: 12px 16px 12px 24px;
-			}
+    & > th,
+    & > td {
+      padding: 12px 24px;
+      text-align: left;
+      font-size: 15px;
+      white-space: nowrap;
 
-			&:last-child {
-				border-right: 1px solid var(--border);
-				padding: 12px 24px 12px 16px;
-			}
-		}
+      &:first-child {
+        border-left: 1px solid var(--border);
+        padding: 12px 16px 12px 24px;
+      }
 
-		& > td {
-			border-bottom: 1px solid var(--border);
-		}
+      &:last-child {
+        border-right: 1px solid var(--border);
+        padding: 12px 24px 12px 16px;
+      }
+    }
 
-		& > th {
-			border-top: 1px solid var(--border);
-			border-bottom: 1px solid var(--border);
-			background-color: var(--body);
-			color: #687076;
-			font-weight: 500;
+    & > td {
+      border-bottom: 1px solid var(--border);
+    }
 
-			&:first-child {
-				border-top-left-radius: 6px;
-			}
+    & > th {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background-color: var(--body);
+      color: #687076;
+      font-weight: 500;
 
-			&:last-child {
-				border-top-right-radius: 6px;
-			}
-		}
+      &:first-child {
+        border-top-left-radius: 6px;
+      }
 
-		&:last-child > td {
-			border-bottom: 0;
-		}
-	}
-	& > tfoot {
-		& > tr > td {
-			border-radius: 0 0 6px 6px;
-			font-size: 12px;
-			color: #7e868c;
-			position: sticky;
-			bottom: 0;
-			background-color: #fbfcfd;
-			border-top: 1px solid var(--border);
-			border-bottom: 1px solid var(--border) !important;
-		}
-	}
+      &:last-child {
+        border-top-right-radius: 6px;
+      }
+    }
+
+    &:last-child > td {
+      border-bottom: 0;
+    }
+  }
+
+  & > tfoot {
+    & > tr > td {
+      border-radius: 0 0 6px 6px;
+      font-size: 12px;
+      color: #7e868c;
+      position: sticky;
+      bottom: 0;
+      background-color: #fbfcfd;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border) !important;
+    }
+
+    & > tr > td span {
+      color: #7e868c;
+    }
+  }
 }

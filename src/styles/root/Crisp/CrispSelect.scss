@@ -1,56 +1,65 @@
 .CrispSelect {
-	--crp-select-width: auto;
-	--crp-select-height: 34px;
-	--crp-select-font-size: 14px;
-	--crp-select-min-width: 150px;
-	--crp-select-icon-offset: 0px;
-	--crp-select-content-padding: 5px;
-	--crp-select-content-border-radius: 12px;
-	--crp-select-content-item-border-radius: 7px;
-	--crp-select-content-border: 0.2px solid #c9c9c966;
-	--crp-select-icon: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>');
+  --crp-select-width: auto;
+  --crp-select-height: 34px;
+  --crp-select-font-size: 14px;
+  --crp-select-min-width: 150px;
+  --crp-select-icon-offset: 0px;
+  --crp-select-content-padding: 5px;
+  --crp-select-content-border-radius: 12px;
+  --crp-select-content-item-border-radius: 7px;
+  --crp-select-content-border: 0.2px solid #c9c9c966;
+  --crp-select-icon: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>');
 
-	min-width: var(--crp-select-min-width);
-	@include box(var(--crp-select-width), var(--crp-select-height));
+  --crp-select-color-disabled: #929292;
+  --crp-select-border-color-disabled: #d9d9d9;
 
-	&:not(&[data-type]) {
-		--crp-select-color: #11181c;
-		--crp-select-color-hover: #11181c;
+  min-width: var(--crp-select-min-width);
+  @include box(var(--crp-select-width), var(--crp-select-height));
 
-		--crp-select-background-color: #f4f6f8;
+  &:not(&[data-type]) {
+    --crp-select-color: #11181c;
+    --crp-select-color-hover: #11181c;
 
-		--crp-select-border: 1px solid #dfe3e6;
-		--crp-select-border-hover: 1px solid #d7dbdf;
+    --crp-select-background-color: #f4f6f8;
 
-		--crp-select-box-shadow: #00000000 0px 0px 0px 0px, #00000000 0px 0px 0px 0px,
-			#0000000d 0px 1px 2px 0px;
+    --crp-select-border: 1px solid #dfe3e6;
+    --crp-select-border-hover: 1px solid #d7dbdf;
 
-		--crp-select-content-box-shadow: 0 0px 15px rgba(0, 0, 0, 0.1);
-	}
+    --crp-select-box-shadow: #00000000 0px 0px 0px 0px, #00000000 0px 0px 0px 0px,
+      #0000000d 0px 1px 2px 0px;
 
-	outline: none;
-	cursor: pointer;
-	user-select: none;
-	position: relative;
-	border-radius: 6px;
-	padding: 0 20px 0 10px;
-	@include make-flex($dir: row, $just: flex-start);
+    --crp-select-content-box-shadow: 0 0px 15px rgba(0, 0, 0, 0.1);
+  }
 
-	// Colors
-	color: var(--crp-select-color);
-	border: var(--crp-select-border);
-	box-shadow: var(--crp-select-box-shadow);
-	background-color: var(--crp-select-background-color);
+  outline: none;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  border-radius: 6px;
+  padding: 0 20px 0 10px;
+  @include make-flex($dir: row, $just: flex-start);
 
-	appearance: none;
-	background-size: 24px 14px;
-	background-repeat: no-repeat;
-	font-size: var(--crp-select-font-size);
-	background-image: var(--crp-select-icon);
-	background-position: calc(100% - var(--crp-select-icon-offset)) 50%;
+  // Colors
+  color: var(--crp-select-color);
+  border: var(--crp-select-border);
+  box-shadow: var(--crp-select-box-shadow);
+  background-color: var(--crp-select-background-color);
 
-	&:hover {
-		color: var(--crp-select-color-hover);
-		border: var(--crp-select-border-hover);
-	}
+  appearance: none;
+  background-size: 24px 14px;
+  background-repeat: no-repeat;
+  font-size: var(--crp-select-font-size);
+  background-image: var(--crp-select-icon);
+  background-position: calc(100% - var(--crp-select-icon-offset)) 50%;
+
+  &:disabled {
+    color: var(--crp-select-color-disabled);
+    border-color: var(--crp-select-border-color-disabled);
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    color: var(--crp-select-color-hover);
+    border: var(--crp-select-border-hover);
+  }
 }

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { SupabaseEnum } from '$lib/Enums';
-	import { getStorageUrl } from '$lib/SupabaseUtils';
-	import type { ValidationErrors } from 'sveltekit-superforms';
+  import { SupabaseEnum } from '$lib/Enums';
+  import { getStorageUrl } from '$lib/SupabaseUtils';
+  import type { ValidationErrors } from 'sveltekit-superforms';
 
 	export let { name, errors, image, bucket } = $$props as {
 		name: string;
@@ -48,55 +48,55 @@
 		{/if}
 	</div>
 
-	{#if errors}
-		<p class="CrispMessage w-100" data-type="error">
-			{errors}
-		</p>
-	{/if}
+  {#if errors}
+    <p class="CrispMessage w-100" data-type="error">
+      {errors}
+    </p>
+  {/if}
 </label>
 
 <style lang="scss">
-	.UploadImage {
-		gap: 11px;
-		@include box($height: auto);
-		@include make-flex($align: flex-start);
+  .UploadImage {
+    gap: 11px;
+    @include box($height: auto);
+    @include make-flex($align: flex-start);
 
-		&__dnd {
-			padding: 5px;
-			@include make-flex();
-			color: var(--subText);
-			@include box($height: 100px);
+    &__dnd {
+      padding: 5px;
+      @include make-flex();
+      color: var(--subText);
+      @include box($height: 100px);
 
-			cursor: pointer;
-			border-radius: 7px;
-			position: relative;
-			border: 2px dashed var(--border);
-			& > input {
-				display: none;
-			}
+      cursor: pointer;
+      border-radius: 7px;
+      position: relative;
+      border: 2px dashed var(--border);
+      & > input {
+        display: none;
+      }
 
-			& > img {
-				max-width: 100%;
-				max-height: 100%;
-				border-radius: 3px;
-				object-fit: contain;
-			}
-			&::before {
-				inset: 0;
-				opacity: 0;
-				color: #fff;
-				@include box();
-				position: absolute;
-				border-radius: 7px;
-				@include make-flex();
-				content: 'Change image';
-				backdrop-filter: blur(0.5px);
-				background: rgba(0, 0, 0, 0.5);
-				transition: opacity 0.1s ease-in-out;
-			}
-			&[data-image]:hover::before {
-				opacity: 1;
-			}
-		}
-	}
+      & > img {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 3px;
+        object-fit: contain;
+      }
+      &::before {
+        inset: 0;
+        opacity: 0;
+        color: #fff;
+        @include box();
+        position: absolute;
+        border-radius: 7px;
+        @include make-flex();
+        content: 'Change image';
+        backdrop-filter: blur(0.5px);
+        background: rgba(0, 0, 0, 0.5);
+        transition: opacity 0.1s ease-in-out;
+      }
+      &[data-image]:hover::before {
+        opacity: 1;
+      }
+    }
+  }
 </style>

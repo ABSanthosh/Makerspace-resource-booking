@@ -5,13 +5,12 @@
 // font-family: 'Montserrat', sans-serif;
 
 @font-face {
-  font-family: "Icons";
-  src: url("/assets/fonts/Icons.woff2") format("woff2");
+  font-family: 'Icons';
+  src: url('/assets/fonts/Icons.woff2') format('woff2');
 }
 
 [data-icon],
 [data-icon-after] {
-
   &::after,
   &::before {
     line-height: 1;
@@ -25,11 +24,15 @@
     display: inline-block;
     letter-spacing: normal;
     color: var(--iconColor);
-    font-feature-settings: "liga";
-    -webkit-font-feature-settings: "liga";
+    font-feature-settings: 'liga';
+    -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
-    font: normal normal normal 20px/1 "Icons";
-    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
+    font: normal normal normal 20px/1 'Icons';
+    font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 48;
   }
 }
 

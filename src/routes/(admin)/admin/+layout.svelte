@@ -1,33 +1,38 @@
 <script lang="ts">
-	import Sidebar from '$components/Sidebar.svelte';
-	import { ADMIN_ROUTES } from '$lib/routes';
-	// import type { User, Session } from '@supabase/supabase-js';
-	// import type { PageData } from './$types';
+  import Sidebar from '$components/Sidebar.svelte';
+  import { ADMIN_ROUTES } from '$lib/routes';
+  // import type { User, Session } from '@supabase/supabase-js';
+  // import type { PageData } from './$types';
 
-	// export let data;
+  // export let data;
 
-	// $: ({ user } = data!.session || ({} as Session));
-	// $: ({ supabase } = data);
+  // $: ({ user } = data!.session || ({} as Session));
+  // $: ({ supabase } = data);
 </script>
 
 <main class="AdminLayout">
-	<Sidebar routes={ADMIN_ROUTES} />
+  <Sidebar routes={ADMIN_ROUTES} />
 
-	<div class="AdminLayout__content">
-		<slot />
-	</div>
+  <div class="AdminLayout__content">
+    <slot />
+  </div>
 </main>
 
 <style lang="scss">
-	.AdminLayout {
-		@include box();
-		display: grid;
-		grid-template-columns: min-content 1fr;
-		grid-template-areas: 'sidebar content';
+  .AdminLayout {
+    @include box();
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    grid-template-areas: 'sidebar content';
 
-		@include respondAt(845px) {
-			padding-left: 56px;
-			grid-template-columns: minmax(0, 1fr);
-		}
-	}
+    &__content {
+      @include box();
+      @include make-flex($just: flex-start);
+    }
+
+    @include respondAt(845px) {
+      padding-left: 56px;
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
 </style>

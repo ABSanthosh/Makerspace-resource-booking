@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+  import type { PageData } from './$types';
 
-	export let data: PageData;
-	$: ({ event } = data);
+  export let data: PageData;
+  $: ({ event } = data);
 </script>
 
 <div class="Event">
@@ -53,14 +53,14 @@
 </div>
 
 <style lang="scss">
-	.Event {
-		@include box($height: auto);
-		@include make-flex();
-		padding: 30px 20px 20px 20px;
-		gap: 24px;
-		position: relative;
-		z-index: 0;
-
+  .Event {
+    @include box($height: auto);
+    @include make-flex();
+    padding: 30px 20px 20px 20px;
+    gap: 24px;
+    position: relative;
+    z-index: 0;
+    
 		@include respondAt(1024px) {
 			padding: 30px 10px 20px 10px;
 		}
@@ -80,13 +80,13 @@
 
 		}
 
-		&__content {
-			padding: 30px 200px;
-			max-width: $maxWidth;
-			@include box(100%, auto);
-			@include make-flex($just: flex-start, $align: flex-start, $dir: column);
-			margin-top: 64px;
-			gap: 24px;
+    &__content {
+      padding: 30px 200px;
+      max-width: $maxWidth;
+      @include box(100%, auto);
+      @include make-flex($just: flex-start, $align: flex-start, $dir: column);
+      margin-top: 64px;
+      gap: 24px;
 
 			@include respondAt(1024px) {
 				padding: 30px 100px;
@@ -125,10 +125,10 @@
 				aspect-ratio: 16 / 9;
 			}
 
-			&--author {
-				@include make-flex($just: space-between, $dir: row);
-				@include box();
-				gap: 24px;
+      &--author {
+        @include make-flex($just: space-between, $dir: row);
+        @include box();
+        gap: 24px;
 
 				@include respondAt(768px) {
 					flex-direction: column;
@@ -140,32 +140,32 @@
 					gap: 18px;
 				}
 
-				&-image {
-					@include box(50px, 50px);
-					border-radius: 50%;
-					background-color: #ff6161;
-				}
+        &-image {
+          @include box(50px, 50px);
+          border-radius: 50%;
+          background-color: #ff6161;
+        }
 
-				&-dates {
-					@include make-flex($just: flex-start, $align: flex-start, $dir: column);
-					gap: 5px;
+        &-dates {
+          @include make-flex($just: flex-start, $align: flex-start, $dir: column);
+          gap: 5px;
 
-					p {
-						font-size: 0.8rem;
-						font-style: italic;
-						color: #646464;
-					}
-				}
-			}
+          p {
+            font-size: 0.8rem;
+            font-style: italic;
+            color: #646464;
+          }
+        }
+      }
 
-			&--divider {
-				width: 100%;
-				border: 1px solid #cbcbcb;
-			}
+      &--divider {
+        width: 100%;
+        border: 1px solid #cbcbcb;
+      }
 
-			&--paragraph {
-				text-align: justify;
-			}
-		}
-	}
+      &--paragraph {
+        text-align: justify;
+      }
+    }
+  }
 </style>

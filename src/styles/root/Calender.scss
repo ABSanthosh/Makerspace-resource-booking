@@ -2,11 +2,74 @@
   .calendar-view-header-text > button {
     cursor: pointer;
   }
+
+  .calendar-view-table {
+    td {
+      @include make-flex();
+    }
+  }
+
+  .calendar-view-item {
+    &.type-month-year {
+      &.disabled {
+        cursor: not-allowed !important;
+        color: #b8b8b8 !important;
+      }
+    }
+
+    &.type-day {
+      &.disabled {
+        cursor: not-allowed !important;
+        color: #b8b8b8 !important;
+        text-decoration: line-through;
+      }
+    }
+  }
+
   .calendar-view-pagination-controls > button {
     cursor: pointer;
+
+    &:disabled {
+      background-color: #e8e8e8 !important;
+      cursor: not-allowed !important;
+
+      & > svg path {
+        fill: #b8b8b8;
+      }
+    }
   }
+
   .calendar-view-item {
     cursor: pointer;
+
+    &.blackout {
+      // background-color: var(--fds-subtle-fill-secondary) !important;
+      cursor: not-allowed !important;
+      pointer-events: all !important;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        color: white !important;
+        background: #961105
+          linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.2) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.2) 50%,
+            rgba(255, 255, 255, 0.2) 75%,
+            transparent 75%,
+            transparent
+          ) !important;
+        // border-color: #961105 !important;
+      }
+    }
+
+    &.selected {
+      background-color: #f59f16 !important;
+      color: white !important;
+      border: #f59f16 !important;
+    }
   }
 
   // Out of range
@@ -16,9 +79,11 @@
   --fds-accent-secondary: #106ebe;
   --fds-text-on-accent-primary: #ffffff;
   --fds-subtle-fill-secondary: #e0e0e0;
+  --fds-text-disabled: #b8b8b8;
   // --fds-subtle-fill-transparent: #e30000;
 
   @include box(100% !important, $height: auto);
+
   .calendar-view-table-wrapper {
     @include box(100% !important, $height: auto);
   }
