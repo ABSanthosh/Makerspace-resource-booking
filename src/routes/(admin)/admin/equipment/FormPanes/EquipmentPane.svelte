@@ -1,15 +1,15 @@
 <script lang="ts">
-	import Pane from '$components/Pane.svelte';
-	import type { Writable } from 'svelte/store';
-	import type { ECategories } from '@prisma/client';
-	import type { ESchema } from '$lib/schemas';
-	import { superForm } from 'sveltekit-superforms/client';
-	import UploadImage from '$components/UploadImage.svelte';
-	import type { SuperValidated } from 'sveltekit-superforms';
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
-	import TipTap from '$components/TipTap.svelte';
-	import { addToast } from '$store/ToastStore';
-	import { SupabaseEnum } from '$lib/Enums';
+  import Pane from '$components/Pane.svelte';
+  import type { Writable } from 'svelte/store';
+  import type { ECategories } from '@prisma/client';
+  import type { ESchema } from '$lib/schemas';
+  import { superForm } from 'sveltekit-superforms/client';
+  import UploadImage from '$components/UploadImage.svelte';
+  import type { SuperValidated } from 'sveltekit-superforms';
+  import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+  import TipTap from '$components/TipTap.svelte';
+  import { addToast } from '$store/ToastStore';
+  import { SupabaseEnum } from '$lib/Enums';
 
   export let { modal, formStore, resetForm, eCategories } = $$props as {
     modal: boolean;
@@ -120,7 +120,12 @@
         {/if}
       </label>
 
-			<UploadImage name="image" bucket={SupabaseEnum.EQUIPMENT} bind:errors={$errors.image} bind:image={$form.image} />
+      <UploadImage
+        name="image"
+        bucket={SupabaseEnum.EQUIPMENT}
+        bind:errors={$errors.image}
+        bind:image={$form.image}
+      />
 
       <label class="CrispLabel" for="description">
         <span style="color: inherit;"> Description </span>
@@ -128,6 +133,15 @@
         {#if $errors.description}
           <p class="CrispMessage w-100" data-type="error">
             {$errors.description}
+          </p>
+        {/if}
+      </label>
+      <label class="CrispLabel" for="specifications">
+        <span style="color: inherit;"> Specifications </span>
+        <TipTap name="specifications" bind:content={$form.specifications} />
+        {#if $errors.specifications}
+          <p class="CrispMessage w-100" data-type="error">
+            {$errors.specifications}
           </p>
         {/if}
       </label>

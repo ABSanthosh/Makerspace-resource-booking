@@ -51,6 +51,7 @@ model Equipment {
   name            String
   model           String
   description     String           @db.VarChar(2500)
+  specifications  String           @db.VarChar(2500)
   image           String
   instances       EInstance[]
   eCategoriesId   String

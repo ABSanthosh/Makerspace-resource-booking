@@ -5,12 +5,12 @@ import {
   EventStatus,
   ProfileType,
   UserRole,
-  type Equipment,
-  type ECategories,
-  type Manual,
-  type Video,
-  type BookingItem,
-  type CartItem,
+  // type Equipment,
+  // type ECategories,
+  // type Manual,
+  // type Video,
+  // type BookingItem,
+  // type CartItem,
   EBillingType,
   PaymentStatus
 } from '@prisma/client';
@@ -119,6 +119,7 @@ export const EZodSchema = z.object({
     .refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
     .or(z.string()),
   description: z.string().optional().default(''),
+  specifications: z.string(),
   eCategoriesId: z.string().min(7, { message: 'Category is required' }),
   // isDeleted: z.boolean().optional().or(z.literal(false))
   secondaryStatus: z.nativeEnum(ESecondaryStatus)

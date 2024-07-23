@@ -47,6 +47,7 @@
 
   <div class="Equipment__content">
     {#each data.allEquipment.filter((item) => {
+      if (item.secondaryStatus === ESecondaryStatus.DISABLED) return false;
       if (categoryFilter === '') return item;
       return item.eCategoriesId === categoryFilter;
     }) as item (item.id)}

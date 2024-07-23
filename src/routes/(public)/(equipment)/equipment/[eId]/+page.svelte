@@ -36,6 +36,7 @@
   $: manualPane = false;
   $: videoPane = false;
   $: selectedInstance = null as EquipmentById['instances'][0] | null;
+  $: seemore = false;
 
   $: isUserBlacklisted = user?.app_metadata.custom_claims.is_blacklisted ?? false;
 </script>
@@ -70,6 +71,14 @@
       <div class="w-100">
         {@html data.equipment.description}
       </div>
+      <a on:click={() => (seemore = !seemore)} href={null} class="w-100 text-sm">
+        {seemore ? 'See Specs' : 'Hide Specs'}
+      </a>
+      {#if seemore}
+        <div class="w-100">
+          {@html data.equipment.specifications}
+        </div>
+      {/if}
       <h3 class="w-100">
         Resources
         <hr />
@@ -221,6 +230,14 @@
           width: 100%;
           border: 1px solid var(--border);
         }
+      }
+
+      a {
+        font-size: 15px;
+        color: #687076;
+        font-weight: 500;
+        cursor: pointer;
+        user-select: none;
       }
     }
 
