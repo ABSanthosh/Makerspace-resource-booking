@@ -1,6 +1,6 @@
 import { db } from '$lib/prisma';
 import type { BookingSchema, CartItemSchema } from '$lib/schemas';
-import { type Booking, type Prisma, PaymentStatus } from '@prisma/client';
+import { type Booking, type Prisma, BookingStatus, PaymentStatus } from '@prisma/client';
 
 export async function initUserCart(userId: string) {
   try {
@@ -181,7 +181,7 @@ export async function cancelBooking(bookingId: string) {
       id: bookingId
     },
     data: {
-      status: 'CANCELLED'
+      status: BookingStatus.CANCELLED
     }
   });
 }
@@ -194,7 +194,7 @@ export async function updateBooking({
   paymentStatus
 }: {
   bookingId: string;
-  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
+  status: BookingStatus;
   adminNotes: string;
   paymentId?: string;
   paymentStatus?: PaymentStatus;

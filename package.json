@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vite dev --host",
-    "build": "npx prisma generate && npm run db:build && vite build",
+    "build": "npx prisma generate && vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -49,7 +49,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@prisma/client": "5.4.1",
+    "@prisma/client": "^5.17.0",
     "@supabase/ssr": "^0.0.10",
     "@supabase/supabase-js": "^2.39.2",
     "@tiptap/core": "^2.2.3",
