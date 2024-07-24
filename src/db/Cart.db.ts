@@ -1,8 +1,8 @@
 import { db } from '$lib/prisma';
 import type { BookingSchema, CartItemSchema } from '$lib/schemas';
-import { type Booking, type Prisma, PaymentStatus } from '@prisma/client';
-import pkg from '@prisma/client';
-const { BookingStatus } = pkg;
+import { type Booking, type Prisma, BookingStatus, PaymentStatus } from '@prisma/client';
+// import pkg from '@prisma/client';
+// const { BookingStatus } = pkg;
 
 export async function initUserCart(userId: string) {
   try {
@@ -196,7 +196,7 @@ export async function updateBooking({
   paymentStatus
 }: {
   bookingId: string;
-  status: (typeof BookingStatus)[keyof typeof BookingStatus];
+  status: BookingStatus;
   adminNotes: string;
   paymentId?: string;
   paymentStatus?: PaymentStatus;
